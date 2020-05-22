@@ -4,4 +4,8 @@ export const APP_DEPENDENCIES = {
   '@mdx-js/runtime': 'latest',
   react: 'latest',
   'react-dom': 'latest',
+  'code-surfer': 'latest',
+  // 'mdx-deck': '4.1.1',
+  '@mdx-deck/gatsby-plugin': '4.1.1',
+  '@mdx-deck/themes': '4.1.0',
 }
