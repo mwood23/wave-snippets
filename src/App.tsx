@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
-import { CodeMirror } from 'react-smooshpack'
+import { Switch } from 'react-router-dom'
 
-import { Preview } from './components'
+import { PageRoute } from './components'
+import { HomePage } from './pages'
 
 export const App: FC = () => {
   return (
-    <div style={{ display: 'flex', width: '100%', height: '100%' }}>
-      <CodeMirror style={{ width: '50%' }} />
-      <Preview style={{ flex: 1 }} />
-    </div>
+    <Switch>
+      <PageRoute component={HomePage} path="/" />
+    </Switch>
   )
 }
