@@ -97,7 +97,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     })
 
     return (
-      <Box height={'300px'} overflow={'hidden'} ref={ref} width={'300px'}>
+      <Box height={'314px'} overflow={'hidden'} ref={ref} width={'550px'}>
         {/* Reinitialize theme-ui around code surfer so that all the built in themes work
       // @ts-ignore */}
         <ThemeProvider>

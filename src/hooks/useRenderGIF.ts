@@ -1,11 +1,66 @@
-// @ts-ignore
-import domToImage from 'dom-to-image-more'
+import domToImage from 'dom-to-image'
 import GIFBuilder from 'gif.js.optimized'
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
 
 import { UnreachableCaseError } from '../utils'
 
 const DEFAULT_SNAPSHOT_FREQUENCY = 50
+
+type GIFBuilderConfig = {
+  /**
+   * Number of web workers to spawn. Defaults to [navigator.concurrentHardware](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorConcurrentHardware)
+   * and falls back to four if that's no available.
+   *
+   */
+  workers: number
+  /**
+   * Pixel sample interval, lower is better
+   *
+   * @default 10
+   */
+  quality: number
+  /**
+   * 	URL to load worker script from. Place this script where your website is served from. For create-react-app, it's /public.
+   *
+   * @default '/gif.worker.js'
+   */
+  workerScript: string
+  /**
+   * Repeat count, -1 = no repeat, 0 = forever
+   */
+  repeat: number
+  /**
+   * Background color where source image is transparent
+   */
+  background: string
+  /**
+   * 	Output image width. Defaults to the width of the node you pass into the hook.
+   */
+  width: number
+  /**
+   * 	Output image height. Defaults to the width of the node you pass into the hook.
+   */
+  height: number
+  /**
+   * 	Transparent hex color, 0x00FF00 = green
+   */
+  transparent: string
+  /**
+   * 	Dithering method, e.g. Flo
+   */
+  dither:
+    | boolean
+    | 'FloydSteinberg'
+    | 'FloydSteinberg-serpentine'
+    | 'FalseFloydSteinberg'
+    | 'FalseFloydSteinberg-serpentine'
+    | 'Stucki'
+    | 'Atkinson'
+  /**
+   * Whether to print debug information to console
+   */
+  debug: boolean
+}
 
 type RenderGIFOptions = {
   /**
@@ -14,6 +69,8 @@ type RenderGIFOptions = {
   frequency: number
 
   exportSize: number
+
+  gifJSConfig?: Partial<GIFBuilderConfig>
 }
 
 type RenderGIFState = {
@@ -87,16 +144,20 @@ const buildImageElements = async (images: string[]) => {
 }
 
 export const useRenderGIF = (
-  { frequency = DEFAULT_SNAPSHOT_FREQUENCY }: RenderGIFOptions = {
+  {
+    frequency = DEFAULT_SNAPSHOT_FREQUENCY,
+    gifJSConfig = {},
+  }: RenderGIFOptions = {
     frequency: DEFAULT_SNAPSHOT_FREQUENCY,
     exportSize: 2,
+    gifJSConfig: {},
   },
 ): [{ ref: typeof elementToGIF }, typeof dispatch, RenderGIFState] => {
   const elementToGIF = useRef<any>()
   const snapshotIntervalID = useRef<NodeJS.Timeout>()
 
   const [state, dispatch] = useReducer(renderGIFReducer, initialRenderGIFState)
-  const [images, setImages] = useState<string[]>([]) // base64 data URLs
+  const imagesToRender = useRef<string[]>([]) // base64 data URLs
   const { isRecording, isBuildingGIF } = state
 
   useEffect(() => {
@@ -117,9 +178,7 @@ export const useRenderGIF = (
           },
         })
 
-        setImages((prevImages) => {
-          return [...prevImages, image]
-        })
+        imagesToRender.current.push(image)
       }
 
       snapshotIntervalID.current = setInterval(takeSnapshotOfElement, frequency)
@@ -134,14 +193,15 @@ export const useRenderGIF = (
 
   useEffect(() => {
     const buildGIF = async () => {
-      console.log('build gif')
-      const imageElements = await buildImageElements(images)
+      console.log('Building gif...')
+      const imageElements = await buildImageElements(imagesToRender.current)
 
       const gif = new GIFBuilder({
-        workers: 4,
+        workers: navigator.hardwareConcurrency ?? 4,
         quality: 10,
         workerScript: '/gif.worker.js',
         delay: 0,
+        ...gifJSConfig,
       })
 
       imageElements.forEach((img) => {

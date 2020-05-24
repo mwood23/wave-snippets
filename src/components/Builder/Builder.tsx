@@ -9,22 +9,22 @@ import { Toolbar } from './Toolbar'
 
 const testSteps = [
   {
-    code: `var x1 = 1\ndebugger`,
+    code: `var x1: any = 1\ndebugger`,
     focus: '2',
-    lang: 'js',
+    lang: 'ts',
   },
   {
-    code: `var x0 = 3
+    code: `var x0: any = 3
 var x1 = 1
 var x0 = 3`,
-    lang: 'js',
+    lang: 'ts',
   },
   {
-    code: `var x0 = 3
+    code: `var x0: number = 3
 var x1 = 1
 var x1 = 1
 var x0 = 3`,
-    lang: 'js',
+    lang: 'ts',
   },
 ]
 
