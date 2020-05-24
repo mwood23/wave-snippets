@@ -1,2 +1,6 @@
 export * from './Preview'
-export * from './SandpackProvider'
+export * from './ScrollToTop'
+export * from './Page'
+export * from './Route'
+export * from './Builder'
+export * from './Editor'
