@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/core'
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 import { useBuilderState } from '../../context'
 import { useRenderGIF } from '../../hooks'
@@ -29,10 +29,9 @@ var x0 = 3`,
 ]
 
 export const Builder: FC = () => {
-  const previewRef = useRef<any>()
   const { pause, teleport } = useBuilderState()
   const [previewKey, setPreviewKey] = useState(0)
-  const [renderGIF] = useRenderGIF()
+  const [bind, dispatch] = useRenderGIF()
 
   return (
     <Box
@@ -46,20 +45,18 @@ export const Builder: FC = () => {
         onRenderGIFClicked={() => {
           // Reset the component because we don't know what step the user is at or if we're mid animation
           setPreviewKey(Math.random())
-
-          // Render the gif by passing the ref of the dom element
-          renderGIF(previewRef.current)
+          dispatch({ type: 'startRecording' })
         }}
       />
       <Flex>
         <Editor flex={1} />
         <Preview
+          {...bind}
           key={previewKey}
           onAnimationCycleEnd={() => {
-            console.log('animation complete!')
+            dispatch({ type: 'stopRecording' })
           }}
           pause={pause}
-          ref={previewRef}
           steps={testSteps}
           teleport={teleport}
         />

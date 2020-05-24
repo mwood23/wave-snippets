@@ -1,1 +1,1 @@
-export const DEFAULT_CYCLE_SPEED = 3000
+export const DEFAULT_CYCLE_SPEED = 4000

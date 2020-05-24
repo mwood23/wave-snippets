@@ -1,0 +1,33 @@
+diff --git a/node_modules/@code-surfer/standalone/dist/standalone.esm.js b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
+index 37c0d32..75c75cd 100644
+--- a/node_modules/@code-surfer/standalone/dist/standalone.esm.js
++++ b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
+@@ -873,7 +873,9 @@ function CodeSurferContent(_ref2) {
+     style: {
+       margin: 0,
+       height: "100%",
+-      overflow: "hidden"
++      overflow: "hidden",
++      display: "flex",
++      alignItems: "center"
+     }
+   }, React.createElement(Styled.Code, {
+     className: "cs-scaled-content",
+@@ -888,7 +890,7 @@ function CodeSurferContent(_ref2) {
+     }
+   }, React.createElement("div", {
+     style: {
+-      height: dimensions && dimensions.containerHeight / 2
++      // height: dimensions && dimensions.containerHeight / 2
+     }
+   }), React.createElement(LineList, {
+     stepPair: stepPair,
+@@ -901,7 +903,7 @@ function CodeSurferContent(_ref2) {
+     showNumbers: showNumbers
+   }), React.createElement("div", {
+     style: {
+-      height: dimensions && dimensions.containerHeight / 2
++      // height: dimensions && dimensions.containerHeight / 2
+     }
+   })));
+ }

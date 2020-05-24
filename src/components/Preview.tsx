@@ -97,18 +97,16 @@ export const Preview = forwardRef<any, PreviewProps>(
     })
 
     return (
-      <Box height={'300px'} width={'300px'}>
-        <div ref={ref}>
-          {/* Reinitialize theme-ui around code surfer so that all the built in themes work
+      <Box height={'300px'} overflow={'hidden'} ref={ref} width={'300px'}>
+        {/* Reinitialize theme-ui around code surfer so that all the built in themes work
       // @ts-ignore */}
-          <ThemeProvider>
-            <AnimatedCodeSurfer
-              progress={props.progress}
-              steps={steps}
-              theme={nightOwl}
-            />
-          </ThemeProvider>
-        </div>
+        <ThemeProvider>
+          <AnimatedCodeSurfer
+            progress={props.progress}
+            steps={steps}
+            theme={nightOwl}
+          />
+        </ThemeProvider>
       </Box>
     )
   },
