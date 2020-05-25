@@ -51,7 +51,7 @@ const Wrapper = styled(Box)`
     border-width: 1px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    z-index: 10;
+    z-index: 1000;
     max-height: 270px;
     overflow-y: auto;
     background: #fff;
@@ -144,7 +144,7 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
         onSuggestionsClearRequested={() => {
           setDisplayValue(value.name)
         }}
-        onSuggestionsFetchRequested={({ reason, value }) => {
+        onSuggestionsFetchRequested={({ reason }) => {
           if (
             [
               'input-focused',

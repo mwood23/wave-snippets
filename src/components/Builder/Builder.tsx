@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react'
 
-import { useBuilderState } from '../../context'
+import { CODE_THEMES_DICT } from '../../code-themes'
+import { useBuilderDispatch, useBuilderState } from '../../context'
 import { useRenderGIF } from '../../hooks'
 import { Box, Flex } from '../core'
-import { Editor } from '../Editor'
+// import { Editor } from '../Editor'
 import { Preview } from '../Preview'
+import { PreviewContainer } from '../PreviewContainer'
 import { Toolbar } from './Toolbar'
 
 const testSteps = [
@@ -26,39 +28,63 @@ var x0 = 3`,
 ]
 
 export const Builder: FC = () => {
-  const { pause, teleport, theme, language } = useBuilderState()
+  const {
+    pause,
+    teleport,
+    theme,
+    language,
+    backgroundColor,
+    title,
+  } = useBuilderState()
+  const builderDispatch = useBuilderDispatch()
   const [previewKey, setPreviewKey] = useState(0)
-  const [bind, dispatch] = useRenderGIF()
+  const [bind, renderGIFDispatch] = useRenderGIF()
+  const themeObject = CODE_THEMES_DICT[theme]
 
   return (
     <Box
       border="2px solid white"
       borderRadius="2px"
       margin="0 auto"
+      maxWidth="900px"
       padding="4"
-      width="700px"
+      width="100%"
     >
       <Toolbar
         onRenderGIFClicked={() => {
           // Reset the component because we don't know what step the user is at or if we're mid animation
           setPreviewKey(Math.random())
-          dispatch({ type: 'startRecording' })
+          renderGIFDispatch({ type: 'startRecording' })
         }}
       />
-      <Flex>
-        <Editor flex={1} />
-        <Preview
+      <Flex justifyContent="center">
+        {/* <Editor flex={1} /> */}
+        <PreviewContainer
           {...bind}
-          key={previewKey}
-          language={language}
-          onAnimationCycleEnd={() => {
-            dispatch({ type: 'stopRecording' })
+          backgroundColor={backgroundColor}
+          onTitleChanged={(e: any) => {
+            return builderDispatch({
+              type: 'updateBuilderState',
+              title: e.target.value,
+            })
           }}
-          pause={pause}
-          steps={testSteps}
-          teleport={teleport}
-          theme={theme}
-        />
+          title={title}
+          windowBackground={themeObject.theme.colors.background}
+          windowControlsPosition={themeObject.windowControlsPosition}
+          windowControlsType={themeObject.windowControlsType}
+        >
+          <Preview
+            key={previewKey}
+            language={language}
+            onAnimationCycleEnd={() => {
+              renderGIFDispatch({ type: 'stopRecording' })
+            }}
+            pause={pause}
+            steps={testSteps}
+            teleport={teleport}
+            theme={theme}
+          />
+        </PreviewContainer>
       </Flex>
     </Box>
   )

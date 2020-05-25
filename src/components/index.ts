@@ -7,3 +7,6 @@ export * from './Editor'
 // eslint-disable-next-line import/export
 export * from './core'
 export * from './Autocomplete'
+export * from './ColorPicker'
+export * from './WindowTitleBar'
+export * from './Hero'

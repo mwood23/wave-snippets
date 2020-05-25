@@ -7,18 +7,32 @@ import {
 } from '../../const'
 import { useBuilderDispatch, useBuilderState } from '../../context'
 import { Autocomplete } from '../Autocomplete'
-import { Button, Flex } from '../core'
+import { ColorPicker } from '../ColorPicker'
+import {
+  Button,
+  Flex,
+  IconButton,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../core'
 
 type ToolbarProps = {
   onRenderGIFClicked: any
 }
 
 export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
-  const { teleport, pause, language, theme } = useBuilderState()
+  const {
+    teleport,
+    pause,
+    language,
+    theme,
+    backgroundColor,
+  } = useBuilderState()
   const dispatch = useBuilderDispatch()
 
   return (
-    <Flex>
+    <Flex justifyContent="center" marginBottom="8">
       <Autocomplete
         onSelect={({ suggestion }) => {
           dispatch({
@@ -41,6 +55,23 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
         value={SUPPORTED_CODING_LANGAUGES_DICT[language]}
         valueKey={'value'}
       />
+
+      <Popover>
+        <PopoverTrigger>
+          <IconButton aria-label="Settings dropdown" icon="settings" />
+        </PopoverTrigger>
+        <PopoverContent zIndex={1000}>
+          <ColorPicker
+            color={backgroundColor}
+            onChange={(color) => {
+              return dispatch({
+                type: 'updateBuilderState',
+                backgroundColor: color.hex,
+              })
+            }}
+          />
+        </PopoverContent>
+      </Popover>
 
       <Button
         onClick={() => {

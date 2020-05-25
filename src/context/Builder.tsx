@@ -9,6 +9,8 @@ type BuilderState = {
   pause: boolean
   theme: string
   language: string
+  backgroundColor: string
+  title: string
 }
 
 type BuilderAction =
@@ -29,6 +31,8 @@ const initialBuilderState: BuilderState = {
   pause: false,
   theme: DEFAULT_PREVIEW_THEME,
   language: 'typescript',
+  backgroundColor: '#50e3c2',
+  title: '',
 }
 
 const BuilderStateContext = createContext<BuilderState>(initialBuilderState)

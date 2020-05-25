@@ -1,6 +1,6 @@
 import { normalizeArray } from './utils'
 
-export const DEFAULT_CYCLE_SPEED = 4000
+export const DEFAULT_CYCLE_SPEED = 3000
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
 
 export const SUPPORTED_CODING_LANGAUGES = [
