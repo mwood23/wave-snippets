@@ -1,8 +1,8 @@
-import { Box, Flex } from '@chakra-ui/core'
 import React, { FC, useState } from 'react'
 
 import { useBuilderState } from '../../context'
 import { useRenderGIF } from '../../hooks'
+import { Box, Flex } from '../core'
 import { Editor } from '../Editor'
 import { Preview } from '../Preview'
 import { Toolbar } from './Toolbar'
@@ -11,25 +11,22 @@ const testSteps = [
   {
     code: `var x1: any = 1\ndebugger`,
     focus: '2',
-    lang: 'ts',
   },
   {
     code: `var x0: any = 3
 var x1 = 1
 var x0 = 3`,
-    lang: 'ts',
   },
   {
     code: `var x0: number = 3
 var x1 = 1
 var x1 = 1
 var x0 = 3`,
-    lang: 'ts',
   },
 ]
 
 export const Builder: FC = () => {
-  const { pause, teleport } = useBuilderState()
+  const { pause, teleport, theme, language } = useBuilderState()
   const [previewKey, setPreviewKey] = useState(0)
   const [bind, dispatch] = useRenderGIF()
 
@@ -53,12 +50,14 @@ export const Builder: FC = () => {
         <Preview
           {...bind}
           key={previewKey}
+          language={language}
           onAnimationCycleEnd={() => {
             dispatch({ type: 'stopRecording' })
           }}
           pause={pause}
           steps={testSteps}
           teleport={teleport}
+          theme={theme}
         />
       </Flex>
     </Box>

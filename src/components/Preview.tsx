@@ -1,6 +1,4 @@
-import { Box } from '@chakra-ui/core'
 import { CodeSurfer } from '@code-surfer/standalone'
-import { nightOwl } from '@code-surfer/themes'
 import React, { forwardRef } from 'react'
 import {
   config as ReactSpringPresets,
@@ -10,9 +8,11 @@ import {
 } from 'react-spring'
 import { ThemeProvider } from 'theme-ui'
 
-import { DEFAULT_CYCLE_SPEED } from '../const'
+import { CODE_THEMES_DICT } from '../code-themes'
+import { DEFAULT_CYCLE_SPEED, DEFAULT_PREVIEW_THEME } from '../const'
 import { useCycle } from '../hooks'
 import { noop } from '../utils'
+import { Box } from './core'
 
 const AnimatedCodeSurfer = animated(CodeSurfer)
 
@@ -22,7 +22,8 @@ interface InputStep {
   focus?: string
   title?: string
   subtitle?: string
-  lang?: string
+  // Making the assumption that all steps are the same language for now
+  // lang?: string
   showNumbers?: boolean
 }
 
@@ -60,6 +61,9 @@ export type PreviewProps = {
 
   initialStep?: number
 
+  theme?: string
+  language: string
+
   onAnimationCycleStart?: () => void
   onAnimationCycleEnd?: () => void
 }
@@ -74,6 +78,8 @@ export const Preview = forwardRef<any, PreviewProps>(
       springPreset = 'molasses',
       initialStep = 0,
       onAnimationCycleEnd = noop,
+      theme = DEFAULT_PREVIEW_THEME,
+      language,
     },
     ref,
   ) => {
@@ -103,8 +109,13 @@ export const Preview = forwardRef<any, PreviewProps>(
         <ThemeProvider>
           <AnimatedCodeSurfer
             progress={props.progress}
-            steps={steps}
-            theme={nightOwl}
+            steps={steps.map((s) => {
+              return {
+                ...s,
+                lang: language,
+              }
+            })}
+            theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>
       </Box>

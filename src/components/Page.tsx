@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/core'
 import React, { FC } from 'react'
+
+import { Box } from './core'
 
 export const Page: FC = ({ children }) => {
   return (

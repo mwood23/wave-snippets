@@ -1,5 +1,6 @@
-import { Box, BoxProps, Text } from '@chakra-ui/core'
 import React, { FC } from 'react'
+
+import { Box, BoxProps, Text } from './core'
 
 export const Editor: FC<BoxProps> = ({ ...rest }) => {
   return (

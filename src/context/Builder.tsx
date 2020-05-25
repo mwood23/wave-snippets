@@ -1,11 +1,14 @@
 import React, { Dispatch, FC, createContext, useReducer } from 'react'
 
-import { UnreachableCaseError, noop } from '../utils'
+import { DEFAULT_PREVIEW_THEME } from '../const'
+import { UnreachableCaseError, noop, omit } from '../utils'
 
 type BuilderState = {
   currentStep: number
   teleport: boolean
   pause: boolean
+  theme: string
+  language: string
 }
 
 type BuilderAction =
@@ -13,19 +16,19 @@ type BuilderAction =
       type: 'setStep'
       step: number
     }
+  | ({
+      type: 'updateBuilderState'
+    } & Partial<BuilderState>)
   | {
-      type: 'setTeleport'
-      teleport: boolean
-    }
-  | {
-      type: 'setPause'
-      pause: boolean
+      type: 'resetBuilderState'
     }
 
 const initialBuilderState: BuilderState = {
   currentStep: 0,
   teleport: false,
   pause: false,
+  theme: DEFAULT_PREVIEW_THEME,
+  language: 'typescript',
 }
 
 const BuilderStateContext = createContext<BuilderState>(initialBuilderState)
@@ -35,10 +38,10 @@ const builderReducer = (state: BuilderState, action: BuilderAction) => {
   switch (action.type) {
     case 'setStep':
       return { ...state, currentStep: action.step }
-    case 'setTeleport':
-      return { ...state, teleport: action.teleport }
-    case 'setPause':
-      return { ...state, pause: action.pause }
+    case 'updateBuilderState':
+      return { ...state, ...omit(['type'], action) }
+    case 'resetBuilderState':
+      return { ...initialBuilderState }
 
     default:
       // eslint-disable-next-line no-case-declarations

@@ -154,7 +154,7 @@ export const useRenderGIF = (
   },
 ): [{ ref: typeof elementToGIF }, typeof dispatch, RenderGIFState] => {
   const elementToGIF = useRef<any>()
-  const snapshotIntervalID = useRef<NodeJS.Timeout>()
+  const snapshotIntervalID = useRef<any>()
 
   const [state, dispatch] = useReducer(renderGIFReducer, initialRenderGIFState)
   const imagesToRender = useRef<string[]>([]) // base64 data URLs
@@ -211,7 +211,7 @@ export const useRenderGIF = (
       })
 
       gif.on('finished', function (blob: any) {
-        console.log('finish', blob, URL.createObjectURL(blob))
+        console.log('Build gif finished!', blob, URL.createObjectURL(blob))
         window.open(URL.createObjectURL(blob))
 
         dispatch({ type: 'renderComplete' })

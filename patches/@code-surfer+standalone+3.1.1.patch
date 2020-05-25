@@ -1,8 +1,60 @@
+diff --git a/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts b/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
+index c366e04..0e9fcdd 100644
+--- a/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
++++ b/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
+@@ -26,5 +26,22 @@ import "prismjs/components/prism-scss";
+ import "prismjs/components/prism-sql";
+ import "prismjs/components/prism-stylus";
+ import "prismjs/components/prism-typescript";
+-import "prismjs/components/prism-wasm";
+-import "prismjs/components/prism-yaml";
++import 'prismjs/components/prism-typescript';
++import 'prismjs/components/prism-wasm';
++import 'prismjs/components/prism-yaml';
++import "prismjs/components/prism-kotlin";
++import "prismjs/components/prism-matlab";
++import "prismjs/components/prism-groovy";
++import "prismjs/components/prism-haskell";
++import "prismjs/components/prism-clojure";
++import "prismjs/components/prism-rust";
++import "prismjs/components/prism-elixir";
++import "prismjs/components/prism-docker";
++import "prismjs/components/prism-swift";
++import "prismjs/components/prism-csharp";
++import "prismjs/components/prism-dart";
++import "prismjs/components/prism-elm";
++import "prismjs/components/prism-php";
++import "prismjs/components/prism-php-extras";
++import "prismjs/components/prism-r";
++import "prismjs/components/prism-ruby";
 diff --git a/node_modules/@code-surfer/standalone/dist/standalone.esm.js b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
-index 37c0d32..75c75cd 100644
+index 37c0d32..b79c0d0 100644
 --- a/node_modules/@code-surfer/standalone/dist/standalone.esm.js
 +++ b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
-@@ -873,7 +873,9 @@ function CodeSurferContent(_ref2) {
+@@ -31,6 +31,22 @@ import 'prismjs/components/prism-stylus';
+ import 'prismjs/components/prism-typescript';
+ import 'prismjs/components/prism-wasm';
+ import 'prismjs/components/prism-yaml';
++import "prismjs/components/prism-kotlin";
++import "prismjs/components/prism-matlab";
++import "prismjs/components/prism-groovy";
++import "prismjs/components/prism-haskell";
++import "prismjs/components/prism-clojure";
++import "prismjs/components/prism-rust";
++import "prismjs/components/prism-elixir";
++import "prismjs/components/prism-docker";
++import "prismjs/components/prism-swift";
++import "prismjs/components/prism-csharp";
++import "prismjs/components/prism-dart";
++import "prismjs/components/prism-elm";
++import "prismjs/components/prism-php";
++import "prismjs/components/prism-php-extras";
++import "prismjs/components/prism-r";
++import "prismjs/components/prism-ruby";
+ 
+ function _extends() {
+   _extends = Object.assign || function (target) {
+@@ -873,7 +889,9 @@ function CodeSurferContent(_ref2) {
      style: {
        margin: 0,
        height: "100%",
@@ -13,7 +65,7 @@ index 37c0d32..75c75cd 100644
      }
    }, React.createElement(Styled.Code, {
      className: "cs-scaled-content",
-@@ -888,7 +890,7 @@ function CodeSurferContent(_ref2) {
+@@ -888,7 +906,7 @@ function CodeSurferContent(_ref2) {
      }
    }, React.createElement("div", {
      style: {
@@ -22,7 +74,7 @@ index 37c0d32..75c75cd 100644
      }
    }), React.createElement(LineList, {
      stepPair: stepPair,
-@@ -901,7 +903,7 @@ function CodeSurferContent(_ref2) {
+@@ -901,7 +919,7 @@ function CodeSurferContent(_ref2) {
      showNumbers: showNumbers
    }), React.createElement("div", {
      style: {
