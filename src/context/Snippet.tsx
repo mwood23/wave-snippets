@@ -1,17 +1,37 @@
 import React, { Dispatch, FC, createContext, useReducer } from 'react'
 import { RGBColor } from 'react-color'
 
-import { DEFAULT_PREVIEW_THEME } from '../const'
+import {
+  DEFAULT_CYCLE,
+  DEFAULT_CYCLE_SPEED,
+  DEFAULT_IMMEDIATE,
+  DEFAULT_PREVIEW_THEME,
+} from '../const'
 import { UnreachableCaseError, noop, omit } from '../utils'
 
 export type BackgroundColor = RGBColor
 
+// Pulled from source cause types aren't exported right
+export type InputStep = {
+  code: string
+  focus?: string
+  title?: string
+  subtitle?: string
+  // Making the assumption that all steps are the same language for now
+  // lang?: string
+  showNumbers?: boolean
+}
+
 type SnippetState = {
-  teleport: boolean
+  immediate: boolean
   theme: string
   language: string
   backgroundColor: BackgroundColor
   title: string
+  startingStep: number
+  cycle: boolean
+  steps: InputStep[]
+  cycleSpeed: number
 }
 
 type SnippetAction =
@@ -23,7 +43,7 @@ type SnippetAction =
     }
 
 const initialSnippetState: SnippetState = {
-  teleport: false,
+  immediate: DEFAULT_IMMEDIATE,
   theme: DEFAULT_PREVIEW_THEME,
   language: 'typescript',
   backgroundColor: {
@@ -33,6 +53,28 @@ const initialSnippetState: SnippetState = {
     a: 100,
   },
   title: '',
+  startingStep: 0,
+  cycleSpeed: DEFAULT_CYCLE_SPEED,
+  cycle: DEFAULT_CYCLE,
+  steps: [
+    {
+      code: `var x1: any = 1\ndebugger`,
+      focus: '2',
+    },
+    {
+      code: `
+var x0: any = 3
+var x1 = 1
+var x0 = 3`,
+    },
+    {
+      code: `
+var x0: number = 3
+var x1 = 1
+var x1 = 1
+var x0 = 3`,
+    },
+  ],
 }
 
 const SnippetStateContext = createContext<SnippetState>(initialSnippetState)

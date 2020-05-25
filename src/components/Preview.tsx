@@ -1,5 +1,5 @@
 import { CodeSurfer } from '@code-surfer/standalone'
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import {
   config as ReactSpringPresets,
   SpringConfig,
@@ -9,65 +9,31 @@ import {
 import { ThemeProvider } from 'theme-ui'
 
 import { CODE_THEMES_DICT } from '../code-themes'
-import { DEFAULT_CYCLE_SPEED, DEFAULT_PREVIEW_THEME } from '../const'
-import { useCycle } from '../hooks'
+import { DEFAULT_PREVIEW_THEME } from '../const'
+import { InputStep, usePreviewDispatch, usePreviewState } from '../context'
 import { noop } from '../utils'
 import { Box } from './core'
 
 const AnimatedCodeSurfer = animated(CodeSurfer)
 
-// Pulled from source cause types aren't exported right
-interface InputStep {
-  code: string
-  focus?: string
-  title?: string
-  subtitle?: string
-  // Making the assumption that all steps are the same language for now
-  // lang?: string
-  showNumbers?: boolean
-}
-
 export type PreviewProps = {
   steps: InputStep[]
-  /**
-   * Speed to cycle the steps in milleseconds
-   */
-  speed?: number
-
-  /**
-   * Pass true to cycle through the steps
-   */
-  cycle?: boolean
-
-  /**
-   * Time in milliseconds for the springs to be activated between steps. A lower number is a quicker animation.
-   */
-  cycleSpeed?: number
-
-  /**
-   * Skip the spring animation.
-   */
-  teleport?: boolean
-
-  /**
-   * Stop cycling through the steps
-   */
-  pause?: boolean
 
   springConfig?: SpringConfig
 
   //   TODO: Create more fun presets
   springPreset?: keyof typeof ReactSpringPresets
 
-  initialStep?: number
-
   theme?: string
   language: string
 
-  onStepChange?: (newStep: number) => void
+  playOnInit?: boolean
 
-  onAnimationCycleStart?: () => void
-  onAnimationCycleEnd?: () => void
+  cycle?: boolean
+  cycleSpeed?: number
+  immediate?: boolean
+
+  onAnimationCycleEnd: () => void
 }
 
 // TODO: Hook up all the props
@@ -75,34 +41,55 @@ export const Preview = forwardRef<any, PreviewProps>(
   (
     {
       steps,
-      cycleSpeed = DEFAULT_CYCLE_SPEED,
-      pause = false,
       springPreset = 'molasses',
-      initialStep = 0,
-      onAnimationCycleEnd = noop,
-      onStepChange = noop,
       theme = DEFAULT_PREVIEW_THEME,
       language,
+      playOnInit = true,
+      cycleSpeed,
+      immediate,
+      cycle,
+      onAnimationCycleEnd = noop,
     },
     ref,
   ) => {
     const totalSteps = steps.length - 1
-    const [currentStep] = useCycle({
-      totalSteps,
-      cycleSpeed,
-      initialStep,
-      pause,
-    })
+    const dispatch = usePreviewDispatch()
+    const { currentStep, isPlaying } = usePreviewState()
+
+    useEffect(() => {
+      if (playOnInit) {
+        dispatch({
+          type: 'updatePreviewState',
+          currentStep: totalSteps > 1 ? currentStep + 1 : currentStep,
+          isPlaying: true,
+        })
+      }
+    }, [])
 
     const props = useSpring({
       progress: currentStep,
       config: ReactSpringPresets[springPreset],
+      delay: cycleSpeed,
       onRest: () => {
-        console.log(totalSteps, currentStep)
-        if (totalSteps === currentStep) {
+        dispatch({
+          type: 'updatePreviewState',
+          currentStep:
+            // How many more can we go?!
+            totalSteps > 1
+              ? currentStep === totalSteps
+                ? cycle
+                  ? 0
+                  : currentStep
+                : currentStep + 1
+              : currentStep,
+        })
+
+        if (currentStep === totalSteps) {
           onAnimationCycleEnd()
         }
       },
+      pause: !isPlaying,
+      immediate,
     })
 
     return (

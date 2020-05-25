@@ -27,8 +27,8 @@ type ToolbarProps = {
 }
 
 export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
-  const { teleport, language, theme, backgroundColor } = useSnippetState()
-  const { pause } = usePreviewState()
+  const { immediate, language, theme, backgroundColor } = useSnippetState()
+  const { isPlaying } = usePreviewState()
   const previewDispatch = usePreviewDispatch()
   const snippetDispatch = useSnippetDispatch()
 
@@ -78,7 +78,7 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
         onClick={() => {
           return snippetDispatch({
             type: 'updateSnippetState',
-            teleport: !teleport,
+            immediate: !immediate,
           })
         }}
       >
@@ -86,10 +86,13 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
       </Button>
       <Button
         onClick={() => {
-          return previewDispatch({ type: 'updatePreviewState', pause: !pause })
+          return previewDispatch({
+            type: 'updatePreviewState',
+            isPlaying: !isPlaying,
+          })
         }}
       >
-        {pause ? 'Unpause' : 'Pause'}
+        {isPlaying ? 'Pause' : 'Unpause'}
       </Button>
       <Button onClick={onRenderGIFClicked}>Download</Button>
     </Flex>

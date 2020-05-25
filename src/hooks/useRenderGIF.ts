@@ -198,7 +198,7 @@ export const useRenderGIF = (
 
       const gif = new GIFBuilder({
         workers: navigator.hardwareConcurrency ?? 4,
-        quality: 10,
+        quality: 5,
         workerScript: '/gif.worker.js',
         delay: 0,
         ...gifJSConfig,

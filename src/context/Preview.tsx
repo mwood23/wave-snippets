@@ -4,7 +4,7 @@ import { UnreachableCaseError, noop, omit } from '../utils'
 
 type PreviewState = {
   currentStep: number
-  pause: boolean
+  isPlaying: boolean
 }
 
 type PreviewAction =
@@ -21,7 +21,7 @@ type PreviewAction =
 
 const initialPreviewState: PreviewState = {
   currentStep: 0,
-  pause: false,
+  isPlaying: true,
 }
 
 const PreviewStateContext = createContext<PreviewState>(initialPreviewState)
@@ -34,6 +34,7 @@ const previewReducer = (state: PreviewState, action: PreviewAction) => {
     case 'updatePreviewState':
       return { ...state, ...omit(['type'], action) }
     case 'resetPreviewState':
+      console.log('in here')
       return { ...initialPreviewState }
 
     default:
@@ -43,8 +44,14 @@ const previewReducer = (state: PreviewState, action: PreviewAction) => {
   }
 }
 
-export const PreviewProvider: FC = ({ children }) => {
-  const [state, dispatch] = useReducer(previewReducer, initialPreviewState)
+export const PreviewProvider: FC<{ initialState?: Partial<PreviewState> }> = ({
+  children,
+  initialState,
+}) => {
+  const [state, dispatch] = useReducer(previewReducer, {
+    ...initialPreviewState,
+    ...initialState,
+  })
 
   return (
     <PreviewStateContext.Provider value={state}>

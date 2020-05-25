@@ -7,7 +7,7 @@ import { ThemeProvider as ThemeUIThemeProvider } from 'theme-ui'
 
 import { App } from './App'
 import { ScrollToTop } from './components'
-import { PreviewProvider, SnippetProvider } from './context'
+import { SnippetProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
 
@@ -30,9 +30,7 @@ ReactDOM.render(
             />
             {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
             <SnippetProvider>
-              <PreviewProvider>
-                <App />
-              </PreviewProvider>
+              <App />
             </SnippetProvider>
           </ColorModeProvider>
         </ThemeProvider>
