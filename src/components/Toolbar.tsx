@@ -1,13 +1,18 @@
 import React, { FC } from 'react'
 
-import { CODE_THEMES, CODE_THEMES_DICT } from '../../code-themes'
+import { CODE_THEMES, CODE_THEMES_DICT } from '../code-themes'
 import {
   SUPPORTED_CODING_LANGAUGES,
   SUPPORTED_CODING_LANGAUGES_DICT,
-} from '../../const'
-import { useBuilderDispatch, useBuilderState } from '../../context'
-import { Autocomplete } from '../Autocomplete'
-import { ColorPicker } from '../ColorPicker'
+} from '../const'
+import {
+  usePreviewDispatch,
+  usePreviewState,
+  useSnippetDispatch,
+  useSnippetState,
+} from '../context'
+import { Autocomplete } from './Autocomplete'
+import { ColorPicker } from './ColorPicker'
 import {
   Button,
   Flex,
@@ -15,28 +20,24 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '../core'
+} from './core'
 
 type ToolbarProps = {
   onRenderGIFClicked: any
 }
 
 export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
-  const {
-    teleport,
-    pause,
-    language,
-    theme,
-    backgroundColor,
-  } = useBuilderState()
-  const dispatch = useBuilderDispatch()
+  const { teleport, language, theme, backgroundColor } = useSnippetState()
+  const { pause } = usePreviewState()
+  const previewDispatch = usePreviewDispatch()
+  const snippetDispatch = useSnippetDispatch()
 
   return (
     <Flex justifyContent="center" marginBottom="8">
       <Autocomplete
         onSelect={({ suggestion }) => {
-          dispatch({
-            type: 'updateBuilderState',
+          snippetDispatch({
+            type: 'updateSnippetState',
             theme: suggestion.key,
           })
         }}
@@ -46,8 +47,8 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
       />
       <Autocomplete
         onSelect={({ suggestion }) => {
-          dispatch({
-            type: 'updateBuilderState',
+          snippetDispatch({
+            type: 'updateSnippetState',
             language: suggestion.value,
           })
         }}
@@ -60,13 +61,13 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
         <PopoverTrigger>
           <IconButton aria-label="Settings dropdown" icon="settings" />
         </PopoverTrigger>
-        <PopoverContent zIndex={1000}>
+        <PopoverContent width="230px" zIndex={1000}>
           <ColorPicker
             color={backgroundColor}
             onChange={(color) => {
-              return dispatch({
-                type: 'updateBuilderState',
-                backgroundColor: color.hex,
+              return snippetDispatch({
+                type: 'updateSnippetState',
+                backgroundColor: color.rgb,
               })
             }}
           />
@@ -75,14 +76,17 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
 
       <Button
         onClick={() => {
-          return dispatch({ type: 'updateBuilderState', teleport: !teleport })
+          return snippetDispatch({
+            type: 'updateSnippetState',
+            teleport: !teleport,
+          })
         }}
       >
         Teleport
       </Button>
       <Button
         onClick={() => {
-          return dispatch({ type: 'updateBuilderState', pause: !pause })
+          return previewDispatch({ type: 'updatePreviewState', pause: !pause })
         }}
       >
         {pause ? 'Unpause' : 'Pause'}

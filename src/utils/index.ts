@@ -1,5 +1,5 @@
 import { always } from 'ramda'
-export { omit, pick, isNil, isEmpty, includes } from 'ramda'
+export { omit, pick, isNil, isEmpty, includes, times } from 'ramda'
 export * from './unreachableCaseError'
 export * from './normalizeArray'
 

@@ -11,4 +11,4 @@ export const customTheme = {
       700: '#2a69ac',
     },
   },
-}
+} as const

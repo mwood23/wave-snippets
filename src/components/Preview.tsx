@@ -64,6 +64,8 @@ export type PreviewProps = {
   theme?: string
   language: string
 
+  onStepChange?: (newStep: number) => void
+
   onAnimationCycleStart?: () => void
   onAnimationCycleEnd?: () => void
 }
@@ -78,6 +80,7 @@ export const Preview = forwardRef<any, PreviewProps>(
       springPreset = 'molasses',
       initialStep = 0,
       onAnimationCycleEnd = noop,
+      onStepChange = noop,
       theme = DEFAULT_PREVIEW_THEME,
       language,
     },

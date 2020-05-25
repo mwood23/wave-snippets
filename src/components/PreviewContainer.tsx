@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
 import React, { ReactNode, forwardRef } from 'react'
 
+import { BackgroundColor } from '../context'
 import { Box } from './core'
 import { WindowTitleBar, WindowTitleBarProps } from './WindowTitleBar'
 
 type PreviewContainerProps = {
-  backgroundColor: string
+  backgroundColor: BackgroundColor
   windowBackground: string
   children: ReactNode
 } & WindowTitleBarProps
@@ -64,7 +65,9 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
           className="eliminateOnRender"
         />
         {/* Background the user selects */}
-        <Background background={backgroundColor} />
+        <Background
+          background={`rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`}
+        />
       </Box>
     )
   },

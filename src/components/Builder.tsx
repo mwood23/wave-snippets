@@ -1,12 +1,18 @@
 import React, { FC, useState } from 'react'
 
-import { CODE_THEMES_DICT } from '../../code-themes'
-import { useBuilderDispatch, useBuilderState } from '../../context'
-import { useRenderGIF } from '../../hooks'
-import { Box, Flex } from '../core'
-// import { Editor } from '../Editor'
-import { Preview } from '../Preview'
-import { PreviewContainer } from '../PreviewContainer'
+import { CODE_THEMES_DICT } from '../code-themes'
+import {
+  usePreviewDispatch,
+  usePreviewState,
+  useSnippetDispatch,
+  useSnippetState,
+} from '../context'
+import { useRenderGIF } from '../hooks'
+import { Box, Divider, Flex } from './core'
+// import { Editor } from './Editor'
+import { Preview } from './Preview'
+import { PreviewContainer } from './PreviewContainer'
+import { StepSelector } from './StepSelector'
 import { Toolbar } from './Toolbar'
 
 const testSteps = [
@@ -29,14 +35,15 @@ var x0 = 3`,
 
 export const Builder: FC = () => {
   const {
-    pause,
     teleport,
     theme,
     language,
     backgroundColor,
     title,
-  } = useBuilderState()
-  const builderDispatch = useBuilderDispatch()
+  } = useSnippetState()
+  const { pause, currentStep } = usePreviewState()
+  const previewDispatch = usePreviewDispatch()
+  const snippetDispatch = useSnippetDispatch()
   const [previewKey, setPreviewKey] = useState(0)
   const [bind, renderGIFDispatch] = useRenderGIF()
   const themeObject = CODE_THEMES_DICT[theme]
@@ -63,8 +70,8 @@ export const Builder: FC = () => {
           {...bind}
           backgroundColor={backgroundColor}
           onTitleChanged={(e: any) => {
-            return builderDispatch({
-              type: 'updateBuilderState',
+            return snippetDispatch({
+              type: 'updateSnippetState',
               title: e.target.value,
             })
           }}
@@ -79,6 +86,9 @@ export const Builder: FC = () => {
             onAnimationCycleEnd={() => {
               renderGIFDispatch({ type: 'stopRecording' })
             }}
+            // onStepChange={(step) => {
+            //   return previewDispatch({ type: 'setStep', step })
+            // }}
             pause={pause}
             steps={testSteps}
             teleport={teleport}
@@ -86,6 +96,8 @@ export const Builder: FC = () => {
           />
         </PreviewContainer>
       </Flex>
+      <Divider />
+      <StepSelector currentStep={currentStep} totalSteps={testSteps.length} />
     </Box>
   )
 }
