@@ -1,3 +1,6 @@
+import 'codemirror/theme/dracula.css'
+import 'codemirror/theme/eclipse.css'
+
 import {
   dracula,
   duotoneDark,
@@ -19,6 +22,7 @@ export * from './windowControls'
 export type CodeTheme = {
   key: string
   name: string
+  codeMirrorMap: string
   windowControlsType: WindowControlsType
   windowControlsPosition: WindowControlsPosition
   theme: {
@@ -40,6 +44,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Dracula',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: dracula,
   },
@@ -48,6 +53,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Duotone Dark',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: duotoneDark,
   },
@@ -56,6 +62,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Duotone Light',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'eclipse',
     // @ts-ignore Internal types are wrong :(
     theme: duotoneLight,
   },
@@ -64,6 +71,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Github',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'eclipse',
     // @ts-ignore Internal types are wrong :(
     theme: github,
   },
@@ -72,6 +80,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Night Owl',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: nightOwl,
   },
@@ -80,6 +89,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Oceanic Next',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: oceanicNext,
   },
@@ -88,6 +98,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Shades of Purple',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: shadesOfPurple,
   },
@@ -96,6 +107,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'Ultramin',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: ultramin,
   },
@@ -104,6 +116,7 @@ export const CODE_THEMES: CodeTheme[] = [
     name: 'VS Code',
     windowControlsType: 'rounded',
     windowControlsPosition: 'left',
+    codeMirrorMap: 'dracula',
     // @ts-ignore Internal types are wrong :(
     theme: vsDark,
   },

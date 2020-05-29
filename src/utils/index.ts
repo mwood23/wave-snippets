@@ -1,7 +1,52 @@
-import { always } from 'ramda'
-export { omit, pick, isNil, isEmpty, includes, times } from 'ramda'
+import { pipe as pipeVal } from 'fp-ts/lib/pipeable'
+import { groupWith, sort, uniq } from 'ramda'
+export { pipe as pipeVal } from 'fp-ts/lib/pipeable'
+export {
+  omit,
+  sort,
+  pick,
+  isNil,
+  isEmpty,
+  includes,
+  times,
+  flatten,
+  mapObjIndexed,
+  groupBy,
+  groupWith,
+  uniq,
+  last,
+  head,
+  equals,
+  symmetricDifference,
+  merge,
+  forEachObjIndexed,
+  maxBy,
+  min,
+  minBy,
+  startsWith,
+  toString,
+  mergeDeepWith,
+  allPass,
+  concat,
+} from 'ramda'
+export { noop, isArray, omitBy } from 'ramda-adjunct'
 export * from './unreachableCaseError'
 export * from './normalizeArray'
+export * from './stepUtils'
 
-// TODO: Should be able to accept N number of args without types blowing up
-export const noop = always(undefined)
+export const sortNumberArray = (a: number[]) => {
+  return sort<typeof a[0]>((a, b) => {
+    return a - b
+  })(a)
+}
+
+export const groupArrayBySequence = (arr: number[]) => {
+  return pipeVal(
+    arr,
+    uniq,
+    sortNumberArray,
+    groupWith<typeof arr[0]>((a, b) => {
+      return a + 1 === b
+    }),
+  )
+}

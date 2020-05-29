@@ -27,7 +27,12 @@ type ToolbarProps = {
 }
 
 export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
-  const { immediate, language, theme, backgroundColor } = useSnippetState()
+  const {
+    immediate,
+    defaultLanguage,
+    theme,
+    backgroundColor,
+  } = useSnippetState()
   const { isPlaying } = usePreviewState()
   const previewDispatch = usePreviewDispatch()
   const snippetDispatch = useSnippetDispatch()
@@ -48,12 +53,12 @@ export const Toolbar: FC<ToolbarProps> = ({ onRenderGIFClicked }) => {
       <Autocomplete
         onSelect={({ suggestion }) => {
           snippetDispatch({
-            type: 'updateSnippetState',
-            language: suggestion.value,
+            type: 'updateLanguage',
+            lang: suggestion.value,
           })
         }}
         options={SUPPORTED_CODING_LANGAUGES}
-        value={SUPPORTED_CODING_LANGAUGES_DICT[language]}
+        value={SUPPORTED_CODING_LANGAUGES_DICT[defaultLanguage]}
         valueKey={'value'}
       />
 

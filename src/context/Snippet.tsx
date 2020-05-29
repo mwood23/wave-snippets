@@ -1,5 +1,7 @@
-import React, { Dispatch, FC, createContext, useReducer } from 'react'
+import { produce } from 'immer'
+import React, { Dispatch, FC, createContext } from 'react'
 import { RGBColor } from 'react-color'
+import { useImmerReducer } from 'use-immer'
 
 import {
   DEFAULT_CYCLE,
@@ -17,15 +19,15 @@ export type InputStep = {
   focus?: string
   title?: string
   subtitle?: string
-  // Making the assumption that all steps are the same language for now
-  // lang?: string
   showNumbers?: boolean
+  lang: string
+  id: string
 }
 
 type SnippetState = {
   immediate: boolean
   theme: string
-  language: string
+  defaultLanguage: string
   backgroundColor: BackgroundColor
   title: string
   startingStep: number
@@ -41,11 +43,19 @@ type SnippetAction =
   | {
       type: 'resetSnippetState'
     }
+  | {
+      type: 'updateLanguage'
+      lang: string
+    }
+  | ({
+      type: 'updateStep'
+      stepID: string
+    } & Partial<InputStep>)
 
 const initialSnippetState: SnippetState = {
   immediate: DEFAULT_IMMEDIATE,
   theme: DEFAULT_PREVIEW_THEME,
-  language: 'typescript',
+  defaultLanguage: 'typescript',
   backgroundColor: {
     r: 51,
     g: 197,
@@ -59,20 +69,25 @@ const initialSnippetState: SnippetState = {
   steps: [
     {
       code: `var x1: any = 1\ndebugger`,
-      focus: '2',
+      // focus: '1[1:14]',
+      lang: 'typescript',
+      id: 'dfgs',
     },
     {
-      code: `
-var x0: any = 3
+      code: `var x0: any = 3
 var x1 = 1
 var x0 = 3`,
+      focus: '',
+      lang: 'typescript',
+      id: 'gfdsg',
     },
     {
-      code: `
-var x0: number = 3
+      code: `var x0: number = 3
 var x1 = 1
 var x1 = 1
 var x0 = 3`,
+      lang: 'typescript',
+      id: '1werw',
     },
   ],
 }
@@ -80,10 +95,34 @@ var x0 = 3`,
 const SnippetStateContext = createContext<SnippetState>(initialSnippetState)
 const SnippetDispatchContext = createContext<Dispatch<SnippetAction>>(noop)
 
-const snippetReducer = (state: SnippetState, action: SnippetAction) => {
+const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
   switch (action.type) {
     case 'updateSnippetState':
       return { ...state, ...omit(['type'], action) }
+    case 'updateLanguage':
+      return {
+        ...state,
+        defaultLanguage: action.lang,
+        steps: state.steps.map((s) => {
+          return { ...s, lang: action.lang }
+        }),
+      }
+    case 'updateStep':
+      // eslint-disable-next-line no-case-declarations
+      const stepToUpdate = state.steps.findIndex((s) => {
+        return s.id === action.stepID
+      })
+
+      if (stepToUpdate === -1) {
+        console.warn('Step ID does not exist!')
+        return
+      }
+
+      state.steps[stepToUpdate] = {
+        ...state.steps[stepToUpdate],
+        ...omit(['type', 'stepIndex'], action),
+      }
+      return
     case 'resetSnippetState':
       return { ...initialSnippetState }
 
@@ -92,10 +131,10 @@ const snippetReducer = (state: SnippetState, action: SnippetAction) => {
       const { type } = action
       throw new UnreachableCaseError(type)
   }
-}
+})
 
 export const SnippetProvider: FC = ({ children }) => {
-  const [state, dispatch] = useReducer(snippetReducer, initialSnippetState)
+  const [state, dispatch] = useImmerReducer(snippetReducer, initialSnippetState)
 
   return (
     <SnippetStateContext.Provider value={state}>

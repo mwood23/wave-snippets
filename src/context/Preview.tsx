@@ -21,7 +21,7 @@ type PreviewAction =
 
 const initialPreviewState: PreviewState = {
   currentStep: 0,
-  isPlaying: true,
+  isPlaying: false,
 }
 
 const PreviewStateContext = createContext<PreviewState>(initialPreviewState)
@@ -34,7 +34,6 @@ const previewReducer = (state: PreviewState, action: PreviewAction) => {
     case 'updatePreviewState':
       return { ...state, ...omit(['type'], action) }
     case 'resetPreviewState':
-      console.log('in here')
       return { ...initialPreviewState }
 
     default:

@@ -3,12 +3,13 @@ import React, { FC, useState } from 'react'
 import { CODE_THEMES_DICT } from '../code-themes'
 import {
   PreviewProvider,
+  usePreviewState,
   useSnippetDispatch,
   useSnippetState,
 } from '../context'
 import { useRenderGIF } from '../hooks'
 import { Box, Divider, Flex } from './core'
-// import { Editor } from './Editor'
+import { Panel } from './Panel'
 import { Preview } from './Preview'
 import { PreviewContainer } from './PreviewContainer'
 import { PreviewStepSelector } from './PreviewStepSelector'
@@ -17,7 +18,6 @@ import { Toolbar } from './Toolbar'
 export const Builder: FC = () => {
   const {
     theme,
-    language,
     backgroundColor,
     title,
     cycle,
@@ -27,6 +27,7 @@ export const Builder: FC = () => {
     steps,
   } = useSnippetState()
   const snippetDispatch = useSnippetDispatch()
+  const { currentStep } = usePreviewState()
   const [previewKey, setPreviewKey] = useState(0)
   const [bind, renderGIFDispatch] = useRenderGIF()
   const themeObject = CODE_THEMES_DICT[theme]
@@ -40,7 +41,7 @@ export const Builder: FC = () => {
         border="2px solid white"
         borderRadius="2px"
         margin="0 auto"
-        maxWidth="900px"
+        maxWidth="1000px"
         padding="4"
         width="100%"
       >
@@ -51,8 +52,17 @@ export const Builder: FC = () => {
             renderGIFDispatch({ type: 'startRecording' })
           }}
         />
-        <Flex justifyContent="center">
-          {/* <Editor flex={1} /> */}
+        <Flex height="450px" justifyContent="center">
+          <Panel
+            containerStyleProps={{
+              flex: 1,
+              height: '100%',
+              overflowY: 'auto',
+            }}
+            currentStep={currentStep}
+            steps={steps}
+            theme={theme}
+          />
           <PreviewContainer
             {...bind}
             backgroundColor={backgroundColor}
@@ -71,7 +81,6 @@ export const Builder: FC = () => {
               cycle={cycle}
               cycleSpeed={cycleSpeed}
               immediate={immediate}
-              language={language}
               onAnimationCycleEnd={() => {
                 renderGIFDispatch({ type: 'stopRecording' })
               }}

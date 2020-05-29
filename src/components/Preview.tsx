@@ -1,5 +1,6 @@
 import { CodeSurfer } from '@code-surfer/standalone'
-import React, { forwardRef, useEffect } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
+import { useDelta } from 'react-delta'
 import {
   config as ReactSpringPresets,
   SpringConfig,
@@ -7,12 +8,13 @@ import {
   useSpring,
 } from 'react-spring'
 import { ThemeProvider } from 'theme-ui'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { CODE_THEMES_DICT } from '../code-themes'
 import { DEFAULT_PREVIEW_THEME } from '../const'
 import { InputStep, usePreviewDispatch, usePreviewState } from '../context'
 import { noop } from '../utils'
-import { Box } from './core'
+import { Box, Spinner } from './core'
 
 const AnimatedCodeSurfer = animated(CodeSurfer)
 
@@ -25,7 +27,6 @@ export type PreviewProps = {
   springPreset?: keyof typeof ReactSpringPresets
 
   theme?: string
-  language: string
 
   playOnInit?: boolean
 
@@ -43,7 +44,6 @@ export const Preview = forwardRef<any, PreviewProps>(
       steps,
       springPreset = 'molasses',
       theme = DEFAULT_PREVIEW_THEME,
-      language,
       playOnInit = true,
       cycleSpeed,
       immediate,
@@ -55,13 +55,30 @@ export const Preview = forwardRef<any, PreviewProps>(
     const totalSteps = steps.length - 1
     const dispatch = usePreviewDispatch()
     const { currentStep, isPlaying } = usePreviewState()
+    const [codeSurferKey, setCodeSurferKey] = useState(1)
+    const codeSurferKeyDelta = useDelta(codeSurferKey)
+    const [loading, setLoading] = useState(false)
+
+    const [debouncedCallback] = useDebouncedCallback(() => {
+      setLoading(false)
+      setCodeSurferKey((key) => {
+        return key + 1
+      })
+    }, 2000)
+
+    useEffect(() => {
+      if (codeSurferKeyDelta?.curr === codeSurferKeyDelta?.prev) {
+        setLoading(true)
+        debouncedCallback()
+      }
+    }, [codeSurferKeyDelta])
 
     useEffect(() => {
       if (playOnInit) {
         dispatch({
           type: 'updatePreviewState',
           currentStep: totalSteps > 1 ? currentStep + 1 : currentStep,
-          isPlaying: true,
+          // isPlaying: true,
         })
       }
     }, [])
@@ -93,18 +110,24 @@ export const Preview = forwardRef<any, PreviewProps>(
     })
 
     return (
-      <Box height={'314px'} overflow={'hidden'} ref={ref} width={'550px'}>
+      <Box
+        height={'314px'}
+        overflow={'hidden'}
+        position="relative"
+        ref={ref}
+        width={'550px'}
+      >
+        {loading && (
+          <Spinner position="absolute" right="6" top="0" zIndex={5000} />
+        )}
+
         {/* Reinitialize theme-ui around code surfer so that all the built in themes work
       // @ts-ignore */}
         <ThemeProvider>
           <AnimatedCodeSurfer
+            key={codeSurferKey}
             progress={props.progress}
-            steps={steps.map((s) => {
-              return {
-                ...s,
-                lang: language,
-              }
-            })}
+            steps={steps}
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>
