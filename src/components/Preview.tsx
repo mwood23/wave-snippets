@@ -1,16 +1,17 @@
 import { CodeSurfer } from '@code-surfer/standalone'
 import React, { forwardRef, useEffect, useState } from 'react'
-import {
-  config as ReactSpringPresets,
-  SpringConfig,
-  animated,
-  useSpring,
-} from 'react-spring'
+import { animated, useSpring } from 'react-spring'
 import { ThemeProvider } from 'theme-ui'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { CODE_THEMES_DICT } from '../code-themes'
-import { DEFAULT_PREVIEW_THEME } from '../const'
+import {
+  ANIMATION_PRESETS_DICT,
+  DEFAULT_ANIMATION_PRESET,
+  DEFAULT_CYCLE_SPEED,
+  DEFAULT_PREVIEW_THEME,
+  DEFAULT_SHOW_NUMBERS,
+} from '../const'
 import { InputStep, usePreviewDispatch, usePreviewState } from '../context'
 import { noop } from '../utils'
 import { Box, Spinner } from './core'
@@ -19,19 +20,13 @@ const AnimatedCodeSurfer = animated(CodeSurfer)
 
 export type PreviewProps = {
   steps: InputStep[]
-
-  springConfig?: SpringConfig
-
-  // TODO: Create more fun presets
-  springPreset?: keyof typeof ReactSpringPresets
-
+  springPreset?: string
   theme?: string
-
   playOnInit?: boolean
-
   cycle?: boolean
   cycleSpeed?: number
   immediate?: boolean
+  showLineNumbers?: boolean
 
   onAnimationCycleEnd: () => void
 }
@@ -41,9 +36,10 @@ export const Preview = forwardRef<any, PreviewProps>(
   (
     {
       steps,
-      springPreset = 'molasses',
+      springPreset = DEFAULT_ANIMATION_PRESET,
       theme = DEFAULT_PREVIEW_THEME,
-      cycleSpeed,
+      showLineNumbers = DEFAULT_SHOW_NUMBERS,
+      cycleSpeed = DEFAULT_CYCLE_SPEED,
       immediate,
       cycle,
       onAnimationCycleEnd = noop,
@@ -56,7 +52,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     const [codeSurferKey, setCodeSurferKey] = useState(1)
     const [loading, setLoading] = useState(false)
 
-    console.log(steps)
+    console.log(steps, isPlaying)
 
     const [debouncedCallback] = useDebouncedCallback(() => {
       setLoading(false)
@@ -68,7 +64,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     useEffect(() => {
       setLoading(true)
       debouncedCallback()
-    }, [steps])
+    }, [steps, showLineNumbers])
 
     useEffect(() => {
       if (isPlaying) {
@@ -81,7 +77,7 @@ export const Preview = forwardRef<any, PreviewProps>(
 
     const props = useSpring({
       progress: currentStep,
-      config: ReactSpringPresets[springPreset],
+      config: ANIMATION_PRESETS_DICT[springPreset].config,
       delay: cycleSpeed,
       onRest: () => {
         if (isPlaying) {
@@ -103,7 +99,6 @@ export const Preview = forwardRef<any, PreviewProps>(
           onAnimationCycleEnd()
         }
       },
-      // pause: !isPlaying,
       immediate,
     })
 
@@ -125,7 +120,12 @@ export const Preview = forwardRef<any, PreviewProps>(
           <AnimatedCodeSurfer
             key={codeSurferKey}
             progress={props.progress}
-            steps={steps}
+            steps={steps.map((s) => {
+              return {
+                ...s,
+                showNumbers: showLineNumbers,
+              }
+            })}
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>

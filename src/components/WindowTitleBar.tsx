@@ -9,7 +9,7 @@ import { Box, Flex, Input } from './core'
 
 export type WindowTitleBarProps = {
   windowControlsType: WindowControlsType
-  windowControlsPosition?: WindowControlsPosition
+  windowControlsPosition: WindowControlsPosition
   title?: string
   onTitleChanged: ((event: React.FormEvent<any>) => void) &
     ((event: React.ChangeEvent<HTMLInputElement>) => void)
@@ -18,7 +18,7 @@ export type WindowTitleBarProps = {
 
 export const WindowTitleBar: FC<WindowTitleBarProps> = ({
   windowControlsType,
-  windowControlsPosition = 'left',
+  windowControlsPosition,
   title,
   onTitleChanged,
   inputStyle,

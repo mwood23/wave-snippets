@@ -1,15 +1,29 @@
 import { produce } from 'immer'
 import React, { Dispatch, FC, createContext } from 'react'
+import { DropResult } from 'react-beautiful-dnd'
 import { RGBColor } from 'react-color'
 import { useImmerReducer } from 'use-immer'
 
+import { WindowControlsPosition, WindowControlsType } from '../code-themes'
 import {
+  DEFAULT_ANIMATION_PRESET,
   DEFAULT_CYCLE,
   DEFAULT_CYCLE_SPEED,
   DEFAULT_IMMEDIATE,
   DEFAULT_PREVIEW_THEME,
+  DEFAULT_SHOW_NUMBERS,
+  DEFAULT_WINDOWS_CONTROLS_POSITION,
+  DEFAULT_WINDOWS_CONTROLS_TYPE,
+  DEFAULT_WINDOW_TITLE,
 } from '../const'
-import { UnreachableCaseError, generateID, last, noop, omit } from '../utils'
+import {
+  UnreachableCaseError,
+  generateID,
+  isNil,
+  last,
+  noop,
+  omit,
+} from '../utils'
 
 export type BackgroundColor = RGBColor
 
@@ -29,11 +43,15 @@ type SnippetState = {
   theme: string
   defaultLanguage: string
   backgroundColor: BackgroundColor
-  title: string
   startingStep: number
   cycle: boolean
   steps: InputStep[]
   cycleSpeed: number
+  springPreset: string
+  showLineNumbers: boolean
+  windowControlsType: WindowControlsType | null
+  windowControlsPosition: WindowControlsPosition | null
+  defaultWindowTitle: string
 }
 
 type SnippetAction =
@@ -61,6 +79,10 @@ type SnippetAction =
       type: 'removeStep'
       stepID: string
     }
+  | {
+      type: 'reorderStep'
+      dropResult: DropResult
+    }
 
 const createEmptyStep = ({
   snippetLanguage,
@@ -79,13 +101,17 @@ const initialSnippetState: SnippetState = {
   immediate: DEFAULT_IMMEDIATE,
   theme: DEFAULT_PREVIEW_THEME,
   defaultLanguage: 'typescript',
+  defaultWindowTitle: DEFAULT_WINDOW_TITLE,
+  springPreset: DEFAULT_ANIMATION_PRESET,
+  showLineNumbers: DEFAULT_SHOW_NUMBERS,
+  windowControlsType: DEFAULT_WINDOWS_CONTROLS_TYPE,
+  windowControlsPosition: DEFAULT_WINDOWS_CONTROLS_POSITION,
   backgroundColor: {
     r: 51,
     g: 197,
     b: 173,
     a: 100,
   },
-  title: '',
   startingStep: 0,
   cycleSpeed: DEFAULT_CYCLE_SPEED,
   cycle: DEFAULT_CYCLE,
@@ -157,6 +183,14 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
       if (!lastStep) return
 
       state.steps.push({ ...lastStep, id: generateID() })
+      return
+    case 'reorderStep':
+      if (isNil(action.dropResult.destination)) return
+
+      // eslint-disable-next-line no-case-declarations
+      const [removed] = state.steps.splice(action.dropResult.source.index, 1)
+      state.steps.splice(action.dropResult.destination.index, 0, removed)
+
       return
     case 'removeStep':
       state.steps = state.steps.filter((step) => {

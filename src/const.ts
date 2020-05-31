@@ -1,9 +1,98 @@
+import { SpringConfig } from 'react-spring'
+
+import { WindowControlsPosition, WindowControlsType } from './code-themes'
 import { normalizeArray } from './utils'
 
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
 export const DEFAULT_CYCLE = false
 export const DEFAULT_IMMEDIATE = false
+export const DEFAULT_SHOW_NUMBERS = false
+export const DEFAULT_ANIMATION_PRESET = 'default'
+export const DEFAULT_WINDOW_TITLE = 'hello.ts'
+export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null
+export const DEFAULT_WINDOWS_CONTROLS_POSITION: WindowControlsPosition | null = null
+
+export type AnimationPreset = {
+  name: string
+  value: string
+  config: SpringConfig
+}
+
+export const ANIMATION_PRESETS: AnimationPreset[] = [
+  {
+    name: 'Default',
+    value: 'default',
+    config: {
+      tension: 280,
+      friction: 120,
+    },
+  },
+  {
+    name: 'Stiff',
+    value: 'stiff',
+    config: {
+      tension: 310,
+      friction: 40,
+    },
+  },
+  {
+    name: 'Molasses',
+    value: 'molasses',
+    config: {
+      tension: 60,
+      friction: 60,
+      mass: 7,
+    },
+  },
+  {
+    name: 'Bouncy',
+    value: 'bouncy',
+    config: {
+      tension: 180,
+      friction: 20,
+      mass: 1.5,
+    },
+  },
+]
+
+export const ANIMATION_PRESETS_DICT = normalizeArray(ANIMATION_PRESETS, 'value')
+
+export const WINDOW_CONTROL_TYPES = [
+  {
+    name: 'Rounded',
+    value: 'rounded',
+  },
+  {
+    name: 'Boxy',
+    value: 'boxy',
+  },
+  {
+    name: 'Black and White',
+    value: 'blackAndWhite',
+  },
+]
+
+export const WINDOW_CONTROL_TYPES_DICT = normalizeArray(
+  ANIMATION_PRESETS,
+  'value',
+)
+
+export const WINDOW_CONTROL_POSITIONS = [
+  {
+    name: 'Left',
+    value: 'left',
+  },
+  {
+    name: 'Right',
+    value: 'right',
+  },
+]
+
+export const WINDOW_CONTROL_POSITIONS_DICT = normalizeArray(
+  WINDOW_CONTROL_POSITIONS,
+  'value',
+)
 
 // TODO: Finish this mapping
 // https://codemirror.net/mode/clike/index.html

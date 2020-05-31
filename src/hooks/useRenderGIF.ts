@@ -1,8 +1,8 @@
-import domToImage from 'dom-to-image'
+import domToImage, { Options } from 'dom-to-image'
 import GIFBuilder from 'gif.js.optimized'
 import { useEffect, useReducer, useRef } from 'react'
 
-import { UnreachableCaseError } from '../utils'
+import { UnreachableCaseError, noop } from '../utils'
 
 const DEFAULT_SNAPSHOT_FREQUENCY = 50
 
@@ -66,11 +66,31 @@ type RenderGIFOptions = {
   /**
    * The number in milliseconds that an image is snapped of the given dom element.
    */
-  frequency: number
+  frequency?: number
 
-  exportSize: number
+  exportSize?: number
 
   gifJSConfig?: Partial<GIFBuilderConfig>
+
+  /**
+   * Config passed to the image capturer
+   */
+  imageCaptureConfig?: Partial<Options>
+
+  /**
+   * Called on start of recording the DOM element
+   */
+  onRecordStart?: () => void
+
+  /**
+   * Called on start of building GIF
+   */
+  onBuildGIFStart?: () => void
+
+  /**
+   * Called when rendering GIF complete. Returns blob version of GIF
+   */
+  onRenderComplete?: (blob: Blob) => void
 }
 
 type RenderGIFState = {
@@ -147,10 +167,18 @@ export const useRenderGIF = (
   {
     frequency = DEFAULT_SNAPSHOT_FREQUENCY,
     gifJSConfig = {},
+    imageCaptureConfig = {},
+    onRenderComplete = noop,
+    onRecordStart = noop,
+    onBuildGIFStart = noop,
   }: RenderGIFOptions = {
     frequency: DEFAULT_SNAPSHOT_FREQUENCY,
     exportSize: 2,
     gifJSConfig: {},
+    imageCaptureConfig: {},
+    onRenderComplete: noop,
+    onRecordStart: noop,
+    onBuildGIFStart: noop,
   },
 ): [{ ref: typeof elementToGIF }, typeof dispatch, RenderGIFState] => {
   const elementToGIF = useRef<any>()
@@ -162,6 +190,7 @@ export const useRenderGIF = (
 
   useEffect(() => {
     if (isRecording && elementToGIF.current) {
+      onRecordStart()
       const takeSnapshotOfElement = async () => {
         const node = elementToGIF.current!
 
@@ -176,6 +205,7 @@ export const useRenderGIF = (
             width: node.offsetWidth + 'px',
             height: node.offsetHeight + 'px',
           },
+          ...imageCaptureConfig,
         })
 
         imagesToRender.current.push(image)
@@ -193,7 +223,7 @@ export const useRenderGIF = (
 
   useEffect(() => {
     const buildGIF = async () => {
-      console.log('Building gif...')
+      onBuildGIFStart()
       const imageElements = await buildImageElements(imagesToRender.current)
 
       const gif = new GIFBuilder({
@@ -210,11 +240,9 @@ export const useRenderGIF = (
         return gif.addFrame(img, { delay: DEFAULT_SNAPSHOT_FREQUENCY })
       })
 
-      gif.on('finished', function (blob: any) {
-        console.log('Build gif finished!', blob, URL.createObjectURL(blob))
-        window.open(URL.createObjectURL(blob))
-
+      gif.on('finished', function (blob: Blob) {
         dispatch({ type: 'renderComplete' })
+        onRenderComplete(blob)
       })
 
       gif.render()
