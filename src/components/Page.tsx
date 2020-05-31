@@ -4,7 +4,7 @@ import { Box } from './core'
 
 export const Page: FC = ({ children }) => {
   return (
-    <Box mb="8" mt="16">
+    <Box mb="8" mt="12">
       {children}
     </Box>
   )

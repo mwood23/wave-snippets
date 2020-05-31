@@ -7,11 +7,13 @@ import { useImmerReducer } from 'use-immer'
 import { WindowControlsPosition, WindowControlsType } from '../code-themes'
 import {
   DEFAULT_ANIMATION_PRESET,
+  DEFAULT_APP_COLOR,
   DEFAULT_CYCLE,
   DEFAULT_CYCLE_SPEED,
   DEFAULT_IMMEDIATE,
   DEFAULT_PREVIEW_THEME,
   DEFAULT_SHOW_NUMBERS,
+  DEFAULT_STARTING_STEP,
   DEFAULT_WINDOWS_CONTROLS_POSITION,
   DEFAULT_WINDOWS_CONTROLS_TYPE,
   DEFAULT_WINDOW_TITLE,
@@ -39,6 +41,8 @@ export type InputStep = {
 }
 
 type SnippetState = {
+  name?: string
+  tags: string[]
   immediate: boolean
   theme: string
   defaultLanguage: string
@@ -64,6 +68,7 @@ type SnippetAction =
   | {
       type: 'updateLanguage'
       lang: string
+      previousLang: string
     }
   | ({
       type: 'updateStep'
@@ -101,18 +106,14 @@ const initialSnippetState: SnippetState = {
   immediate: DEFAULT_IMMEDIATE,
   theme: DEFAULT_PREVIEW_THEME,
   defaultLanguage: 'typescript',
+  tags: ['typescript'],
   defaultWindowTitle: DEFAULT_WINDOW_TITLE,
   springPreset: DEFAULT_ANIMATION_PRESET,
   showLineNumbers: DEFAULT_SHOW_NUMBERS,
   windowControlsType: DEFAULT_WINDOWS_CONTROLS_TYPE,
   windowControlsPosition: DEFAULT_WINDOWS_CONTROLS_POSITION,
-  backgroundColor: {
-    r: 51,
-    g: 197,
-    b: 173,
-    a: 100,
-  },
-  startingStep: 0,
+  backgroundColor: DEFAULT_APP_COLOR,
+  startingStep: DEFAULT_STARTING_STEP,
   cycleSpeed: DEFAULT_CYCLE_SPEED,
   cycle: DEFAULT_CYCLE,
   steps: [
@@ -152,6 +153,12 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
       return {
         ...state,
         defaultLanguage: action.lang,
+        tags: [
+          ...state.tags.filter((t) => {
+            return t !== action.previousLang
+          }),
+          action.lang,
+        ],
         steps: state.steps.map((s) => {
           return { ...s, lang: action.lang }
         }),

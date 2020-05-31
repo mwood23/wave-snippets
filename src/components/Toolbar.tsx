@@ -92,6 +92,7 @@ export const Toolbar: FC<ToolbarProps> = ({
             onSelect={({ suggestion }) => {
               snippetDispatch({
                 type: 'updateLanguage',
+                previousLang: defaultLanguage,
                 lang: suggestion.value,
               })
             }}
@@ -212,39 +213,39 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <FormLabel htmlFor="line-numbers">Line Numbers</FormLabel>
                 <Switch
                   id="line-numbers"
+                  isChecked={showLineNumbers}
                   onChange={() => {
                     return snippetDispatch({
                       type: 'updateSnippetState',
                       showLineNumbers: !showLineNumbers,
                     })
                   }}
-                  value={showLineNumbers}
                 />
               </Flex>
               <Flex align="center" mb="4">
                 <FormLabel htmlFor="slide-show">No Animation</FormLabel>
                 <Switch
                   id="slide-show"
+                  isChecked={immediate}
                   onChange={() => {
                     return snippetDispatch({
                       type: 'updateSnippetState',
                       immediate: !immediate,
                     })
                   }}
-                  value={immediate}
                 />
               </Flex>
               <Flex align="center">
                 <FormLabel htmlFor="cycle">Cycle</FormLabel>
                 <Switch
                   id="cycle"
+                  isChecked={cycle}
                   onChange={() => {
                     return snippetDispatch({
                       type: 'updateSnippetState',
                       cycle: !cycle,
                     })
                   }}
-                  value={cycle}
                 />
               </Flex>
             </PopoverContent>

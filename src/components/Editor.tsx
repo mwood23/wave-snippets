@@ -126,6 +126,7 @@ export const Editor: FC<EditorProps> = ({
           <IconButton
             aria-label="Highlight selection"
             icon="plus-square"
+            mr="2"
             onMouseDown={(e) => {
               e.preventDefault()
 
@@ -159,6 +160,28 @@ export const Editor: FC<EditorProps> = ({
 
                 return newFocus
               })
+            }}
+            size="xs"
+          />
+        </Tooltip>
+        <Tooltip
+          hasArrow
+          aria-label="Clear Selections"
+          label="Clear Selections"
+          placement="top"
+          showDelay={200}
+        >
+          <IconButton
+            aria-label="Clear all Selections"
+            icon="minus"
+            onMouseDown={(e) => {
+              e.preventDefault()
+
+              editorRef.current?.getAllMarks().forEach((m) => {
+                m.clear()
+              })
+
+              setParsedFocus({})
             }}
             size="xs"
           />

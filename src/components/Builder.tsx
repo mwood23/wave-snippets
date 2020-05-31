@@ -13,6 +13,7 @@ import { Box, Flex } from './core'
 import { Panel } from './Panel'
 import { Preview } from './Preview'
 import { PreviewContainer } from './PreviewContainer'
+import { TitleToolbar } from './TitleToolbar'
 import { Toolbar } from './Toolbar'
 
 export const BuilderComponent: FC = () => {
@@ -28,6 +29,7 @@ export const BuilderComponent: FC = () => {
     showLineNumbers,
     windowControlsType,
     windowControlsPosition,
+    name,
   } = useSnippetState()
   const snippetDispatch = useSnippetDispatch()
   const previewDispatch = usePreviewDispatch()
@@ -53,7 +55,7 @@ export const BuilderComponent: FC = () => {
     },
     onRenderComplete: (blob) => {
       const link = document.createElement('a')
-      const prefix = 'waves'
+      const prefix = name ?? 'waves'
 
       link.href = URL.createObjectURL(blob)
       link.download = `${prefix}.gif`
@@ -78,6 +80,7 @@ export const BuilderComponent: FC = () => {
       padding="4"
       width="100%"
     >
+      <TitleToolbar />
       <Toolbar
         downloadLoading={isLoading}
         onRenderGIFClicked={() => {

@@ -12,6 +12,14 @@ export const DEFAULT_ANIMATION_PRESET = 'default'
 export const DEFAULT_WINDOW_TITLE = 'hello.ts'
 export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null
 export const DEFAULT_WINDOWS_CONTROLS_POSITION: WindowControlsPosition | null = null
+export const DEFAULT_APP_COLOR = {
+  r: 51,
+  g: 197,
+  b: 173,
+  a: 100,
+}
+export const DEFAULT_STARTING_STEP = 0
+export const MAX_NUMBER_OF_TAGS = 4
 
 export type AnimationPreset = {
   name: string
@@ -211,3 +219,135 @@ export const SUPPORTED_CODING_LANGAUGES_DICT = normalizeArray(
   SUPPORTED_CODING_LANGAUGES,
   'value',
 )
+
+export const TAG_GROUPS = {
+  general: {
+    name: 'General',
+  },
+  challenge: {
+    name: 'Challenge',
+  },
+  area: {
+    name: 'Area',
+  },
+  language: {
+    name: 'Language',
+  },
+} as const
+
+export type TagGroup = keyof typeof TAG_GROUPS
+export type Tag = {
+  name: string
+  value: string
+  group: TagGroup
+  aliases: string[]
+}
+
+export const TAGS: Tag[] = [
+  {
+    name: 'Fundamentals',
+    value: 'fundamentals',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Coding Challenge',
+    value: 'codingChallenge',
+    group: 'challenge',
+    aliases: [],
+  },
+  {
+    name: 'Fun Fact',
+    value: 'funFact',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'TIL',
+    value: 'til',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Frontend',
+    value: 'frontend',
+    group: 'area',
+    aliases: [],
+  },
+  {
+    name: 'Backend',
+    value: 'backend',
+    group: 'area',
+    aliases: [],
+  },
+  {
+    name: 'Infrastructure',
+    value: 'infrastructure',
+    group: 'area',
+    aliases: [],
+  },
+  {
+    name: 'Serverless',
+    value: 'serverless',
+    group: 'area',
+    aliases: [],
+  },
+  {
+    name: 'Cloud',
+    value: 'cloud',
+    group: 'area',
+    aliases: [],
+  },
+  {
+    name: 'Watercooler',
+    value: 'watercooler',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Motivation',
+    value: 'motivation',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Code Quality',
+    value: 'codeQuality',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Teaser',
+    value: 'teaser',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Interview',
+    value: 'interview',
+    group: 'challenge',
+    aliases: [],
+  },
+  {
+    name: 'Tip',
+    value: 'tip',
+    group: 'general',
+    aliases: [],
+  },
+  {
+    name: 'Algorithms',
+    value: 'algorithms',
+    group: 'challenge',
+    aliases: [],
+  },
+  ...SUPPORTED_CODING_LANGAUGES.map((l) => {
+    return {
+      name: l.name,
+      value: l.value,
+      group: 'language' as TagGroup,
+      aliases: l.aliases,
+    }
+  }),
+]
+
+export const TAGS_DICT = normalizeArray(TAGS, 'value')

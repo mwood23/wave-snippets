@@ -3,36 +3,39 @@ import { rgb, rgba } from 'polished'
 import { groupWith, sort, uniq } from 'ramda'
 import shortID from 'shortid'
 
+import { TagGroup } from '../const'
 import { BackgroundColor } from '../context'
+import { UnreachableCaseError } from './unreachableCaseError'
 
 export { pipe as pipeVal } from 'fp-ts/lib/pipeable'
 export {
-  omit,
-  sort,
-  pick,
-  isNil,
-  isEmpty,
-  includes,
-  times,
-  flatten,
-  mapObjIndexed,
-  groupBy,
-  groupWith,
-  uniq,
-  last,
-  head,
-  equals,
-  symmetricDifference,
-  merge,
-  forEachObjIndexed,
-  maxBy,
-  min,
-  minBy,
-  startsWith,
-  toString,
-  mergeDeepWith,
   allPass,
   concat,
+  equals,
+  flatten,
+  forEachObjIndexed,
+  groupBy,
+  groupWith,
+  head,
+  includes,
+  isEmpty,
+  isNil,
+  last,
+  map,
+  mapObjIndexed,
+  maxBy,
+  merge,
+  mergeDeepWith,
+  min,
+  minBy,
+  omit,
+  pick,
+  sort,
+  startsWith,
+  symmetricDifference,
+  times,
+  toString,
+  uniq,
 } from 'ramda'
 export { noop, isArray, omitBy } from 'ramda-adjunct'
 export * from './unreachableCaseError'
@@ -73,4 +76,20 @@ export const backgroundColorToHexAlpha = (color: BackgroundColor) => {
     blue: color.b,
     alpha: color.a ?? 1,
   })
+}
+
+export const getColorByTagGroup = (domain: TagGroup) => {
+  switch (domain) {
+    case 'area':
+      return 'purple'
+    case 'challenge':
+      return 'red'
+    case 'general':
+      return 'blue'
+    case 'language':
+      return 'orange'
+
+    default:
+      throw new UnreachableCaseError(domain)
+  }
 }
