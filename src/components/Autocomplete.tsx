@@ -4,7 +4,14 @@ import Autosuggest from 'react-autosuggest'
 
 import { useSearch } from '../hooks'
 import { isNil, noop } from '../utils'
-import { Box, Input, useColorMode } from './core'
+import {
+  Box,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  useColorMode,
+} from './core'
 
 type GenericAutocompleteOption = { name: string; aliases?: string[] }
 
@@ -19,6 +26,7 @@ type AutocompleteProps<Option extends GenericAutocompleteOption> = {
     method: 'click' | 'enter'
   }) => void
   value: Option
+  leftInputIcon?: string
 }
 
 /**
@@ -47,7 +55,7 @@ const Wrapper = styled(Box)`
     position: absolute;
     top: 41px;
     transition: background-color 220ms, color 220ms;
-    width: 240px;
+    width: 227px;
     border-width: 1px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -99,6 +107,7 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
   value,
   valueKey,
   onSelect = noop,
+  leftInputIcon,
 }: AutocompleteProps<Option>) => {
   const [displayValue, setDisplayValue] = useState(value.name)
   const { searchText, setSearchText, results } = useSearch<Option>({
@@ -157,8 +166,19 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
           }
         }}
         renderInputComponent={(props) => {
-          // @ts-ignore Types fighting, but looks harmless
-          return <Input {...props} type="input" />
+          return (
+            <InputGroup>
+              {leftInputIcon && (
+                <InputLeftElement>
+                  <Icon color="gray.300" name={leftInputIcon} />
+                </InputLeftElement>
+              )}
+
+              {/*
+               // @ts-ignore Types fighting, but looks harmless */}
+              <Input {...props} type="input" />
+            </InputGroup>
+          )
         }}
         renderSuggestion={(suggestion) => {
           return <Box>{suggestion.name}</Box>

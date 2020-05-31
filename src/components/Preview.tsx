@@ -1,6 +1,5 @@
 import { CodeSurfer } from '@code-surfer/standalone'
 import React, { forwardRef, useEffect, useState } from 'react'
-import { useDelta } from 'react-delta'
 import {
   config as ReactSpringPresets,
   SpringConfig,
@@ -23,7 +22,7 @@ export type PreviewProps = {
 
   springConfig?: SpringConfig
 
-  //   TODO: Create more fun presets
+  // TODO: Create more fun presets
   springPreset?: keyof typeof ReactSpringPresets
 
   theme?: string
@@ -44,7 +43,6 @@ export const Preview = forwardRef<any, PreviewProps>(
       steps,
       springPreset = 'molasses',
       theme = DEFAULT_PREVIEW_THEME,
-      playOnInit = true,
       cycleSpeed,
       immediate,
       cycle,
@@ -56,56 +54,56 @@ export const Preview = forwardRef<any, PreviewProps>(
     const dispatch = usePreviewDispatch()
     const { currentStep, isPlaying } = usePreviewState()
     const [codeSurferKey, setCodeSurferKey] = useState(1)
-    const codeSurferKeyDelta = useDelta(codeSurferKey)
     const [loading, setLoading] = useState(false)
+
+    console.log(steps)
 
     const [debouncedCallback] = useDebouncedCallback(() => {
       setLoading(false)
       setCodeSurferKey((key) => {
         return key + 1
       })
-    }, 2000)
+    }, 1500)
 
     useEffect(() => {
-      if (codeSurferKeyDelta?.curr === codeSurferKeyDelta?.prev) {
-        setLoading(true)
-        debouncedCallback()
-      }
-    }, [codeSurferKeyDelta])
+      setLoading(true)
+      debouncedCallback()
+    }, [steps])
 
     useEffect(() => {
-      if (playOnInit) {
+      if (isPlaying) {
         dispatch({
           type: 'updatePreviewState',
           currentStep: totalSteps > 1 ? currentStep + 1 : currentStep,
-          // isPlaying: true,
         })
       }
-    }, [])
+    }, [isPlaying])
 
     const props = useSpring({
       progress: currentStep,
       config: ReactSpringPresets[springPreset],
       delay: cycleSpeed,
       onRest: () => {
-        dispatch({
-          type: 'updatePreviewState',
-          currentStep:
-            // How many more can we go?!
-            totalSteps > 1
-              ? currentStep === totalSteps
-                ? cycle
-                  ? 0
-                  : currentStep
-                : currentStep + 1
-              : currentStep,
-        })
+        if (isPlaying) {
+          dispatch({
+            type: 'updatePreviewState',
+            currentStep:
+              // How many more can we go?!
+              totalSteps > 1
+                ? currentStep === totalSteps
+                  ? cycle
+                    ? 0
+                    : currentStep
+                  : currentStep + 1
+                : currentStep,
+          })
+        }
 
         if (currentStep === totalSteps) {
           onAnimationCycleEnd()
         }
       },
-      pause: !isPlaying,
+      // pause: !isPlaying,
       immediate,
     })
 
@@ -117,7 +115,7 @@ export const Preview = forwardRef<any, PreviewProps>(
         ref={ref}
         width={'550px'}
       >
-        {loading && (
+        {codeSurferKey !== 1 && loading && (
           <Spinner position="absolute" right="6" top="0" zIndex={5000} />
         )}
 

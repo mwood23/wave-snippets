@@ -8,11 +8,10 @@ import {
   useSnippetState,
 } from '../context'
 import { useRenderGIF } from '../hooks'
-import { Box, Divider, Flex } from './core'
+import { Box, Flex } from './core'
 import { Panel } from './Panel'
 import { Preview } from './Preview'
 import { PreviewContainer } from './PreviewContainer'
-import { PreviewStepSelector } from './PreviewStepSelector'
 import { Toolbar } from './Toolbar'
 
 export const Builder: FC = () => {
@@ -38,8 +37,9 @@ export const Builder: FC = () => {
       key={previewKey}
     >
       <Box
-        border="2px solid white"
-        borderRadius="2px"
+        borderColor="gray.600"
+        borderRadius="3px"
+        borderWidth="2px"
         margin="0 auto"
         maxWidth="1000px"
         padding="4"
@@ -89,8 +89,6 @@ export const Builder: FC = () => {
             />
           </PreviewContainer>
         </Flex>
-        <Divider />
-        <PreviewStepSelector totalSteps={steps.length} />
       </Box>
     </PreviewProvider>
   )

@@ -115,8 +115,9 @@ export const Editor: FC<EditorProps> = ({
 
   return (
     <EditorContainer {...containerStyleProps}>
-      <Box>
+      <Box mb="2">
         <Tooltip
+          hasArrow
           aria-label="Highlight selection"
           label="Highlight Selection"
           placement="top"
@@ -159,7 +160,7 @@ export const Editor: FC<EditorProps> = ({
                 return newFocus
               })
             }}
-            size="sm"
+            size="xs"
           />
         </Tooltip>
       </Box>

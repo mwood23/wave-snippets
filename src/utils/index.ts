@@ -1,5 +1,10 @@
 import { pipe as pipeVal } from 'fp-ts/lib/pipeable'
+import { rgb, rgba } from 'polished'
 import { groupWith, sort, uniq } from 'ramda'
+import shortID from 'shortid'
+
+import { BackgroundColor } from '../context'
+
 export { pipe as pipeVal } from 'fp-ts/lib/pipeable'
 export {
   omit,
@@ -33,6 +38,9 @@ export { noop, isArray, omitBy } from 'ramda-adjunct'
 export * from './unreachableCaseError'
 export * from './normalizeArray'
 export * from './stepUtils'
+export * from './styledUtils'
+
+export const generateID = shortID.generate
 
 export const sortNumberArray = (a: number[]) => {
   return sort<typeof a[0]>((a, b) => {
@@ -49,4 +57,20 @@ export const groupArrayBySequence = (arr: number[]) => {
       return a + 1 === b
     }),
   )
+}
+
+export const backgroundColorToHex = (color: BackgroundColor) => {
+  return rgb({
+    red: color.r,
+    green: color.g,
+    blue: color.b,
+  })
+}
+export const backgroundColorToHexAlpha = (color: BackgroundColor) => {
+  return rgba({
+    red: color.r,
+    green: color.g,
+    blue: color.b,
+    alpha: color.a ?? 1,
+  })
 }

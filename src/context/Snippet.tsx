@@ -9,7 +9,7 @@ import {
   DEFAULT_IMMEDIATE,
   DEFAULT_PREVIEW_THEME,
 } from '../const'
-import { UnreachableCaseError, noop, omit } from '../utils'
+import { UnreachableCaseError, generateID, last, noop, omit } from '../utils'
 
 export type BackgroundColor = RGBColor
 
@@ -51,6 +51,29 @@ type SnippetAction =
       type: 'updateStep'
       stepID: string
     } & Partial<InputStep>)
+  | {
+      type: 'addStep'
+    }
+  | {
+      type: 'duplicateLastStep'
+    }
+  | {
+      type: 'removeStep'
+      stepID: string
+    }
+
+const createEmptyStep = ({
+  snippetLanguage,
+}: {
+  snippetLanguage: string
+}): InputStep => {
+  return {
+    code: '// Type code here',
+    focus: '',
+    lang: snippetLanguage,
+    id: generateID(),
+  }
+}
 
 const initialSnippetState: SnippetState = {
   immediate: DEFAULT_IMMEDIATE,
@@ -123,6 +146,24 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
         ...omit(['type', 'stepIndex'], action),
       }
       return
+    case 'addStep':
+      state.steps.push(
+        createEmptyStep({ snippetLanguage: state.defaultLanguage }),
+      )
+      return
+    case 'duplicateLastStep':
+      // eslint-disable-next-line no-case-declarations
+      const lastStep = last(state.steps)
+      if (!lastStep) return
+
+      state.steps.push({ ...lastStep, id: generateID() })
+      return
+    case 'removeStep':
+      state.steps = state.steps.filter((step) => {
+        return step.id !== action.stepID
+      })
+      return
+
     case 'resetSnippetState':
       return { ...initialSnippetState }
 

@@ -30,7 +30,7 @@ const PreviewDispatchContext = createContext<Dispatch<PreviewAction>>(noop)
 const previewReducer = (state: PreviewState, action: PreviewAction) => {
   switch (action.type) {
     case 'setStep':
-      return { ...state, currentStep: action.step }
+      return { ...state, currentStep: action.step, isPlaying: false }
     case 'updatePreviewState':
       return { ...state, ...omit(['type'], action) }
     case 'resetPreviewState':
