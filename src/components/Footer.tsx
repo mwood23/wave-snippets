@@ -21,8 +21,11 @@ const InternalLink: FC<LinkProps & RouterLinkProps> = ({
   ...props
 }) => {
   return (
-    // @ts-ignore
-    <WavesFooterLink as={RouterLink} {...props}>
+    <WavesFooterLink
+      // @ts-ignore
+      as={RouterLink}
+      {...props}
+    >
       {children}
     </WavesFooterLink>
   )
