@@ -13,9 +13,9 @@ export const DEFAULT_WINDOW_TITLE = 'hello.ts'
 export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null
 export const DEFAULT_WINDOWS_CONTROLS_POSITION: WindowControlsPosition | null = null
 export const DEFAULT_APP_COLOR = {
-  r: 51,
+  r: 11,
   g: 197,
-  b: 173,
+  b: 234,
   a: 100,
 }
 export const DEFAULT_STARTING_STEP = 0

@@ -57,6 +57,7 @@ export const PanelItem: FC<PanelItemProps> = ({
   activeStep,
 }) => {
   const snippetDispatch = useSnippetDispatch()
+  const previewDispatch = usePreviewDispatch()
   const stepNumber = index + 1
   const isActive = activeStep === step.id
 
@@ -96,6 +97,10 @@ export const PanelItem: FC<PanelItemProps> = ({
                   icon={isActive ? 'minus' : 'add'}
                   onClick={() => {
                     onExpandClick(step.id)
+
+                    if (isActive) {
+                      previewDispatch({ type: 'setStep', step: 0 })
+                    }
                   }}
                   size="xs"
                   variant="ghost"

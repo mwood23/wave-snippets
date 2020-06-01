@@ -4,7 +4,7 @@ import {
   LinkProps as RouterLinkProps,
 } from 'react-router-dom'
 
-import { Box, Flex, Icon, Link, LinkProps, Text } from './core'
+import { Box, Flex, Icon, Link, LinkProps, Text, useColorMode } from './core'
 
 type FooterProps = {}
 
@@ -29,6 +29,9 @@ const InternalLink: FC<LinkProps & RouterLinkProps> = ({
 }
 
 export const Footer: FC<FooterProps> = () => {
+  const { colorMode } = useColorMode()
+  const color = { light: 'cyan.400', dark: 'cyan.400' }
+
   return (
     <Flex
       alignItems="center"
@@ -46,7 +49,7 @@ export const Footer: FC<FooterProps> = () => {
       <Box>
         <Text>
           created by{' '}
-          <WavesFooterLink isExternal color="">
+          <WavesFooterLink isExternal color={color[colorMode]}>
             @marcuswood23 <Icon mx="2px" name="external-link" />
           </WavesFooterLink>
         </Text>
