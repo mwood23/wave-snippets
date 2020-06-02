@@ -1,0 +1,5 @@
+/* Overrides for the toaster */
+
+.Toastify__toast-container--top-right {
+  top: 80px !important;
+}

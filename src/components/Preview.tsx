@@ -52,8 +52,6 @@ export const Preview = forwardRef<any, PreviewProps>(
     const [codeSurferKey, setCodeSurferKey] = useState(1)
     const [loading, setLoading] = useState(false)
 
-    console.log(steps, isPlaying)
-
     const [debouncedCallback] = useDebouncedCallback(() => {
       setLoading(false)
       setCodeSurferKey((key) => {

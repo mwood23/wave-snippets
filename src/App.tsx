@@ -2,12 +2,16 @@ import React, { FC } from 'react'
 import { Switch } from 'react-router-dom'
 
 import { PageRoute } from './components'
-import { HomePage } from './pages'
+import { PrivateRoute } from './components/PrivateRoute'
+import { AccountPage, HomePage, NotFoundPage } from './pages'
 
 export const App: FC = () => {
   return (
     <Switch>
-      <PageRoute component={HomePage} path="/" />
+      <PageRoute exact component={HomePage} path="/" />
+      <PrivateRoute exact component={AccountPage} path="/account" />
+
+      <PageRoute component={NotFoundPage} />
     </Switch>
   )
 }

@@ -1,3 +1,7 @@
+import 'react-toastify/dist/ReactToastify.css'
+
+import './index.css'
+
 import { CSSReset, ColorModeProvider, ThemeProvider } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
 import React from 'react'
@@ -6,8 +10,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider as ThemeUIThemeProvider } from 'theme-ui'
 
 import { App } from './App'
-import { ScrollToTop } from './components'
-import { SnippetProvider } from './context'
+import { ScrollToTop, ToastContainer } from './components'
+import { AuthProvider, SnippetProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
 
@@ -19,6 +23,7 @@ ReactDOM.render(
         <ThemeProvider theme={customTheme}>
           <ColorModeProvider value={'dark'}>
             <CSSReset />
+            <ToastContainer />
             {/* Code surfer relies on Theme-UI which hijacks some global elements. We need to take the control
           back so that Chakra can be our single source of truth. */}
             <Global
@@ -29,9 +34,11 @@ ReactDOM.render(
               }}
             />
             {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
-            <SnippetProvider>
-              <App />
-            </SnippetProvider>
+            <AuthProvider>
+              <SnippetProvider>
+                <App />
+              </SnippetProvider>
+            </AuthProvider>
           </ColorModeProvider>
         </ThemeProvider>
       </ThemeUIThemeProvider>

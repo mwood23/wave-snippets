@@ -3,6 +3,8 @@ import { SpringConfig } from 'react-spring'
 import { WindowControlsPosition, WindowControlsType } from './code-themes'
 import { normalizeArray } from './utils'
 
+export const isProd = process.env.REACT_APP_ENV === 'production'
+
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
 export const DEFAULT_CYCLE = false
