@@ -1,3 +1,5 @@
+import { collection } from 'typesaurus'
+
 export type Tiers = 'free'
 
 export type UserDocument = {
@@ -15,3 +17,5 @@ export type UserDocument = {
   tier: Tiers
   userID: string
 }
+
+export const users = collection<UserDocument>('users')

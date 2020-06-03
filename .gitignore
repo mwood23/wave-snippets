@@ -11,6 +11,7 @@ coverage
 # production
 /packages/*/build
 /packages/*/dist
+/deploy-functions/dist
 
 # misc
 .DS_Store

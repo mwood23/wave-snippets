@@ -19,7 +19,7 @@ module.exports = {
     '@typescript-eslint/prefer-nullish-coalescing': ['warn'],
     '@typescript-eslint/member-delimiter-style': ['off'],
     quotes: ['off'],
-    'arrow-body-style': ['error', 'always'],
+    'arrow-body-style': ['error', 'as-needed'],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {

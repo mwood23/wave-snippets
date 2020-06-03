@@ -54,9 +54,7 @@ export const Preview = forwardRef<any, PreviewProps>(
 
     const [debouncedCallback] = useDebouncedCallback(() => {
       setLoading(false)
-      setCodeSurferKey((key) => {
-        return key + 1
-      })
+      setCodeSurferKey((key) => key + 1)
     }, 1500)
 
     useEffect(() => {
@@ -118,12 +116,10 @@ export const Preview = forwardRef<any, PreviewProps>(
           <AnimatedCodeSurfer
             key={codeSurferKey}
             progress={props.progress}
-            steps={steps.map((s) => {
-              return {
-                ...s,
-                showNumbers: showLineNumbers,
-              }
-            })}
+            steps={steps.map((s) => ({
+              ...s,
+              showNumbers: showLineNumbers,
+            }))}
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>

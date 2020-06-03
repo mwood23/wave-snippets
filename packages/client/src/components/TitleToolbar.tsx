@@ -24,13 +24,11 @@ import {
 
 type TitleToolbarProps = {}
 
-const SnippetTag: FC<TagProps> = ({ children, ...rest }) => {
-  return (
-    <Tag rounded="full" size="sm" {...rest}>
-      {children}
-    </Tag>
-  )
-}
+const SnippetTag: FC<TagProps> = ({ children, ...rest }) => (
+  <Tag rounded="full" size="sm" {...rest}>
+    {children}
+  </Tag>
+)
 
 export const TitleToolbar: FC<TitleToolbarProps> = () => {
   const snippetDispatch = useSnippetDispatch()
@@ -73,9 +71,9 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
                   snippetDispatch({
                     // Move this to its own action if this gets more complicated than a one liner
                     type: 'updateSnippetState',
-                    tags: activeSnippetTags.filter((activeTag) => {
-                      return activeTag !== t
-                    }),
+                    tags: activeSnippetTags.filter(
+                      (activeTag) => activeTag !== t,
+                    ),
                   })
                 }}
               />
@@ -133,14 +131,10 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
             <Flex flexWrap="wrap">
               {pipeVal(
                 results,
-                sortBy((a) => {
-                  return a.name
-                }),
+                sortBy((a) => a.name),
                 map((t) => {
                   const isActivelySelected = activeSnippetTags.some(
-                    (activeTags) => {
-                      return activeTags === t.value
-                    },
+                    (activeTags) => activeTags === t.value,
                   )
                   return (
                     <SnippetTag

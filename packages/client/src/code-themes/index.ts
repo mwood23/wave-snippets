@@ -13,9 +13,9 @@ import {
   vsDark,
 } from '@code-surfer/themes'
 import { CodeSurferStyles } from '@code-surfer/themes/dist/utils'
+import { WindowControlsPosition, WindowControlsType } from '@waves/shared'
 
 import { normalizeArray } from '../utils'
-import { WindowControlsPosition, WindowControlsType } from './windowControls'
 
 export * from './windowControls'
 

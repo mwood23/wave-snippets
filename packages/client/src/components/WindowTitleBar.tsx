@@ -1,10 +1,7 @@
+import { WindowControlsPosition, WindowControlsType } from '@waves/shared'
 import React, { CSSProperties, FC } from 'react'
 
-import {
-  WINDOW_CONTROLS_TYPE_DICT,
-  WindowControlsPosition,
-  WindowControlsType,
-} from '../code-themes'
+import { WINDOW_CONTROLS_TYPE_DICT } from '../code-themes'
 import { Box, Flex, Input } from './core'
 
 export type WindowTitleBarProps = {

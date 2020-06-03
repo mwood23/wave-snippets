@@ -8,28 +8,24 @@ import { Box, Flex, Icon, Link, LinkProps, Text, useColorMode } from './core'
 
 type FooterProps = {}
 
-const WavesFooterLink: FC<LinkProps> = ({ children, ...props }) => {
-  return (
-    <Link mr="4" {...props}>
-      {children}
-    </Link>
-  )
-}
+const WavesFooterLink: FC<LinkProps> = ({ children, ...props }) => (
+  <Link mr="4" {...props}>
+    {children}
+  </Link>
+)
 
 const InternalLink: FC<LinkProps & RouterLinkProps> = ({
   children,
   ...props
-}) => {
-  return (
-    <WavesFooterLink
-      // @ts-ignore
-      as={RouterLink}
-      {...props}
-    >
-      {children}
-    </WavesFooterLink>
-  )
-}
+}) => (
+  <WavesFooterLink
+    // @ts-ignore
+    as={RouterLink}
+    {...props}
+  >
+    {children}
+  </WavesFooterLink>
+)
 
 export const Footer: FC<FooterProps> = () => {
   const { colorMode } = useColorMode()

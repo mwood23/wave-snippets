@@ -16,19 +16,18 @@ export const PreviewStepSelector: FC<PreviewStepSelectorProps> = ({
 
   return (
     <Box>
-      {times((i) => {
-        return (
+      {times(
+        (i) => (
           <Button
             isActive={currentStep === i}
             key={i}
-            onClick={() => {
-              return dispatch({ type: 'setStep', step: i })
-            }}
+            onClick={() => dispatch({ type: 'setStep', step: i })}
           >
             {i + 1}
           </Button>
-        )
-      }, totalSteps)}
+        ),
+        totalSteps,
+      )}
     </Box>
   )
 }

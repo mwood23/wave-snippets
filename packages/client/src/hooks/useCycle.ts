@@ -23,9 +23,7 @@ export const useCycle = ({
   const [currentStep, setCurrentStep] = useState(initialStep)
 
   useInterval(
-    () => {
-      return setCurrentStep(currentStep === totalSteps ? 0 : currentStep + 1)
-    },
+    () => setCurrentStep(currentStep === totalSteps ? 0 : currentStep + 1),
     { delay: cycleSpeed, pause },
   )
 

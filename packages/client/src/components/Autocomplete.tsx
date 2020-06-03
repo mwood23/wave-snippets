@@ -77,27 +77,24 @@ const Wrapper = styled(Box)`
   }
 
   .react-autosuggest__suggestion--highlighted {
-    background-color: ${(props) => {
+    background-color: ${(props) =>
       // @ts-ignore
-      return props.theme.colors.gray['200']
-    }};
+      props.theme.colors.gray['200']};
   }
 
   .react-autosuggest__container--dark {
     .react-autosuggest__suggestions-container--open {
-      background: ${(props) => {
+      background: ${(props) =>
         // @ts-ignore
-        return props.theme.colors.gray['700']
-      }};
+        props.theme.colors.gray['700']};
       box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,
         rgba(0, 0, 0, 0.2) 0px 5px 10px, rgba(0, 0, 0, 0.4) 0px 15px 40px;
     }
 
     .react-autosuggest__suggestion--highlighted {
-      background-color: ${(props) => {
+      background-color: ${(props) =>
         // @ts-ignore
-        return props.theme.colors.whiteAlpha['200']
-      }};
+        props.theme.colors.whiteAlpha['200']};
     }
   }
 `
@@ -133,14 +130,11 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
       <Autosuggest
         highlightFirstSuggestion
         focusInputOnSuggestionClick={false}
-        getSuggestionValue={(suggestion) => {
-          return suggestion[valueKey]
-        }}
+        getSuggestionValue={(suggestion) => suggestion[valueKey]}
         inputProps={{
-          onChange: (e) => {
+          onChange: (e) =>
             // @ts-ignore
-            return setDisplayValue(e.target.value)
-          },
+            setDisplayValue(e.target.value),
           value: displayValue ?? searchText,
           type: 'search',
           placeholder: 'Search...',
@@ -165,27 +159,21 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
             setSearchText('')
           }
         }}
-        renderInputComponent={(props) => {
-          return (
-            <InputGroup>
-              {leftInputIcon && (
-                <InputLeftElement>
-                  <Icon color="gray.300" name={leftInputIcon} />
-                </InputLeftElement>
-              )}
+        renderInputComponent={(props) => (
+          <InputGroup>
+            {leftInputIcon && (
+              <InputLeftElement>
+                <Icon color="gray.300" name={leftInputIcon} />
+              </InputLeftElement>
+            )}
 
-              {/*
+            {/*
                // @ts-ignore Types fighting, but looks harmless */}
-              <Input {...props} type="input" />
-            </InputGroup>
-          )
-        }}
-        renderSuggestion={(suggestion) => {
-          return <Box>{suggestion.name}</Box>
-        }}
-        shouldRenderSuggestions={() => {
-          return true
-        }}
+            <Input {...props} type="input" />
+          </InputGroup>
+        )}
+        renderSuggestion={(suggestion) => <Box>{suggestion.name}</Box>}
+        shouldRenderSuggestions={() => true}
         suggestions={results}
         theme={{
           container: `react-autosuggest__container ${

@@ -1,3 +1,5 @@
+Weird functions directory due to: https://github.com/firebase/firebase-tools/issues/653
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

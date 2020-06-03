@@ -1,10 +1,9 @@
+import { SnippetDocument } from '@waves/shared'
 import { produce } from 'immer'
 import React, { Dispatch, FC, createContext } from 'react'
 import { DropResult } from 'react-beautiful-dnd'
-import { RGBColor } from 'react-color'
 import { useImmerReducer } from 'use-immer'
 
-import { WindowControlsPosition, WindowControlsType } from '../code-themes'
 import {
   DEFAULT_ANIMATION_PRESET,
   DEFAULT_APP_COLOR,
@@ -13,6 +12,8 @@ import {
   DEFAULT_IMMEDIATE,
   DEFAULT_PREVIEW_THEME,
   DEFAULT_SHOW_NUMBERS,
+  DEFAULT_SNIPPET_STATUS,
+  DEFAULT_SNIPPET_VISIBILITY,
   DEFAULT_STARTING_STEP,
   DEFAULT_WINDOWS_CONTROLS_POSITION,
   DEFAULT_WINDOWS_CONTROLS_TYPE,
@@ -27,8 +28,6 @@ import {
   omit,
 } from '../utils'
 
-export type BackgroundColor = RGBColor
-
 // Pulled from source cause types aren't exported right
 export type InputStep = {
   code: string
@@ -40,23 +39,7 @@ export type InputStep = {
   id: string
 }
 
-type SnippetState = {
-  name?: string
-  tags: string[]
-  immediate: boolean
-  theme: string
-  defaultLanguage: string
-  backgroundColor: BackgroundColor
-  startingStep: number
-  cycle: boolean
-  steps: InputStep[]
-  cycleSpeed: number
-  springPreset: string
-  showLineNumbers: boolean
-  windowControlsType: WindowControlsType | null
-  windowControlsPosition: WindowControlsPosition | null
-  defaultWindowTitle: string
-}
+type SnippetState = Omit<SnippetDocument, 'owner' | 'createdOn' | 'updatedOn'>
 
 type SnippetAction =
   | ({
@@ -93,14 +76,12 @@ const createEmptyStep = ({
   snippetLanguage,
 }: {
   snippetLanguage: string
-}): InputStep => {
-  return {
-    code: '// Type code here',
-    focus: '',
-    lang: snippetLanguage,
-    id: generateID(),
-  }
-}
+}): InputStep => ({
+  code: '// Type code here',
+  focus: '',
+  lang: snippetLanguage,
+  id: generateID(),
+})
 
 const initialSnippetState: SnippetState = {
   immediate: DEFAULT_IMMEDIATE,
@@ -116,6 +97,8 @@ const initialSnippetState: SnippetState = {
   startingStep: DEFAULT_STARTING_STEP,
   cycleSpeed: DEFAULT_CYCLE_SPEED,
   cycle: DEFAULT_CYCLE,
+  status: DEFAULT_SNIPPET_STATUS,
+  visibility: DEFAULT_SNIPPET_VISIBILITY,
   steps: [
     {
       code: `var x1: any = 1\ndebugger`,
@@ -154,20 +137,14 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
         ...state,
         defaultLanguage: action.lang,
         tags: [
-          ...state.tags.filter((t) => {
-            return t !== action.previousLang
-          }),
+          ...state.tags.filter((t) => t !== action.previousLang),
           action.lang,
         ],
-        steps: state.steps.map((s) => {
-          return { ...s, lang: action.lang }
-        }),
+        steps: state.steps.map((s) => ({ ...s, lang: action.lang })),
       }
     case 'updateStep':
       // eslint-disable-next-line no-case-declarations
-      const stepToUpdate = state.steps.findIndex((s) => {
-        return s.id === action.stepID
-      })
+      const stepToUpdate = state.steps.findIndex((s) => s.id === action.stepID)
 
       if (stepToUpdate === -1) {
         console.warn('Step ID does not exist!')
@@ -200,9 +177,7 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
 
       return
     case 'removeStep':
-      state.steps = state.steps.filter((step) => {
-        return step.id !== action.stepID
-      })
+      state.steps = state.steps.filter((step) => step.id !== action.stepID)
       return
 
     case 'resetSnippetState':

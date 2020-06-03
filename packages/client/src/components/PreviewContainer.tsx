@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
+import { BackgroundColor } from '@waves/shared'
 import React, { ReactNode, forwardRef } from 'react'
 
-import { BackgroundColor } from '../context'
 import { Box } from './core'
 import { WindowTitleBar, WindowTitleBarProps } from './WindowTitleBar'
 
@@ -39,36 +39,34 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       windowControlsPosition,
     },
     ref,
-  ) => {
-    return (
-      <Box paddingX="8" paddingY="12" position="relative" ref={ref}>
-        <Window
-          background={windowBackground}
-          paddingBottom="4"
-          paddingLeft="4"
-          paddingRight="4"
-          paddingTop="4"
-        >
-          <WindowTitleBar
-            onTitleChanged={onTitleChanged}
-            title={title}
-            windowControlsPosition={windowControlsPosition}
-            windowControlsType={windowControlsType}
-          />
-          {children}
-        </Window>
+  ) => (
+    <Box paddingX="8" paddingY="12" position="relative" ref={ref}>
+      <Window
+        background={windowBackground}
+        paddingBottom="4"
+        paddingLeft="4"
+        paddingRight="4"
+        paddingTop="4"
+      >
+        <WindowTitleBar
+          onTitleChanged={onTitleChanged}
+          title={title}
+          windowControlsPosition={windowControlsPosition}
+          windowControlsType={windowControlsType}
+        />
+        {children}
+      </Window>
 
-        {/* If the user clears the colors gives them the transparent checkerboard */}
-        <Background background="white" className="eliminateOnRender" />
-        <Background
-          background="url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==)"
-          className="eliminateOnRender"
-        />
-        {/* Background the user selects */}
-        <Background
-          background={`rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`}
-        />
-      </Box>
-    )
-  },
+      {/* If the user clears the colors gives them the transparent checkerboard */}
+      <Background background="white" className="eliminateOnRender" />
+      <Background
+        background="url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==)"
+        className="eliminateOnRender"
+      />
+      {/* Background the user selects */}
+      <Background
+        background={`rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`}
+      />
+    </Box>
+  ),
 )

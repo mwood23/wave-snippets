@@ -15,24 +15,20 @@ export const PageRoute: FC<PageRouteProps> = ({
   render,
   component: Component,
   ...rest
-}) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        return (
-          <>
-            {showNav && <Nav />}
-            {render ? (
-              render({ ...rest, ...props })
-            ) : (
-              // @ts-ignore React router props appear to be wrong
-              <Component {...rest} {...props} />
-            )}
-            {showFooter && <Footer />}
-          </>
-        )
-      }}
-    />
-  )
-}
+}) => (
+  <Route
+    {...rest}
+    render={(props) => (
+      <>
+        {showNav && <Nav />}
+        {render ? (
+          render({ ...rest, ...props })
+        ) : (
+          // @ts-ignore React router props appear to be wrong
+          <Component {...rest} {...props} />
+        )}
+        {showFooter && <Footer />}
+      </>
+    )}
+  />
+)

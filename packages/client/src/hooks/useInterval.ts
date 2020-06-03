@@ -15,15 +15,11 @@ export const useInterval = (
   }, [callback])
 
   useEffect(() => {
-    const handler = () => {
-      return savedCallback.current && savedCallback.current()
-    }
+    const handler = () => savedCallback.current && savedCallback.current()
 
     if (!pause) {
       const id = setInterval(handler, delay)
-      return () => {
-        return clearInterval(id)
-      }
+      return () => clearInterval(id)
     }
   }, [delay, pause])
 }

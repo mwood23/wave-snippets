@@ -64,14 +64,10 @@ function parsePart(part: string): Part[] {
     const [, line, columns] = columnsMatch
     const columnsList = columns.split(',').map(expandString)
     const lineIndex = Number(line) - 1
-    const columnIndexes = flat(columnsList).map((c) => {
-      return c - 1
-    })
+    const columnIndexes = flat(columnsList).map((c) => c - 1)
     return [[lineIndex, columnIndexes]]
   }
-  return expandString(part).map((lineNumber) => {
-    return [lineNumber - 1, true]
-  })
+  return expandString(part).map((lineNumber) => [lineNumber - 1, true])
 }
 
 function expandString(part: string) {
@@ -112,9 +108,7 @@ function isNaturalNumber(n: any) {
 }
 
 export function getFocusSize(focus: Record<LineIndex, true | ColumnIndex[]>) {
-  const lineIndexList = Object.keys(focus).map((k) => {
-    return +k
-  })
+  const lineIndexList = Object.keys(focus).map((k) => +k)
   // eslint-disable-next-line prefer-spread
   const focusStart = Math.min.apply(Math, lineIndexList)
   // eslint-disable-next-line prefer-spread
@@ -160,10 +154,11 @@ export function serializeFocus(parsedFocus: Record<number, true | number[]>) {
 
     if (isArray(val)) {
       focusString = `${focusString},${serializedLineNumber}[${val
-        .map((v) => {
-          // Columns are 0 base indexed until they're serialized as well. 0 = 1
-          return Number(v) + 1
-        })
+        .map(
+          (v) =>
+            // Columns are 0 base indexed until they're serialized as well. 0 = 1
+            Number(v) + 1,
+        )
         .join(',')}]`
     }
   }, parsedFocus)
@@ -176,16 +171,12 @@ export function serializeFocus(parsedFocus: Record<number, true | number[]>) {
 export const removeLineFromFocus = (
   lineNumber: number,
   parsedFocus: ParsedFocus,
-) => {
-  return omit([toString(lineNumber)], parsedFocus)
-}
+) => omit([toString(lineNumber)], parsedFocus)
 
 export const addLineToFocus = (
   lineNumber: number,
   parsedFocus: ParsedFocus,
-): ParsedFocus => {
-  return { ...parsedFocus, [lineNumber]: true }
-}
+): ParsedFocus => ({ ...parsedFocus, [lineNumber]: true })
 
 type CodeMirrorPositionWithContent = CodeMirror.Position & { content: string }
 
@@ -199,16 +190,12 @@ export const addFocusToSelection = ({
   parsedFocus: ParsedFocus
 }): ParsedFocus => {
   const startingLine = minBy<CodeMirrorPositionWithContent>(
-    (x) => {
-      return x.line + x.ch // I think this will work?
-    },
+    (x) => x.line + x.ch, // I think this will work?
     anchor,
     head,
   )
   const endingLine = maxBy<CodeMirrorPositionWithContent>(
-    (x) => {
-      return x.line + x.ch
-    },
+    (x) => x.line + x.ch,
     anchor,
     head,
   )
@@ -272,19 +259,16 @@ export const addFocusToSelection = ({
 
   // Selecting a full line places the end position on the next line in codemirror. Here we check for that
   // and take it out because that's not in the codemirror spec.
-  return omitBy<ParsedFocusLine, ParsedFocus>((val) => {
-    return isArray(val) && val.length === 0
-  }, newParsedFocus)
+  return omitBy<ParsedFocusLine, ParsedFocus>(
+    (val) => isArray(val) && val.length === 0,
+    newParsedFocus,
+  )
 }
 
-const createContiguousArray = (x1: number) => {
-  return (x2: number) => {
-    const startCharacter = min(x1)(x2)
+const createContiguousArray = (x1: number) => (x2: number) => {
+  const startCharacter = min(x1)(x2)
 
-    return times((i) => {
-      return startCharacter + i
-    }, Math.abs(x1 - x2))
-  }
+  return times((i) => startCharacter + i, Math.abs(x1 - x2))
 }
 
 /**

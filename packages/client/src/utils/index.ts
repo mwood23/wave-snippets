@@ -1,10 +1,10 @@
+import { BackgroundColor } from '@waves/shared'
 import { pipe as pipeVal } from 'fp-ts/lib/pipeable'
 import { rgb, rgba } from 'polished'
 import { groupWith, sort, uniq } from 'ramda'
 import shortID from 'shortid'
 
 import { TagGroup } from '../const'
-import { BackgroundColor } from '../context'
 import { UnreachableCaseError } from './unreachableCaseError'
 
 export { pipe as pipeVal } from 'fp-ts/lib/pipeable'
@@ -45,38 +45,30 @@ export * from './styledUtils'
 
 export const generateID = shortID.generate
 
-export const sortNumberArray = (a: number[]) => {
-  return sort<typeof a[0]>((a, b) => {
-    return a - b
-  })(a)
-}
+export const sortNumberArray = (a: number[]) =>
+  sort<typeof a[0]>((a, b) => a - b)(a)
 
-export const groupArrayBySequence = (arr: number[]) => {
-  return pipeVal(
+export const groupArrayBySequence = (arr: number[]) =>
+  pipeVal(
     arr,
     uniq,
     sortNumberArray,
-    groupWith<typeof arr[0]>((a, b) => {
-      return a + 1 === b
-    }),
+    groupWith<typeof arr[0]>((a, b) => a + 1 === b),
   )
-}
 
-export const backgroundColorToHex = (color: BackgroundColor) => {
-  return rgb({
+export const backgroundColorToHex = (color: BackgroundColor) =>
+  rgb({
     red: color.r,
     green: color.g,
     blue: color.b,
   })
-}
-export const backgroundColorToHexAlpha = (color: BackgroundColor) => {
-  return rgba({
+export const backgroundColorToHexAlpha = (color: BackgroundColor) =>
+  rgba({
     red: color.r,
     green: color.g,
     blue: color.b,
     alpha: color.a ?? 1,
   })
-}
 
 export const getColorByTagGroup = (domain: TagGroup) => {
   switch (domain) {

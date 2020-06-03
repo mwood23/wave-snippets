@@ -147,21 +147,21 @@ const renderGIFReducer = (state: RenderGIFState, action: RenderGIFAction) => {
   }
 }
 
-const buildImageElements = async (images: string[]) => {
-  return Promise.all(
-    images.map((myBlob) => {
-      return new Promise(function (resolved) {
-        const i = new Image()
-        i.onload = function () {
-          // wait for the onload to get the width and height
-          resolved(i)
-        }
+const buildImageElements = async (images: string[]) =>
+  Promise.all(
+    images.map(
+      (myBlob) =>
+        new Promise(function (resolved) {
+          const i = new Image()
+          i.onload = function () {
+            // wait for the onload to get the width and height
+            resolved(i)
+          }
 
-        i.src = myBlob
-      })
-    }),
+          i.src = myBlob
+        }),
+    ),
   )
-}
 
 export const useRenderGIF = (
   {
@@ -234,11 +234,11 @@ export const useRenderGIF = (
         ...gifJSConfig,
       })
 
-      imageElements.forEach((img) => {
+      imageElements.forEach((img) =>
         // This adds a delay between the frames. By keeping it synced up with the snapshot frequency no frame will be wasted
         // and keep the GIF 1:1 with what we're recording
-        return gif.addFrame(img, { delay: DEFAULT_SNAPSHOT_FREQUENCY })
-      })
+        gif.addFrame(img, { delay: DEFAULT_SNAPSHOT_FREQUENCY }),
+      )
 
       gif.on('finished', function (blob: Blob) {
         dispatch({ type: 'renderComplete' })

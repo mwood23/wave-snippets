@@ -108,12 +108,12 @@ export const BuilderComponent: FC = () => {
           {...bind}
           backgroundColor={backgroundColor}
           key={previewKey}
-          onTitleChanged={(e: any) => {
-            return snippetDispatch({
+          onTitleChanged={(e: any) =>
+            snippetDispatch({
               type: 'updateSnippetState',
               defaultWindowTitle: e.target.value,
             })
-          }}
+          }
           title={defaultWindowTitle}
           windowBackground={themeObject.theme.colors.background}
           windowControlsPosition={

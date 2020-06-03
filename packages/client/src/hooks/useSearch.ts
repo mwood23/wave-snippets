@@ -36,9 +36,7 @@ export const useSearch = <T extends {}>({
   // Can't change indexes once mounted with how this is written
   useEffect(() => {
     searchInstance.current = new Search(uidFieldName)
-    indexes.forEach((index) => {
-      return searchInstance.current!.addIndex(index)
-    })
+    indexes.forEach((index) => searchInstance.current!.addIndex(index))
     searchInstance.current!.addDocuments(collection)
   }, [])
 

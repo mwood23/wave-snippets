@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-scripts/scripts/start.js b/node_modules/react-scripts/scripts/start.js
+index 2568ab3..270c7f0 100644
+--- a/node_modules/react-scripts/scripts/start.js
++++ b/node_modules/react-scripts/scripts/start.js
+@@ -171,7 +171,7 @@ checkBrowsers(paths.appPath, isInteractive)
+         devServer.close();
+         process.exit();
+       });
+-      process.stdin.resume();
++      // process.stdin.resume();
+     }
+   })
+   .catch(err => {

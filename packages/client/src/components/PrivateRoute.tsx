@@ -37,8 +37,8 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({
   return (
     <Route
       {...rest}
-      render={(props) => {
-        return user ? (
+      render={(props) =>
+        user ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -48,7 +48,7 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({
             }}
           />
         )
-      }}
+      }
     />
   )
 }

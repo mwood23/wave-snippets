@@ -1,6 +1,12 @@
+import {
+  BackgroundColor,
+  SnippetStatus,
+  SnippetVisibility,
+  WindowControlsPosition,
+  WindowControlsType,
+} from '@waves/shared'
 import { SpringConfig } from 'react-spring'
 
-import { WindowControlsPosition, WindowControlsType } from './code-themes'
 import { normalizeArray } from './utils'
 
 export const isProd = process.env.REACT_APP_ENV === 'production'
@@ -12,9 +18,11 @@ export const DEFAULT_IMMEDIATE = false
 export const DEFAULT_SHOW_NUMBERS = false
 export const DEFAULT_ANIMATION_PRESET = 'default'
 export const DEFAULT_WINDOW_TITLE = 'hello.ts'
+export const DEFAULT_SNIPPET_STATUS: SnippetStatus = 'draft'
+export const DEFAULT_SNIPPET_VISIBILITY: SnippetVisibility = 'private'
 export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null
 export const DEFAULT_WINDOWS_CONTROLS_POSITION: WindowControlsPosition | null = null
-export const DEFAULT_APP_COLOR = {
+export const DEFAULT_APP_COLOR: BackgroundColor = {
   r: 11,
   g: 197,
   b: 234,
@@ -342,14 +350,12 @@ export const TAGS: Tag[] = [
     group: 'challenge',
     aliases: [],
   },
-  ...SUPPORTED_CODING_LANGAUGES.map((l) => {
-    return {
-      name: l.name,
-      value: l.value,
-      group: 'language' as TagGroup,
-      aliases: l.aliases,
-    }
-  }),
+  ...SUPPORTED_CODING_LANGAUGES.map((l) => ({
+    name: l.name,
+    value: l.value,
+    group: 'language' as TagGroup,
+    aliases: l.aliases,
+  })),
 ]
 
 export const TAGS_DICT = normalizeArray(TAGS, 'value')

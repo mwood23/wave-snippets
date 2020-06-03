@@ -1,8 +1,8 @@
+import { UserDocument } from '@waves/shared'
 import React, { FC, createContext, useEffect, useState } from 'react'
 
 import { useCreateToast } from '../components'
 import { firebase } from '../config/firebase'
-import { UserDocument } from '../types'
 
 type UnauthedState = {
   isAuthed: false
@@ -30,9 +30,7 @@ export const initialAuthState: AuthState = {
 
 const AuthStateContext = createContext<AuthState>(initialAuthState)
 const AuthDispatchContext = createContext<AuthDispatch>({
-  logout: () => {
-    return Promise.resolve()
-  },
+  logout: () => Promise.resolve(),
 })
 
 export const AuthProvider: FC = ({ children }) => {
@@ -40,9 +38,8 @@ export const AuthProvider: FC = ({ children }) => {
   const toast = useCreateToast()
 
   useEffect(() => {
-    let unsubscribeFromUserListener = () => {
-      return
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    let unsubscribeFromUserListener = () => {}
 
     const unsubscribe = firebase.auth().onAuthStateChanged(async (userAuth) => {
       if (!userAuth) {

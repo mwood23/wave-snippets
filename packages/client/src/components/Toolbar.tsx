@@ -115,12 +115,12 @@ export const Toolbar: FC<ToolbarProps> = ({
             <PopoverContent width="230px" zIndex={1000}>
               <ColorPicker
                 color={backgroundColor}
-                onChange={(color) => {
-                  return snippetDispatch({
+                onChange={(color) =>
+                  snippetDispatch({
                     type: 'updateSnippetState',
                     backgroundColor: color.rgb,
                   })
-                }}
+                }
               />
             </PopoverContent>
           </Popover>
@@ -136,23 +136,21 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <FormLabel htmlFor="email">Animation Preset</FormLabel>
                 <Select
                   isDisabled={immediate}
-                  onChange={(e) => {
-                    return snippetDispatch({
+                  onChange={(e) =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       springPreset: e.target.value,
                     })
-                  }}
+                  }
                   placeholder="Select option"
                   size="sm"
                   value={springPreset}
                 >
-                  {ANIMATION_PRESETS.map((preset) => {
-                    return (
-                      <option key={preset.value} value={preset.value}>
-                        {preset.name}
-                      </option>
-                    )
-                  })}
+                  {ANIMATION_PRESETS.map((preset) => (
+                    <option key={preset.value} value={preset.value}>
+                      {preset.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl mb="4">
@@ -160,23 +158,21 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <Select
                   isDisabled={immediate}
                   mb="2"
-                  onChange={(e) => {
-                    return snippetDispatch({
+                  onChange={(e) =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       windowControlsType: e.target.value as WindowControlsType,
                     })
-                  }}
+                  }
                   placeholder="Select option"
                   size="sm"
                   value={windowControlsType ?? ''}
                 >
-                  {WINDOW_CONTROL_TYPES.map((preset) => {
-                    return (
-                      <option key={preset.value} value={preset.value}>
-                        {preset.name}
-                      </option>
-                    )
-                  })}
+                  {WINDOW_CONTROL_TYPES.map((preset) => (
+                    <option key={preset.value} value={preset.value}>
+                      {preset.name}
+                    </option>
+                  ))}
                 </Select>
                 <Flex align="center">
                   <FormLabel htmlFor="window-controls-position">
@@ -184,13 +180,13 @@ export const Toolbar: FC<ToolbarProps> = ({
                   </FormLabel>
                   <Switch
                     id="window-controls-position"
-                    onChange={() => {
-                      return snippetDispatch({
+                    onChange={() =>
+                      snippetDispatch({
                         type: 'updateSnippetState',
                         windowControlsPosition:
                           windowControlsPosition === 'right' ? 'left' : 'right',
                       })
-                    }}
+                    }
                     value={windowControlsPosition === 'right'}
                   />
                 </Flex>
@@ -198,12 +194,12 @@ export const Toolbar: FC<ToolbarProps> = ({
               <FormControl mb="4">
                 <FormLabel htmlFor="email">Cycle Speed (ms)</FormLabel>
                 <Input
-                  onChange={(e: any) => {
-                    return snippetDispatch({
+                  onChange={(e: any) =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       cycleSpeed: e.target.value,
                     })
-                  }}
+                  }
                   size="sm"
                   type="numeric"
                   value={cycleSpeed}
@@ -214,12 +210,12 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <Switch
                   id="line-numbers"
                   isChecked={showLineNumbers}
-                  onChange={() => {
-                    return snippetDispatch({
+                  onChange={() =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       showLineNumbers: !showLineNumbers,
                     })
-                  }}
+                  }
                 />
               </Flex>
               <Flex align="center" mb="4">
@@ -227,12 +223,12 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <Switch
                   id="slide-show"
                   isChecked={immediate}
-                  onChange={() => {
-                    return snippetDispatch({
+                  onChange={() =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       immediate: !immediate,
                     })
-                  }}
+                  }
                 />
               </Flex>
               <Flex align="center">
@@ -240,12 +236,12 @@ export const Toolbar: FC<ToolbarProps> = ({
                 <Switch
                   id="cycle"
                   isChecked={cycle}
-                  onChange={() => {
-                    return snippetDispatch({
+                  onChange={() =>
+                    snippetDispatch({
                       type: 'updateSnippetState',
                       cycle: !cycle,
                     })
-                  }}
+                  }
                 />
               </Flex>
             </PopoverContent>
@@ -258,12 +254,12 @@ export const Toolbar: FC<ToolbarProps> = ({
             // @ts-ignore
             icon={isPlaying ? 'pause' : 'play'}
             isDisabled={downloadLoading}
-            onClick={() => {
-              return previewDispatch({
+            onClick={() =>
+              previewDispatch({
                 type: 'updatePreviewState',
                 isPlaying: !isPlaying,
               })
-            }}
+            }
           />
         </ToolbarItem>
         <ToolbarItem>

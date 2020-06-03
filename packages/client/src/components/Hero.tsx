@@ -29,9 +29,7 @@ export const Hero: FC<HeroProps> = () => {
   return (
     <Flex alignItems="center" direction="column">
       <animated.svg
-        onClick={() => {
-          return toggle(!open)
-        }}
+        onClick={() => toggle(!open)}
         style={{ transform, opacity, margin: '1rem auto', cursor: 'pointer' }}
         viewBox="0 0 1278 446"
         width="250px"

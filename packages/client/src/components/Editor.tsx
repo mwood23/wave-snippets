@@ -51,10 +51,9 @@ const EditorContainer = styled(Box)`
 
   .waves-highlight-line,
   .waves-highlight-column {
-    background-color: ${(props) => {
+    background-color: ${(props) =>
       // @ts-ignore
-      return props.theme.colors.whiteAlpha['400']
-    }};
+      props.theme.colors.whiteAlpha['400']};
   }
 `
 
