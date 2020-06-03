@@ -1,0 +1,20 @@
+{
+  "name": "@waves/shared",
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "run-p clean:*",
+    "clean:node_modules": "rimraf node_modules",
+    "clean:build": "rimraf build",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "test": "echo 'N/A'",
+    "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "eslint:fix": "yarn eslint --fix",
+    "tsc": "tsc -p tsconfig.json",
+    "lint": "run-s tsc eslint",
+    "lint:fix": "yarn tsc && yarn eslint:fix"
+  },
+  "main": "dist/index.js",
+  "dependencies": {},
+  "private": true
+}

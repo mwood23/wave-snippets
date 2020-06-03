@@ -2,50 +2,31 @@
   "name": "waves",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
-    "@code-surfer/standalone": "^3.1.1",
-    "@code-surfer/themes": "^3.1.1",
-    "@emotion/core": "^10.0.28",
-    "@emotion/styled": "^10.0.27",
-    "array.prototype.flat": "^1.2.3",
-    "base64-arraybuffer": "^0.2.0",
-    "codemirror": "^5.54.0",
-    "dom-to-image": "^2.6.0",
-    "dom-to-image-more": "^2.8.0",
-    "emotion-theming": "^10.0.27",
-    "firebase": "^7.14.6",
-    "formik": "^2.1.4",
-    "fp-ts": "^2.6.1",
-    "gif.js": "^0.2.0",
-    "gif.js.optimized": "^1.0.1",
-    "highlight.js": "^10.0.3",
-    "immer": "^6.0.8",
-    "js-search": "^2.0.0",
-    "polished": "^3.6.4",
-    "prism-react-renderer": "^1.1.1",
-    "prismjs": "1.20.0",
-    "ramda": "^0.27.0",
-    "ramda-adjunct": "^2.27.0",
-    "react": "^16.13.1",
-    "react-autosuggest": "^10.0.2",
-    "react-beautiful-dnd": "^13.0.0",
-    "react-codemirror2": "^7.2.0",
-    "react-color": "^2.18.1",
-    "react-delta": "^1.0.2",
-    "react-dom": "^16.13.1",
-    "react-firebase-hooks": "^2.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-share": "^4.1.0",
-    "react-simple-code-editor": "^0.11.0",
-    "react-spring": "^9.0.0-rc.3",
-    "react-toastify": "^6.0.5",
-    "shortid": "^2.2.15",
-    "theme-ui": "^0.3.1",
-    "use-debounce": "^3.4.2",
-    "use-immer": "^0.4.0",
-    "use-spring": "^0.2.3",
-    "yup": "^0.29.0"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "yarn install && yarn build",
+    "build": "yarn lerna:run-deps build",
+    "clean": "run-p clean:*",
+    "clean:build": "lerna run clean:build --parallel",
+    "clean:node_modules": "lerna run clean:node_modules --parallel && rimraf node_modules",
+    "lerna": "lerna",
+    "lerna:run": "lerna run",
+    "lerna:run-deps": "lerna run --include-filtered-dependencies --stream",
+    "lerna:list": "lerna list --long --all",
+    "lerna:diff": "lerna diff",
+    "lerna:change": "lerna changed --long || true",
+    "killallNode": "killall node",
+    "lint": "lerna run lint --parallel",
+    "lint:fix": "lerna run lint:fix --parallel",
+    "test": "lerna run test --parallel",
+    "postinstall": "patch-package",
+    "lint:css": "stylelint './src/**/*.{ts,tsx}'",
+    "rebootstrap": "run-s clean bootstrap killallNode",
+    "reinstall": "yarn clean:node_modules && yarn install && yarn killallNode",
+    "firebase:deploy": "cd projects/firebase-auth && firebase deploy",
+    "dev:client": "yarn lerna:run-deps dev"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -81,41 +62,27 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^4.0.2",
     "eslint-plugin-unicorn": "20.0.0",
+    "firebase-functions-test": "^0.2.0",
+    "husky": "^4.2.5",
     "import-sort-style-module": "6.0.0",
+    "lerna": "^3.22.0",
+    "npm-run-all": "^4.1.5",
     "patch-package": "^6.2.2",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.0.5",
     "prettier-plugin-import-sort": "0.0.4",
     "react-scripts": "3.4.1",
+    "rimraf": "^3.0.2",
     "stylelint": "13.5.0",
     "stylelint-config-recommended": "3.0.0",
     "stylelint-config-styled-components": "0.1.1",
     "stylelint-processor-styled-components": "1.10.0",
-    "typescript": "3.8.3"
-  },
-  "scripts": {
-    "postinstall": "patch-package",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint:css": "stylelint './src/**/*.{ts,tsx}'"
+    "typescript": "3.8.3",
+    "use-yarn": "^2.2.0"
   },
   "importSort": {
     ".ts,.tsx": {
       "style": "module"
     }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react'
 
-import { firebase } from '../config/firebase'
 import { useAuthDispatch, useAuthState } from '../context'
 import { useOAuth } from '../hooks/useOAuth'
 import {
@@ -39,7 +38,6 @@ export const Nav: FC<NavProps> = () => {
       toast(googleError ?? githubError, { type: 'error' })
     }
   }, [googleError, githubError])
-
 
   return (
     <Box position="fixed" right="8" top="8">

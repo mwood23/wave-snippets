@@ -48,7 +48,7 @@ export function deserializeFocus(focus: string) {
     throw new Error('Focus cannot be empty')
   }
 
-  const parts = focus.split(/,(?![^\[]*\])/g).map(parsePart)
+  const parts = focus.split(/,(?![^[]*\])/g).map(parsePart)
   return fromEntries(flat(parts))
 }
 

@@ -1,0 +1,32 @@
+{
+  "name": "@waves/functions",
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "run-p clean:*",
+    "clean:node_modules": "rimraf node_modules",
+    "clean:build": "rimraf dist",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "echo 'N/A'",
+    "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "eslint:fix": "yarn eslint --fix",
+    "tsc": "tsc -p tsconfig.json",
+    "lint": "run-s tsc eslint",
+    "lint:fix": "yarn tsc && yarn eslint:fix",
+    "dev": "echo 'N/A: You have to deploy and test against environment'"
+  },
+  "engines": {
+    "node": "10"
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "@waves/shared": "^0.1.0",
+    "firebase-admin": "^8.10.0",
+    "firebase-functions": "^3.6.1"
+  },
+  "private": true
+}

@@ -7,6 +7,7 @@ module.exports = {
     'import/named': ['off'],
     'import/prefer-default-export': ['off'],
     'import/namespace': ['off'],
+    'import/no-nodejs-modules': ['off'],
     '@typescript-eslint/no-explicit-any': ['off'],
     '@typescript-eslint/ban-ts-ignore': ['off'],
     '@typescript-eslint/ban-types': ['off'],
@@ -72,5 +73,8 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    'import/core-modules': [
+      '@testing-library/react'
+    ]
   },
 }
