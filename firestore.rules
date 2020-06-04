@@ -19,7 +19,7 @@ service cloud.firestore {
     }
 
     match /snippets/{snippet} {
-      allow read: if isPublic();
+      allow read: if isPublic() || (isSignedIn() && isSnippetOwner());
       allow create: if isSignedIn();
       allow update, delete: if isSignedIn() && isSnippetOwner();
     }

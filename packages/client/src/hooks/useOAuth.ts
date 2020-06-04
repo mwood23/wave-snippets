@@ -32,8 +32,6 @@ export const useOAuth = ({
 
   const authProvider = getAuthProvider(provider)
 
-  console.log(authProvider)
-
   const loginCall = async () => {
     setLoading(true)
 

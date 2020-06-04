@@ -1,12 +1,19 @@
-import { SnippetDocument } from '@waves/shared'
+import { InputStep, SnippetDocument, snippets } from '@waves/shared'
 import { produce } from 'immer'
-import React, { Dispatch, FC, createContext } from 'react'
+import React, { Dispatch, FC, createContext, useEffect, useState } from 'react'
 import { DropResult } from 'react-beautiful-dnd'
+import { useHistory, useParams } from 'react-router-dom'
+import { add, update } from 'typesaurus'
+import { useDebouncedCallback } from 'use-debounce'
 import { useImmerReducer } from 'use-immer'
+import { Optional } from 'utility-types'
 
+import { Box, Text, useCreateToast } from '../components'
+import { firebase } from '../config/firebase'
 import {
   DEFAULT_ANIMATION_PRESET,
   DEFAULT_APP_COLOR,
+  DEFAULT_AUTOSAVE_THRESHOLD,
   DEFAULT_CYCLE,
   DEFAULT_CYCLE_SPEED,
   DEFAULT_IMMEDIATE,
@@ -27,24 +34,17 @@ import {
   noop,
   omit,
 } from '../utils'
+import { useAuthState } from './Auth'
 
-// Pulled from source cause types aren't exported right
-export type InputStep = {
-  code: string
-  focus?: string
-  title?: string
-  subtitle?: string
-  showNumbers?: boolean
-  lang: string
-  id: string
-}
-
-type SnippetState = Omit<SnippetDocument, 'owner' | 'createdOn' | 'updatedOn'>
+type SnippetState = Optional<
+  SnippetDocument,
+  'owner' | 'createdOn' | 'updatedOn'
+>
 
 type SnippetAction =
   | ({
       type: 'updateSnippetState'
-    } & Partial<SnippetState>)
+    } & Partial<SnippetDocument>)
   | {
       type: 'resetSnippetState'
     }
@@ -77,6 +77,8 @@ const createEmptyStep = ({
 }: {
   snippetLanguage: string
 }): InputStep => ({
+  title: '',
+  subtitle: '',
   code: '// Type code here',
   focus: '',
   lang: snippetLanguage,
@@ -101,12 +103,16 @@ const initialSnippetState: SnippetState = {
   visibility: DEFAULT_SNIPPET_VISIBILITY,
   steps: [
     {
+      title: '',
+      subtitle: '',
       code: `var x1: any = 1\ndebugger`,
-      // focus: '1[1:14]',
+      focus: '1[1:14]',
       lang: 'typescript',
       id: 'dfgs',
     },
     {
+      title: '',
+      subtitle: '',
       code: `var x0: any = 3
 var x1 = 1
 var x0 = 3`,
@@ -115,6 +121,8 @@ var x0 = 3`,
       id: 'gfdsg',
     },
     {
+      title: '',
+      subtitle: '',
       code: `var x0: number = 3
 var x1 = 1
 var x1 = 1
@@ -125,7 +133,9 @@ var x0 = 3`,
   ],
 }
 
-const SnippetStateContext = createContext<SnippetState>(initialSnippetState)
+const SnippetStateContext = createContext<SnippetState & { isSaving: boolean }>(
+  { ...initialSnippetState, isSaving: false },
+)
 const SnippetDispatchContext = createContext<Dispatch<SnippetAction>>(noop)
 
 const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
@@ -190,11 +200,71 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
   }
 })
 
-export const SnippetProvider: FC = ({ children }) => {
-  const [state, dispatch] = useImmerReducer(snippetReducer, initialSnippetState)
+export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
+  children,
+  snippet,
+}) => {
+  const toast = useCreateToast()
+  const [state, dispatch] = useImmerReducer(
+    snippetReducer,
+    snippet ?? initialSnippetState,
+  )
+  const [isSaving, setIsSaving] = useState(false)
+  const [currentThreshold, setCurrentThreshold] = useState(0)
+  const { user } = useAuthState()
+  const params = useParams<{ snippetID: string }>()
+  const history = useHistory()
+
+  /**
+   * This is called on initial render and everytime a user takes an action in the app.
+   * We add a threshold here for autosaving to keep us from saving on initial render and
+   * saving from users taking one or two actions. Any GIF worth saving will have tons of actions.
+   */
+  const [debouncedCallback] = useDebouncedCallback(async () => {
+    // Break early if in the process of creating a new entity
+    if (isSaving) return
+    setCurrentThreshold((current) => current + 1)
+
+
+    if (user) {
+      if (params.snippetID) {
+        // @Performance: This fires an extra write on redirection, not too worried about it for now.
+        console.log('autosave update')
+        setIsSaving(true)
+        await update(snippets, params.snippetID, {
+          ...state,
+          updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
+          owner: user.userID,
+        })
+        setIsSaving(false)
+      } else if (currentThreshold > DEFAULT_AUTOSAVE_THRESHOLD) {
+        console.log('autosave create')
+        setIsSaving(true)
+        const data = await add(snippets, {
+          ...state,
+          createdOn: firebase.firestore.FieldValue.serverTimestamp(),
+          owner: user.userID,
+        })
+
+        history.push(`/${data.id}`, { skipFetch: true })
+
+        toast(
+          <Box>
+            <Text>🚀Saved a new snippet!</Text>
+          </Box>,
+        )
+        dispatch({ type: 'updateSnippetState', owner: user.userID })
+        setIsSaving(false)
+      }
+    }
+  }, 3000)
+
+  useEffect(() => {
+    debouncedCallback()
+  }, [debouncedCallback, state])
 
   return (
-    <SnippetStateContext.Provider value={state}>
+    <SnippetStateContext.Provider value={{ ...state, isSaving }}>
       <SnippetDispatchContext.Provider value={dispatch}>
         {children}
       </SnippetDispatchContext.Provider>

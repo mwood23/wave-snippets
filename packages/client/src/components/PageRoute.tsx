@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import React, { FC } from 'react'
 import { Route, RouteProps } from 'react-router-dom'
 
@@ -9,6 +10,12 @@ export type PageRouteProps = RouteProps & {
   showFooter?: boolean
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`
+
 export const PageRoute: FC<PageRouteProps> = ({
   showNav = true,
   showFooter = true,
@@ -19,7 +26,7 @@ export const PageRoute: FC<PageRouteProps> = ({
   <Route
     {...rest}
     render={(props) => (
-      <>
+      <Wrapper>
         {showNav && <Nav />}
         {render ? (
           render({ ...rest, ...props })
@@ -28,7 +35,7 @@ export const PageRoute: FC<PageRouteProps> = ({
           <Component {...rest} {...props} />
         )}
         {showFooter && <Footer />}
-      </>
+      </Wrapper>
     )}
   />
 )

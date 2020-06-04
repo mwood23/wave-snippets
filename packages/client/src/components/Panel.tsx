@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
+import { InputStep } from '@waves/shared'
 import { head } from 'ramda'
 import React, { FC, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 import { CODE_THEMES_DICT } from '../code-themes'
 import { SUPPORTED_CODING_LANGAUGES_DICT } from '../const'
-import { InputStep, usePreviewDispatch, useSnippetDispatch } from '../context'
+import { usePreviewDispatch, useSnippetDispatch } from '../context'
 import {
   Box,
   BoxProps,
@@ -119,6 +120,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                   }}
                   placeholder="Title"
                   size="sm"
+                  value={step.title}
                 />
               </FormControl>
               <FormControl mb="4">
@@ -134,6 +136,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                   }}
                   placeholder="Subtitle"
                   size="sm"
+                  value={step.subtitle}
                 />
               </FormControl>
             </Box>
@@ -149,6 +152,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                 })
               }}
               onFocusChanged={(newFocus, stepID) => {
+                console.log('on focus changed called')
                 snippetDispatch({
                   type: 'updateStep',
                   stepID,

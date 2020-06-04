@@ -11,6 +11,8 @@ import { normalizeArray } from './utils'
 
 export const isProd = process.env.REACT_APP_ENV === 'production'
 
+export const DEFAULT_AUTOSAVE_THRESHOLD = 2
+
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
 export const DEFAULT_CYCLE = false
@@ -119,12 +121,6 @@ export const SUPPORTED_CODING_LANGAUGES = [
     value: 'markup',
     aliases: ['html', 'xml', 'svg', 'mathml', 'ssml', 'atom', 'rss'],
     name: 'Markup',
-    codeMirrorMap: '',
-  },
-  {
-    value: 'markup',
-    aliases: ['html', 'xml', 'svg'],
-    name: 'HTML',
     codeMirrorMap: 'text/html',
   },
   { value: 'css', aliases: [], name: 'CSS', codeMirrorMap: 'css' },

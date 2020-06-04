@@ -1,22 +1,30 @@
-import React, { FC, useState } from 'react'
+import { SnippetDocument } from '@waves/shared'
+import React, { ComponentType, FC, useState } from 'react'
 
 import { CODE_THEMES_DICT } from '../code-themes'
 import {
   PreviewProvider,
+  SnippetProvider,
   usePreviewDispatch,
   usePreviewState,
   useSnippetDispatch,
   useSnippetState,
 } from '../context'
 import { useRenderGIF } from '../hooks'
-import { Box, Flex } from './core'
+import { Box, Flex, Text } from './core'
 import { Panel } from './Panel'
 import { Preview } from './Preview'
 import { PreviewContainer } from './PreviewContainer'
 import { TitleToolbar } from './TitleToolbar'
+import { useCreateToast } from './Toast'
 import { Toolbar } from './Toolbar'
 
+type BuilderProps = {
+  snippet?: SnippetDocument
+}
+
 export const BuilderComponent: FC = () => {
+  const toast = useCreateToast()
   const {
     theme,
     backgroundColor,
@@ -48,9 +56,19 @@ export const BuilderComponent: FC = () => {
       },
     },
     onRecordStart: () => {
+      toast(
+        <Box>
+          <Text>Recording your snippet...</Text>
+        </Box>,
+      )
       console.log('Recording started...')
     },
     onBuildGIFStart: () => {
+      toast(
+        <Box>
+          <Text>Building your GIF...</Text>
+        </Box>,
+      )
       console.log('Gif building started...')
     },
     onRenderComplete: (blob) => {
@@ -141,11 +159,26 @@ export const BuilderComponent: FC = () => {
   )
 }
 
-export const Builder: FC = (props) => {
+const withSnippetProvider = <P extends BuilderProps>(
+  Component: ComponentType<P>,
+): FC<P> => (props) => (
+  <SnippetProvider snippet={props.snippet}>
+    <Component {...props} />
+  </SnippetProvider>
+)
+
+const withPreviewProvider = <P extends BuilderProps>(
+  Component: ComponentType<P>,
+): FC<P> => (props) => {
   const { startingStep } = useSnippetState()
+
   return (
     <PreviewProvider initialState={{ currentStep: startingStep }}>
-      <BuilderComponent {...props} />
+      <Component {...props} />
     </PreviewProvider>
   )
 }
+
+export const Builder: FC<BuilderProps> = withSnippetProvider(
+  withPreviewProvider(BuilderComponent),
+)

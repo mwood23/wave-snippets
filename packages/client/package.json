@@ -6,6 +6,7 @@
     "@chakra-ui/core": "^0.8.0",
     "@code-surfer/standalone": "^3.1.1",
     "@code-surfer/themes": "^3.1.1",
+    "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@typesaurus/react": "^3.0.0",

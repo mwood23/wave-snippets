@@ -2,11 +2,11 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 
 import styled from '@emotion/styled'
+import { InputStep } from '@waves/shared'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { usePrevious } from 'react-delta'
 
-import { InputStep } from '../context'
 import {
   ParsedFocus,
   addFocusToSelection,
@@ -72,9 +72,11 @@ export const Editor: FC<EditorProps> = ({
   const previousParsedFocus = usePrevious<ParsedFocus>(parsedFocus)
 
   useEffect(() => {
-    if (equals(previousParsedFocus, parsedFocus) || !editorRef.current) return
-    onFocusChanged(serializeFocus(parsedFocus), step.id)
+    if (!editorRef.current || equals(previousParsedFocus, parsedFocus)) {
+      return
+    }
 
+    onFocusChanged(serializeFocus(parsedFocus), step.id)
     console.log(serializeFocus(parsedFocus))
 
     editorRef.current?.getAllMarks().forEach((m) => {
@@ -191,8 +193,6 @@ export const Editor: FC<EditorProps> = ({
           editorRef.current = editor
         }}
         onBeforeChange={(editor, data, value) => {
-          console.log(editor, data, value)
-
           onChange(editor, data, value)
         }}
         onGutterClick={(editor, lineNumber) => {

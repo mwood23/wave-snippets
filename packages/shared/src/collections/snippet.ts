@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import { collection } from 'typesaurus'
 
 import { UserID } from '../types'
@@ -18,8 +19,8 @@ export type BackgroundColor = {
 export type InputStep = {
   code: string
   focus?: string
-  title?: string
-  subtitle?: string
+  title: string
+  subtitle: string
   showNumbers?: boolean
   lang: string
   id: string
@@ -44,8 +45,8 @@ export type SnippetDocument = {
   defaultWindowTitle: string
   visibility: SnippetVisibility
   owner: UserID
-  createdOn: string
-  updatedOn: string
+  createdOn?: firebase.firestore.FieldValue
+  updatedOn?: firebase.firestore.FieldValue
   status: SnippetStatus
 }
 

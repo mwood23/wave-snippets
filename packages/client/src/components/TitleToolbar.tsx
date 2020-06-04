@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { map, sortBy } from 'ramda'
 import React, { FC, useRef } from 'react'
 
@@ -29,6 +30,14 @@ const SnippetTag: FC<TagProps> = ({ children, ...rest }) => (
     {children}
   </Tag>
 )
+
+const TagTriggerButton = styled(IconButton)`
+  /* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-
+ the-warning-exists-for-a-reason */
+  &[aria-expanded='true'] {
+    transform: rotate(-45deg);
+  }
+`
 
 export const TitleToolbar: FC<TitleToolbarProps> = () => {
   const snippetDispatch = useSnippetDispatch()
@@ -87,7 +96,7 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
           placement="bottom-end"
         >
           <PopoverTrigger>
-            <IconButton
+            <TagTriggerButton
               aria-label="Add Tag"
               icon="add"
               ml="2"

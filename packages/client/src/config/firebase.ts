@@ -1,7 +1,9 @@
+/* eslint-disable import/no-namespace */
 import 'firebase/firestore'
 import 'firebase/auth'
+import 'firebase/analytics'
 
-import firebase from 'firebase'
+import * as firebase from 'firebase/app'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCc71mgT1pZafksMQiFTINZBUgyCqbuYw0',

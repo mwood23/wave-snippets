@@ -3,7 +3,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
 import { CSSReset, ColorModeProvider, ThemeProvider } from '@chakra-ui/core'
-import { Global } from '@emotion/core'
+import createCache from '@emotion/cache'
+import { CacheProvider, Global } from '@emotion/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -11,37 +12,40 @@ import { ThemeProvider as ThemeUIThemeProvider } from 'theme-ui'
 
 import { App } from './App'
 import { ScrollToTop, ToastContainer } from './components'
-import { AuthProvider, SnippetProvider } from './context'
+import { AuthProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
+
+const myCache = createCache()
+myCache.compat = true
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <ScrollToTop />
-      <ThemeUIThemeProvider theme={{}}>
-        <ThemeProvider theme={customTheme}>
-          <ColorModeProvider value={'dark'}>
-            <CSSReset />
-            <ToastContainer />
-            {/* Code surfer relies on Theme-UI which hijacks some global elements. We need to take the control
+      <CacheProvider value={myCache}>
+        <ThemeUIThemeProvider theme={{}}>
+          <ThemeProvider theme={customTheme}>
+            <ColorModeProvider value={'dark'}>
+              <CSSReset />
+              <ToastContainer />
+              {/* Code surfer relies on Theme-UI which hijacks some global elements. We need to take the control
           back so that Chakra can be our single source of truth. */}
-            <Global
-              styles={{
-                body: {
-                  backgroundColor: 'transparent !important',
-                },
-              }}
-            />
-            {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
-            <AuthProvider>
-              <SnippetProvider>
+              <Global
+                styles={{
+                  body: {
+                    backgroundColor: 'transparent !important',
+                  },
+                }}
+              />
+              {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
+              <AuthProvider>
                 <App />
-              </SnippetProvider>
-            </AuthProvider>
-          </ColorModeProvider>
-        </ThemeProvider>
-      </ThemeUIThemeProvider>
+              </AuthProvider>
+            </ColorModeProvider>
+          </ThemeProvider>
+        </ThemeUIThemeProvider>
+      </CacheProvider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root'),

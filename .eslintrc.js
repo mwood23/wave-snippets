@@ -74,7 +74,8 @@ module.exports = {
       version: 'detect',
     },
     'import/core-modules': [
-      '@testing-library/react'
+      '@testing-library/react',
+      'utility-types'
     ]
   },
 }

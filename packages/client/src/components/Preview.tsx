@@ -1,4 +1,5 @@
 import { CodeSurfer } from '@code-surfer/standalone'
+import { InputStep } from '@waves/shared'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 import { ThemeProvider } from 'theme-ui'
@@ -12,7 +13,7 @@ import {
   DEFAULT_PREVIEW_THEME,
   DEFAULT_SHOW_NUMBERS,
 } from '../const'
-import { InputStep, usePreviewDispatch, usePreviewState } from '../context'
+import { usePreviewDispatch, usePreviewState } from '../context'
 import { noop } from '../utils'
 import { Box, Spinner } from './core'
 
@@ -31,7 +32,6 @@ export type PreviewProps = {
   onAnimationCycleEnd: () => void
 }
 
-// TODO: Hook up all the props
 export const Preview = forwardRef<any, PreviewProps>(
   (
     {
@@ -60,6 +60,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     useEffect(() => {
       setLoading(true)
       debouncedCallback()
+      // Show line numbers is global to a snippet right now and why it's passed in
     }, [steps, showLineNumbers])
 
     useEffect(() => {
