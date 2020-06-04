@@ -1,10 +1,9 @@
 import React, { ComponentType, FC } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { Redirect, Route, RouteProps } from 'react-router-dom'
 
-import { firebase } from '../config/firebase'
+import { useAuthState } from '../context'
 import { Spinner } from './core'
-import { PageRouteProps } from './PageRoute'
+import { PageRoute, PageRouteProps } from './PageRoute'
 
 export type PrivateRouteProps = RouteProps &
   PageRouteProps & {
@@ -15,31 +14,17 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const { user, isLoading } = useAuthState()
 
-  console.log(user)
-
-  if (loading) {
-    return (
-      <Spinner
-        left="50%"
-        position="absolute"
-        top="50%"
-        transform="translate(-50%,-50%)"
-      />
-    )
-  }
-
-  if (error) {
-    return <div>Error</div>
+  if (isLoading) {
+    return <Spinner superCentered />
   }
 
   return (
     <Route
-      {...rest}
       render={(props) =>
         user ? (
-          <Component {...props} />
+          <PageRoute {...rest} {...props} component={Component} />
         ) : (
           <Redirect
             to={{

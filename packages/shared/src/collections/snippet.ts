@@ -1,4 +1,3 @@
-import firebase from 'firebase'
 import { collection } from 'typesaurus'
 
 import { UserID } from '../types'
@@ -45,8 +44,8 @@ export type SnippetDocument = {
   defaultWindowTitle: string
   visibility: SnippetVisibility
   owner: UserID
-  createdOn?: firebase.firestore.FieldValue
-  updatedOn?: firebase.firestore.FieldValue
+  createdOn?: Date
+  updatedOn?: Date
   status: SnippetStatus
 }
 

@@ -3,13 +3,12 @@ import { produce } from 'immer'
 import React, { Dispatch, FC, createContext, useEffect, useState } from 'react'
 import { DropResult } from 'react-beautiful-dnd'
 import { useHistory, useParams } from 'react-router-dom'
-import { add, update } from 'typesaurus'
+import { add, update, value } from 'typesaurus'
 import { useDebouncedCallback } from 'use-debounce'
 import { useImmerReducer } from 'use-immer'
 import { Optional } from 'utility-types'
 
 import { Box, Text, useCreateToast } from '../components'
-import { firebase } from '../config/firebase'
 import {
   DEFAULT_ANIMATION_PRESET,
   DEFAULT_APP_COLOR,
@@ -225,7 +224,6 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
     if (isSaving) return
     setCurrentThreshold((current) => current + 1)
 
-
     if (user) {
       if (params.snippetID) {
         // @Performance: This fires an extra write on redirection, not too worried about it for now.
@@ -233,7 +231,7 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
         setIsSaving(true)
         await update(snippets, params.snippetID, {
           ...state,
-          updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedOn: value('serverDate'),
           owner: user.userID,
         })
         setIsSaving(false)
@@ -242,7 +240,7 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
         setIsSaving(true)
         const data = await add(snippets, {
           ...state,
-          createdOn: firebase.firestore.FieldValue.serverTimestamp(),
+          createdOn: value('serverDate'),
           owner: user.userID,
         })
 

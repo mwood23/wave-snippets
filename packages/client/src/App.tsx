@@ -3,13 +3,21 @@ import { Switch } from 'react-router-dom'
 
 import { PageRoute } from './components'
 import { PrivateRoute } from './components/PrivateRoute'
-import { AccountPage, HomePage, NotFoundPage } from './pages'
+import {
+  AccountPage,
+  GalleryPage,
+  HomePage,
+  MySnippetsPage,
+  NotFoundPage,
+} from './pages'
 
 export const App: FC = () => (
   <Switch>
-    <PageRoute exact component={HomePage} path="/:snippetID?" />
     <PrivateRoute exact component={AccountPage} path="/account" />
+    <PrivateRoute exact component={GalleryPage} path="/gallery" />
+    <PrivateRoute exact component={MySnippetsPage} path="/my-snippets" />
 
+    <PageRoute exact component={HomePage} path="/:snippetID?" />
     <PageRoute component={NotFoundPage} />
   </Switch>
 )

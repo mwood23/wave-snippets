@@ -35,6 +35,7 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       windowBackground,
       title,
       onTitleChanged,
+      readOnly,
       windowControlsType,
       windowControlsPosition,
     },
@@ -50,6 +51,7 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       >
         <WindowTitleBar
           onTitleChanged={onTitleChanged}
+          readOnly={readOnly}
           title={title}
           windowControlsPosition={windowControlsPosition}
           windowControlsType={windowControlsType}

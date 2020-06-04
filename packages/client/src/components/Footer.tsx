@@ -36,7 +36,9 @@ export const Footer: FC<FooterProps> = () => {
       alignItems="center"
       flexDir="column"
       justifyContent="center"
-      padding="4"
+      pb="8"
+      pt="4"
+      px="4"
     >
       <Flex alignItems="center" justifyContent="center" mb="2">
         <InternalLink to="/">About</InternalLink>

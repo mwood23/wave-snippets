@@ -1,3 +1,5 @@
 export * from './Home'
 export * from './Account'
 export * from './NotFound'
+export * from './Gallery'
+export * from './MySnippets'

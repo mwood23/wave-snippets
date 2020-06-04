@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 
 import { useAuthDispatch, useAuthState } from '../context'
 import { useOAuth } from '../hooks/useOAuth'
@@ -19,6 +20,7 @@ import { useCreateToast } from './Toast'
 type NavProps = {}
 
 export const Nav: FC<NavProps> = () => {
+  const history = useHistory()
   const { colorMode, toggleColorMode } = useColorMode()
   const { user, isLoading } = useAuthState()
   const { logout } = useAuthDispatch()
@@ -40,7 +42,7 @@ export const Nav: FC<NavProps> = () => {
   }, [googleError, githubError])
 
   return (
-    <Box position="fixed" right="8" top="8">
+    <Box position="absolute" right="8" top="8" zIndex={3000}>
       <IconButton
         aria-label="Toggle color mode"
         icon={colorMode === 'dark' ? 'sun' : 'moon'}
@@ -48,6 +50,11 @@ export const Nav: FC<NavProps> = () => {
         onClick={toggleColorMode}
         size="sm"
       />
+      {/*
+      // @ts-ignore */}
+      <Button as={Link} mr="2" size="sm" to="/gallery">
+        Gallery
+      </Button>
       <Menu>
         {/*
         // @ts-ignore */}
@@ -84,7 +91,14 @@ export const Nav: FC<NavProps> = () => {
             )}
             {user.displayName}
           </MenuButton>
-          <MenuList placement="bottom-end">
+          <MenuList minWidth="125px" placement="bottom-end">
+            <MenuItem
+              onClick={() => {
+                history.push('/my-snippets')
+              }}
+            >
+              My Snippets
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 logout()

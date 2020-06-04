@@ -53,18 +53,15 @@ export const HomePage: FC<RouteComponentProps<
     getData()
   }, [snippetID, state])
 
+  console.log(data)
+
   return (
     <Page>
       <Hero />
       {state?.skipFetch ? (
         <Builder />
       ) : loading && !data ? (
-        <Spinner
-          left="50%"
-          position="absolute"
-          top="50%"
-          transform="translate(-50%, -50%)"
-        />
+        <Spinner superCentered />
       ) : (
         <Builder snippet={data} />
       )}

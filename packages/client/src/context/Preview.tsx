@@ -1,4 +1,10 @@
-import React, { Dispatch, FC, createContext, useReducer } from 'react'
+import React, {
+  Dispatch,
+  FC,
+  createContext,
+  useContext,
+  useReducer,
+} from 'react'
 
 import { UnreachableCaseError, noop, omit } from '../utils'
 
@@ -62,14 +68,14 @@ export const PreviewProvider: FC<{ initialState?: Partial<PreviewState> }> = ({
 }
 
 export const usePreviewState = () => {
-  const context = React.useContext(PreviewStateContext)
+  const context = useContext(PreviewStateContext)
   if (context === undefined) {
     throw new Error('usePreviewState must be used within a PreviewProvider')
   }
   return context
 }
 export const usePreviewDispatch = () => {
-  const context = React.useContext(PreviewDispatchContext)
+  const context = useContext(PreviewDispatchContext)
   if (context === undefined) {
     throw new Error('usePreviewDispatch must be used within a PreviewProvider')
   }

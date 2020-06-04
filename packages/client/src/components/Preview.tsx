@@ -28,8 +28,13 @@ export type PreviewProps = {
   cycleSpeed?: number
   immediate?: boolean
   showLineNumbers?: boolean
-
-  onAnimationCycleEnd: () => void
+  onAnimationCycleEnd?: () => void
+  /**
+   * EXPERIMENTAL
+   *
+   * Disables the fixed height and width and fills the containing element.
+   */
+  responsive?: boolean
 }
 
 export const Preview = forwardRef<any, PreviewProps>(
@@ -40,9 +45,11 @@ export const Preview = forwardRef<any, PreviewProps>(
       theme = DEFAULT_PREVIEW_THEME,
       showLineNumbers = DEFAULT_SHOW_NUMBERS,
       cycleSpeed = DEFAULT_CYCLE_SPEED,
+      playOnInit = false,
       immediate,
       cycle,
       onAnimationCycleEnd = noop,
+      responsive = false,
     },
     ref,
   ) => {
@@ -71,6 +78,15 @@ export const Preview = forwardRef<any, PreviewProps>(
         })
       }
     }, [isPlaying])
+
+    useEffect(() => {
+      if (playOnInit) {
+        dispatch({
+          type: 'updatePreviewState',
+          isPlaying: true,
+        })
+      }
+    }, [playOnInit])
 
     const props = useSpring({
       progress: currentStep,
@@ -105,7 +121,7 @@ export const Preview = forwardRef<any, PreviewProps>(
         overflow={'hidden'}
         position="relative"
         ref={ref}
-        width={'550px'}
+        width={responsive ? '100%' : '550px'}
       >
         {codeSurferKey !== 1 && loading && (
           <Spinner position="absolute" right="6" top="0" zIndex={5000} />
