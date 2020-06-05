@@ -222,7 +222,7 @@ export const Panel: FC<PanelProps> = ({
                 <MenuButton as={Button} rightIcon="chevron-down" size="sm">
                   Add Step
                 </MenuButton>
-                <MenuList placement="top-start">
+                <MenuList placement="top-start" zIndex={10}>
                   <MenuItem
                     onClick={() => snippetDispatch({ type: 'addStep' })}
                   >

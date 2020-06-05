@@ -114,7 +114,6 @@ export const WINDOW_CONTROL_POSITIONS_DICT = normalizeArray(
   'value',
 )
 
-// TODO: Finish this mapping
 // https://codemirror.net/mode/clike/index.html
 export const SUPPORTED_CODING_LANGAUGES = [
   {
@@ -124,7 +123,7 @@ export const SUPPORTED_CODING_LANGAUGES = [
     codeMirrorMap: 'text/html',
   },
   { value: 'css', aliases: [], name: 'CSS', codeMirrorMap: 'css' },
-  { value: 'clike', aliases: [], name: 'C-like', codeMirrorMap: '' },
+  { value: 'clike', aliases: [], name: 'C-like', codeMirrorMap: 'clike' },
   {
     value: 'javascript',
     aliases: ['js'],
@@ -155,9 +154,9 @@ export const SUPPORTED_CODING_LANGAUGES = [
     name: 'Docker',
     codeMirrorMap: 'dockerfile',
   },
-  { value: 'elixir', aliases: [], name: 'Elixir', codeMirrorMap: '' },
+  { value: 'elixir', aliases: [], name: 'Elixir', codeMirrorMap: 'elixir' },
   { value: 'elm', aliases: [], name: 'Elm', codeMirrorMap: 'elm' },
-  { value: 'git', aliases: [], name: 'Git', codeMirrorMap: '' },
+  { value: 'git', aliases: [], name: 'Git', codeMirrorMap: 'shell' },
   { value: 'go', aliases: [], name: 'Go', codeMirrorMap: 'go' },
   { value: 'graphql', aliases: [], name: 'GraphQL', codeMirrorMap: '' },
   { value: 'groovy', aliases: [], name: 'Groovy', codeMirrorMap: 'groovy' },
@@ -167,7 +166,7 @@ export const SUPPORTED_CODING_LANGAUGES = [
     name: 'Haskell',
     codeMirrorMap: 'haskell',
   },
-  { value: 'java', aliases: [], name: 'Java', codeMirrorMap: 'java' },
+  { value: 'java', aliases: [], name: 'Java', codeMirrorMap: 'clike' },
   {
     value: 'json',
     aliases: ['webmanifest'],
@@ -175,36 +174,33 @@ export const SUPPORTED_CODING_LANGAUGES = [
     codeMirrorMap: { name: 'javascript', json: true },
   },
   { value: 'kotlin', aliases: [], name: 'Kotlin', codeMirrorMap: 'clike' },
-  { value: 'less', aliases: [], name: 'Less', codeMirrorMap: '' },
-  { value: 'makefile', aliases: [], name: 'Makefile', codeMirrorMap: '' },
+  { value: 'less', aliases: [], name: 'Less', codeMirrorMap: 'css' },
+  { value: 'makefile', aliases: [], name: 'Makefile', codeMirrorMap: 'shell' },
   {
     value: 'markdown',
     aliases: ['md'],
     name: 'Markdown',
     codeMirrorMap: 'markdown',
   },
-  { value: 'matlab', aliases: [], name: 'MATLAB', codeMirrorMap: '' },
+  { value: 'matlab', aliases: [], name: 'MATLAB', codeMirrorMap: 'octave' },
   {
     value: 'objectivec',
     aliases: ['objc'],
     name: 'Objective-C',
-    codeMirrorMap: '',
+    codeMirrorMap: 'clike',
   },
-  { value: 'ocaml', aliases: [], name: 'OCaml', codeMirrorMap: '' },
+  { value: 'ocaml', aliases: [], name: 'OCaml', codeMirrorMap: 'mllike' },
   { value: 'php', aliases: [], name: 'PHP', codeMirrorMap: 'php' },
   { value: 'python', aliases: ['py'], name: 'Python', codeMirrorMap: 'python' },
   { value: 'r', aliases: [], name: 'R', codeMirrorMap: 'r' },
-  { value: 'jsx', aliases: [], name: 'React JSX', codeMirrorMap: 'jsx' },
+  { value: 'jsx', aliases: [], name: 'React JSX', codeMirrorMap: 'text/jsx' },
   {
     value: 'tsx',
     aliases: [],
     name: 'React TSX',
-    codeMirrorMap: {
-      name: 'jsx',
-      base: { name: 'javascript', typescript: true },
-    },
+    codeMirrorMap: 'text/typescript-jsx',
   },
-  { value: 'reason', aliases: [], name: 'Reason', codeMirrorMap: '' },
+  { value: 'reason', aliases: [], name: 'Reason', codeMirrorMap: 'mllike' },
   { value: 'ruby', aliases: ['rb'], name: 'Ruby', codeMirrorMap: 'ruby' },
   { value: 'rust', aliases: [], name: 'Rust', codeMirrorMap: 'rust' },
   { value: 'sass', aliases: [], name: 'Sass', codeMirrorMap: 'sass' },
@@ -217,7 +213,12 @@ export const SUPPORTED_CODING_LANGAUGES = [
     name: 'TypeScript',
     codeMirrorMap: { name: 'javascript', typescript: true },
   },
-  { value: 'wasm', aliases: [], name: 'WebAssembly', codeMirrorMap: '' },
+  {
+    value: 'wasm',
+    aliases: ['wasm'],
+    name: 'WebAssembly',
+    codeMirrorMap: 'clike',
+  },
   { value: 'yaml', aliases: ['yml'], name: 'YAML', codeMirrorMap: '' },
 ]
 

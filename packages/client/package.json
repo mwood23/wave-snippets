@@ -14,6 +14,7 @@
     "array.prototype.flat": "^1.2.3",
     "base64-arraybuffer": "^0.2.0",
     "codemirror": "^5.54.0",
+    "codemirror-mode-elixir": "^1.1.2",
     "dom-to-image": "^2.6.0",
     "dom-to-image-more": "^2.8.0",
     "emotion-theming": "^10.0.27",
