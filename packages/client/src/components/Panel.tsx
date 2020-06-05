@@ -157,7 +157,6 @@ export const PanelItem: FC<PanelItemProps> = ({
                 })
               }}
               onFocusChanged={(newFocus, stepID) => {
-                console.log('on focus changed called')
                 snippetDispatch({
                   type: 'updateStep',
                   stepID,
@@ -234,7 +233,7 @@ export const Panel: FC<PanelProps> = ({
                 <MenuButton as={Button} rightIcon="chevron-down" size="sm">
                   Add Step
                 </MenuButton>
-                <MenuList placement="top-start" zIndex={10}>
+                <MenuList placement="top-start" zIndex={1000}>
                   <MenuItem
                     onClick={() => snippetDispatch({ type: 'addStep' })}
                   >

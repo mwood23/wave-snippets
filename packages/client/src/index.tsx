@@ -5,6 +5,7 @@ import './index.css'
 import { CSSReset, ColorModeProvider, ThemeProvider } from '@chakra-ui/core'
 import createCache from '@emotion/cache'
 import { CacheProvider, Global } from '@emotion/core'
+import { init } from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -15,6 +16,11 @@ import { ScrollToTop, ToastContainer } from './components'
 import { AuthProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
+
+init({
+  dsn:
+    'https://27e96aefbcba4947a1ed1fc69a00fc87@o180781.ingest.sentry.io/5266266',
+})
 
 const myCache = createCache()
 myCache.compat = true

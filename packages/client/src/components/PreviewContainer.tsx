@@ -10,6 +10,7 @@ type PreviewContainerProps = {
   windowBackground: string
   children: ReactNode
   className?: string
+  responsive?: boolean
 } & WindowTitleBarProps
 
 const Background = styled(Box)`
@@ -36,7 +37,8 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       windowBackground,
       title,
       onTitleChanged,
-      readOnly,
+      readOnly = false,
+      responsive = false,
       windowControlsType,
       windowControlsPosition,
       className,
@@ -45,13 +47,13 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
   ) => (
     <Box
       className={className}
-      height="450px"
+      height={responsive ? 'auto' : '450px'}
       margin="0 auto"
       paddingX="8"
       paddingY="12"
       position="relative"
       ref={ref}
-      width="646px"
+      width={responsive ? '100%' : '646px'}
     >
       <Window
         background={windowBackground}

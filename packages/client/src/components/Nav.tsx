@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import { useAuthDispatch, useAuthState } from '../context'
 import { useOAuth } from '../hooks/useOAuth'
+import { TEMPLATES, TEMPLATES_DICT } from '../templates'
 import {
   Avatar,
   Box,
@@ -77,10 +78,20 @@ export const Nav: FC<NavProps> = () => {
             New...
           </MenuButton>
           <MenuList placement="bottom-end">
-            <MenuItem>Blank</MenuItem>
-            <MenuItem>Create a Copy</MenuItem>
-            <MenuItem>Mark as Draft</MenuItem>
-            <MenuItem>Delete</MenuItem>
+            {TEMPLATES.map((t) => {
+              const foundTemplate = TEMPLATES_DICT[t]
+
+              return (
+                <MenuItem
+                  key={t}
+                  onClick={() => {
+                    history.push(`/${t}`)
+                  }}
+                >
+                  {foundTemplate.name}
+                </MenuItem>
+              )
+            })}
           </MenuList>
         </Menu>
       )}

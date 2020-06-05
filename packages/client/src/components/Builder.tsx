@@ -3,7 +3,10 @@ import { SnippetDocument } from '@waves/shared'
 import React, { ComponentType, FC, useState } from 'react'
 
 import { CODE_THEMES_DICT } from '../code-themes'
-import { BUILDER_MOBILE_BREAKPOINT } from '../const'
+import {
+  BUILDER_MOBILE_BREAKPOINT,
+  BUILDER_MOBILE_TINY_BREAKPOINT,
+} from '../const'
 import {
   PreviewProvider,
   SnippetProvider,
@@ -26,7 +29,7 @@ type BuilderProps = {
 }
 
 const StyledBuilder = styled(Box)`
-  @media (max-width: 760px) {
+  @media (max-width: ${BUILDER_MOBILE_TINY_BREAKPOINT}) {
     border: none;
     padding: 0;
   }
@@ -39,6 +42,16 @@ const StyledBuilderContent = styled(Flex)`
 `
 const PreviewWrapper = styled.div`
   overflow-x: auto;
+
+  @media (max-width: ${BUILDER_MOBILE_TINY_BREAKPOINT}) {
+    margin: 0 -1rem;
+  }
+`
+
+const MobileHelperText = styled(Text)`
+  @media (min-width: ${BUILDER_MOBILE_TINY_BREAKPOINT}) {
+    display: none;
+  }
 `
 
 export const BuilderComponent: FC = () => {
@@ -121,11 +134,12 @@ export const BuilderComponent: FC = () => {
         downloadLoading={isLoading}
         onRenderGIFClicked={() => {
           // Reset the component because we don't know what step the user is at or if we're mid animation
+          setPreviewKey(Math.random())
           previewDispatch({
             type: 'updatePreviewState',
             isPlaying: true,
+            currentStep: 0,
           })
-          setPreviewKey(Math.random())
           renderGIFDispatch({ type: 'startRecording' })
         }}
       />
@@ -173,6 +187,9 @@ export const BuilderComponent: FC = () => {
               theme={theme}
             />
           </PreviewContainer>
+          <MobileHelperText fontSize={'xs'} mt="2" textAlign="center">
+            Scroll left and right!
+          </MobileHelperText>
         </PreviewWrapper>
       </StyledBuilderContent>
     </StyledBuilder>

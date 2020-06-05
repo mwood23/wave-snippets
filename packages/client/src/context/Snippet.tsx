@@ -6,39 +6,21 @@ import { useHistory, useParams } from 'react-router-dom'
 import { add, update, value } from 'typesaurus'
 import { useDebouncedCallback } from 'use-debounce'
 import { useImmerReducer } from 'use-immer'
-import { Optional } from 'utility-types'
 
 import { Box, Text, useCreateToast } from '../components'
-import {
-  DEFAULT_ANIMATION_PRESET,
-  DEFAULT_APP_COLOR,
-  DEFAULT_AUTOSAVE_THRESHOLD,
-  DEFAULT_CYCLE,
-  DEFAULT_CYCLE_SPEED,
-  DEFAULT_IMMEDIATE,
-  DEFAULT_PREVIEW_THEME,
-  DEFAULT_SHOW_NUMBERS,
-  DEFAULT_SNIPPET_STATUS,
-  DEFAULT_SNIPPET_VISIBILITY,
-  DEFAULT_STARTING_STEP,
-  DEFAULT_WINDOWS_CONTROLS_POSITION,
-  DEFAULT_WINDOWS_CONTROLS_TYPE,
-  DEFAULT_WINDOW_TITLE,
-} from '../const'
+import { DEFAULT_AUTOSAVE_THRESHOLD } from '../const'
+import { DEFAULT_TEMPLATE } from '../templates/default'
+import { BaseSnippet } from '../types'
 import {
   UnreachableCaseError,
   generateID,
+  isMatchParamTemplate,
   isNil,
   last,
   noop,
   omit,
 } from '../utils'
 import { useAuthState } from './Auth'
-
-type SnippetState = Optional<
-  SnippetDocument,
-  'owner' | 'createdOn' | 'updatedOn'
->
 
 type SnippetAction =
   | ({
@@ -84,60 +66,15 @@ const createEmptyStep = ({
   id: generateID(),
 })
 
-const initialSnippetState: SnippetState = {
-  immediate: DEFAULT_IMMEDIATE,
-  theme: DEFAULT_PREVIEW_THEME,
-  defaultLanguage: 'typescript',
-  tags: ['typescript'],
-  defaultWindowTitle: DEFAULT_WINDOW_TITLE,
-  springPreset: DEFAULT_ANIMATION_PRESET,
-  showLineNumbers: DEFAULT_SHOW_NUMBERS,
-  windowControlsType: DEFAULT_WINDOWS_CONTROLS_TYPE,
-  windowControlsPosition: DEFAULT_WINDOWS_CONTROLS_POSITION,
-  backgroundColor: DEFAULT_APP_COLOR,
-  startingStep: DEFAULT_STARTING_STEP,
-  cycleSpeed: DEFAULT_CYCLE_SPEED,
-  cycle: DEFAULT_CYCLE,
-  status: DEFAULT_SNIPPET_STATUS,
-  visibility: DEFAULT_SNIPPET_VISIBILITY,
-  steps: [
-    {
-      title: '',
-      subtitle: '',
-      code: `var x1: any = 1\ndebugger`,
-      focus: '1[1:14]',
-      lang: 'typescript',
-      id: 'dfgs',
-    },
-    {
-      title: '',
-      subtitle: '',
-      code: `var x0: any = 3
-var x1 = 1
-var x0 = 3`,
-      focus: '',
-      lang: 'typescript',
-      id: 'gfdsg',
-    },
-    {
-      title: '',
-      subtitle: '',
-      code: `var x0: number = 3
-var x1 = 1
-var x1 = 1
-var x0 = 3`,
-      lang: 'typescript',
-      id: '1werw',
-    },
-  ],
-}
+const initialSnippetState: BaseSnippet = DEFAULT_TEMPLATE
 
-const SnippetStateContext = createContext<SnippetState & { isSaving: boolean }>(
-  { ...initialSnippetState, isSaving: false },
-)
+const SnippetStateContext = createContext<BaseSnippet & { isSaving: boolean }>({
+  ...initialSnippetState,
+  isSaving: false,
+})
 const SnippetDispatchContext = createContext<Dispatch<SnippetAction>>(noop)
 
-const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
+const snippetReducer = produce((state: BaseSnippet, action: SnippetAction) => {
   switch (action.type) {
     case 'updateSnippetState':
       return { ...state, ...omit(['type'], action) }
@@ -162,7 +99,7 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
 
       state.steps[stepToUpdate] = {
         ...state.steps[stepToUpdate],
-        ...omit(['type', 'stepIndex'], action),
+        ...omit(['type', 'stepIndex', 'stepID'], action),
       }
       return
     case 'addStep':
@@ -199,7 +136,7 @@ const snippetReducer = produce((state: SnippetState, action: SnippetAction) => {
   }
 })
 
-export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
+export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
   children,
   snippet,
 }) => {
@@ -214,6 +151,8 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
   const params = useParams<{ snippetID: string }>()
   const history = useHistory()
 
+  // console.log(JSON.stringify(state, null, 2))
+
   /**
    * This is called on initial render and everytime a user takes an action in the app.
    * We add a threshold here for autosaving to keep us from saving on initial render and
@@ -225,9 +164,9 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
     setCurrentThreshold((current) => current + 1)
 
     if (user) {
-      if (params.snippetID) {
+      if (params.snippetID && !isMatchParamTemplate(params.snippetID)) {
         // @Performance: This fires an extra write on redirection, not too worried about it for now.
-        console.log('autosave update')
+        console.log('autosave update', state)
         setIsSaving(true)
         await update(snippets, params.snippetID, {
           ...state,
@@ -236,7 +175,7 @@ export const SnippetProvider: FC<{ snippet?: SnippetState }> = ({
         })
         setIsSaving(false)
       } else if (currentThreshold > DEFAULT_AUTOSAVE_THRESHOLD) {
-        console.log('autosave create')
+        console.log('autosave create', state)
         setIsSaving(true)
         const data = await add(snippets, {
           ...state,

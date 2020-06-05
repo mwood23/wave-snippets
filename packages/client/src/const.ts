@@ -14,6 +14,7 @@ export const isProd = process.env.REACT_APP_ENV === 'production'
 // Starts at 0 and used on a debounced callback so think +2 actions to what you put in
 export const DEFAULT_AUTOSAVE_THRESHOLD = 1
 export const BUILDER_MOBILE_BREAKPOINT = '1000px'
+export const BUILDER_MOBILE_TINY_BREAKPOINT = '760px'
 
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
@@ -21,7 +22,7 @@ export const DEFAULT_CYCLE = false
 export const DEFAULT_IMMEDIATE = false
 export const DEFAULT_SHOW_NUMBERS = false
 export const DEFAULT_ANIMATION_PRESET = 'default'
-export const DEFAULT_WINDOW_TITLE = 'hello.ts'
+export const DEFAULT_WINDOW_TITLE = 'hello.tsx'
 export const DEFAULT_SNIPPET_STATUS: SnippetStatus = 'draft'
 export const DEFAULT_SNIPPET_VISIBILITY: SnippetVisibility = 'private'
 export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null

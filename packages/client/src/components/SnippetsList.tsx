@@ -41,7 +41,6 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({
   return (
     <Box
       display="flex"
-      flex="1"
       flexDir="column"
       padding="2"
       width={['100%', '100%', '100%', '50%']}
@@ -50,6 +49,7 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({
         <PreviewProvider>
           <PreviewContainer
             readOnly
+            responsive
             backgroundColor={backgroundColor}
             title={defaultWindowTitle}
             windowBackground={themeObject.theme.colors.background}

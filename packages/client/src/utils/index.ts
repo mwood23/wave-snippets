@@ -38,12 +38,14 @@ export {
   uniq,
   prop,
   sortBy,
+  keys,
 } from 'ramda'
 export { noop, isArray, omitBy } from 'ramda-adjunct'
 export * from './unreachableCaseError'
 export * from './normalizeArray'
 export * from './stepUtils'
 export * from './styledUtils'
+export * from './snippetUtils'
 
 export const generateID = shortID.generate
 

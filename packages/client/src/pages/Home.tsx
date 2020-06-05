@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { SnippetDocument, snippets } from '@waves/shared'
 import React, { FC, useEffect, useRef, useState } from 'react'
+import { usePrevious } from 'react-delta'
 import { RouteComponentProps, useHistory } from 'react-router-dom'
 import { get } from 'typesaurus'
 
@@ -12,6 +13,8 @@ import {
   Spinner,
   useCreateToast,
 } from '../components'
+import { TEMPLATES_DICT } from '../templates'
+import { isMatchParamTemplate } from '../utils'
 
 const StyledMobileWarningMessage = styled(Message)`
   @media (min-width: 700px) {
@@ -32,18 +35,18 @@ export const HomePage: FC<RouteComponentProps<
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const initialSnippetID = useRef<string | undefined>(snippetID)
+  const previousSnippetID = usePrevious(snippetID)
   const toast = useCreateToast()
 
-  // Skip fetch when redirecting from an autosave. Aka from / to /:snippetID
-  const shouldSkipFetch = !initialSnippetID.current || !snippetID
+  const isTemplateURL = isMatchParamTemplate(snippetID)
+
+  // Skip fetch when redirecting from an autosave. Aka from / to /:snippetID or if using a template
+  const shouldSkipFetch =
+    !initialSnippetID.current || !snippetID || isTemplateURL
 
   // Reset the builder when from /:snippetID to / (clicking the logo to take you home)
-  const shouldResetBuilder = !!initialSnippetID.current && !snippetID
-
-  console.log({
-    shouldSkipFetch,
-    shouldResetBuilder,
-  })
+  const shouldResetBuilder =
+    (!!initialSnippetID.current && !snippetID) || isTemplateURL
 
   useEffect(() => {
     if (shouldResetBuilder) {
@@ -51,7 +54,7 @@ export const HomePage: FC<RouteComponentProps<
       initialSnippetID.current = undefined
       setData(undefined)
     }
-  }, [setData, shouldResetBuilder])
+  }, [setData, shouldResetBuilder, snippetID])
 
   useEffect(() => {
     // We want to skip this fetch when we redirect from an auto-create
@@ -78,7 +81,6 @@ export const HomePage: FC<RouteComponentProps<
     getData()
   }, [snippetID, shouldSkipFetch])
 
-  console.log(data)
   return (
     <Page>
       <Hero />
@@ -89,11 +91,12 @@ export const HomePage: FC<RouteComponentProps<
       />
       {loading ? (
         <Spinner superCentered />
+      ) : // @ts-ignore
+      isTemplateURL || isMatchParamTemplate(previousSnippetID) ? (
+        // @ts-ignore Doing check for safety above
+        <Builder snippet={TEMPLATES_DICT[snippetID]} />
       ) : !data ? (
-        <>
-          {console.log('in here')}
-          <Builder />
-        </>
+        <Builder />
       ) : (
         <Builder snippet={data} />
       )}
