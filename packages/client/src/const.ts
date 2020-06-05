@@ -11,7 +11,8 @@ import { normalizeArray } from './utils'
 
 export const isProd = process.env.REACT_APP_ENV === 'production'
 
-export const DEFAULT_AUTOSAVE_THRESHOLD = 2
+// Starts at 0 and used on a debounced callback so think +2 actions to what you put in
+export const DEFAULT_AUTOSAVE_THRESHOLD = 1
 
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
@@ -123,7 +124,7 @@ export const SUPPORTED_CODING_LANGAUGES = [
     codeMirrorMap: 'text/html',
   },
   { value: 'css', aliases: [], name: 'CSS', codeMirrorMap: 'css' },
-  { value: 'clike', aliases: [], name: 'C-like', codeMirrorMap: 'clike' },
+  // { value: 'clike', aliases: [], name: 'C-like', codeMirrorMap: 'clike' },
   {
     value: 'javascript',
     aliases: ['js'],

@@ -18,7 +18,7 @@ import {
   useSnippetDispatch,
   useSnippetState,
 } from '../context'
-import { backgroundColorToHexAlpha, rem } from '../utils'
+import { backgroundColorToHexAlpha, prop, rem, sortBy } from '../utils'
 import { Autocomplete } from './Autocomplete'
 import { ColorPicker } from './ColorPicker'
 import {
@@ -27,6 +27,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Icon,
   IconButton,
   Input,
   Popover,
@@ -34,6 +35,7 @@ import {
   PopoverTrigger,
   Select,
   Switch,
+  Tooltip,
 } from './core'
 
 type ToolbarProps = {
@@ -64,6 +66,7 @@ export const Toolbar: FC<ToolbarProps> = ({
     cycleSpeed,
     windowControlsPosition,
     windowControlsType,
+    visibility,
   } = useSnippetState()
   const { isPlaying } = usePreviewState()
   const previewDispatch = usePreviewDispatch()
@@ -96,7 +99,7 @@ export const Toolbar: FC<ToolbarProps> = ({
                 lang: suggestion.value,
               })
             }}
-            options={SUPPORTED_CODING_LANGAUGES}
+            options={sortBy(prop('name'), SUPPORTED_CODING_LANGAUGES)}
             value={SUPPORTED_CODING_LANGAUGES_DICT[defaultLanguage]}
             valueKey={'value'}
           />
@@ -248,7 +251,29 @@ export const Toolbar: FC<ToolbarProps> = ({
           </Popover>
         </ToolbarItem>
       </Flex>
-      <Flex>
+      <Flex alignItems="center">
+        <Flex align="center" mr="2">
+          <FormLabel htmlFor="visibility">
+            Public{' '}
+            <Tooltip
+              aria-label="Make public info"
+              label="Making a snippet public lets everyone see and search for it!"
+              placement="top"
+            >
+              <Icon name="info-outline" />
+            </Tooltip>
+          </FormLabel>
+          <Switch
+            id="visibility"
+            isChecked={visibility === 'public'}
+            onChange={() =>
+              snippetDispatch({
+                type: 'updateSnippetState',
+                visibility: 'public',
+              })
+            }
+          />
+        </Flex>
         <ToolbarItem>
           <IconButton
             // @ts-ignore

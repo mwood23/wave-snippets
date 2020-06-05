@@ -1,10 +1,11 @@
-import domToImage, { Options } from 'dom-to-image'
+import { Options } from 'dom-to-image'
+import domToImage from 'dom-to-image-more'
 import GIFBuilder from 'gif.js.optimized'
 import { useEffect, useReducer, useRef } from 'react'
 
 import { UnreachableCaseError, noop } from '../utils'
 
-const DEFAULT_SNAPSHOT_FREQUENCY = 50
+const DEFAULT_SNAPSHOT_FREQUENCY = 75
 
 type GIFBuilderConfig = {
   /**
@@ -194,7 +195,7 @@ export const useRenderGIF = (
       const takeSnapshotOfElement = async () => {
         const node = elementToGIF.current!
 
-        const scale = 750 / node.offsetWidth
+        const scale = 600 / node.offsetWidth
 
         const image = await domToImage.toPng(elementToGIF.current!, {
           height: node.offsetHeight * scale,

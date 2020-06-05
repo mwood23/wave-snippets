@@ -94,7 +94,7 @@ export const BuilderComponent: FC = () => {
       borderRadius="3px"
       borderWidth="2px"
       margin="0 auto"
-      maxWidth="1000px"
+      maxWidth="1200px"
       padding="4"
       width="100%"
     >

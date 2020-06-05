@@ -36,6 +36,8 @@ export {
   times,
   toString,
   uniq,
+  prop,
+  sortBy,
 } from 'ramda'
 export { noop, isArray, omitBy } from 'ramda-adjunct'
 export * from './unreachableCaseError'
