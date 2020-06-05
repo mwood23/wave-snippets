@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { map, sortBy } from 'ramda'
 import React, { FC, useRef } from 'react'
 
-import { MAX_NUMBER_OF_TAGS, TAGS, TAGS_DICT, Tag as TagType } from '../const'
+import { MAX_NUMBER_OF_TAGS, TAGS, Tag as TagType } from '../const'
 import { useSnippetDispatch, useSnippetState } from '../context'
 import { useSearch } from '../hooks'
 import { getColorByTagGroup, pipeVal } from '../utils'
@@ -15,27 +15,30 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Tag,
-  TagCloseButton,
   TagIcon,
   TagLabel,
-  TagProps,
   Text,
 } from './core'
+import { SnippetTag, SnippetTags } from './SnippetTags'
 
 type TitleToolbarProps = {}
-
-const SnippetTag: FC<TagProps> = ({ children, ...rest }) => (
-  <Tag rounded="full" size="sm" {...rest}>
-    {children}
-  </Tag>
-)
 
 const TagTriggerButton = styled(IconButton)`
   /* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-
  the-warning-exists-for-a-reason */
   &[aria-expanded='true'] {
     transform: rotate(-45deg);
+  }
+`
+
+const StyledTitleToolbar = styled(Flex)`
+  @media (max-width: 710px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    & > * {
+      margin-bottom: 1rem;
+    }
   }
 `
 
@@ -52,7 +55,7 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
   const hasMaxTags = activeSnippetTags.length >= MAX_NUMBER_OF_TAGS
 
   return (
-    <Flex justifyContent="space-between" mb="4">
+    <StyledTitleToolbar justifyContent="space-between" mb="4">
       <Input
         onChange={(e: any) => {
           snippetDispatch({
@@ -65,30 +68,18 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
         variant="unstyled"
         width="300px"
       />
+
       <Flex alignItems="center">
-        {activeSnippetTags.map((t) => {
-          const foundTag = TAGS_DICT[t]
-          return (
-            <SnippetTag
-              key={foundTag.value}
-              mr="2"
-              variantColor={getColorByTagGroup(foundTag.group)}
-            >
-              <TagLabel>{foundTag.name}</TagLabel>
-              <TagCloseButton
-                onClick={() => {
-                  snippetDispatch({
-                    // Move this to its own action if this gets more complicated than a one liner
-                    type: 'updateSnippetState',
-                    tags: activeSnippetTags.filter(
-                      (activeTag) => activeTag !== t,
-                    ),
-                  })
-                }}
-              />
-            </SnippetTag>
-          )
-        })}
+        <SnippetTags
+          onCloseButtonClicked={(t) => {
+            snippetDispatch({
+              // Move this to its own action if this gets more complicated than a one liner
+              type: 'updateSnippetState',
+              tags: activeSnippetTags.filter((activeTag) => activeTag !== t),
+            })
+          }}
+          tags={activeSnippetTags}
+        />
 
         <Popover
           closeOnBlur={false}
@@ -176,6 +167,6 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
           </PopoverContent>
         </Popover>
       </Flex>
-    </Flex>
+    </StyledTitleToolbar>
   )
 }

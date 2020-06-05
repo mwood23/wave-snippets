@@ -1,14 +1,15 @@
+import styled from '@emotion/styled/macro'
 import React, { FC, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { useAuthDispatch, useAuthState } from '../context'
 import { useOAuth } from '../hooks/useOAuth'
 import {
+  Avatar,
   Box,
   Button,
   Icon,
   IconButton,
-  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -19,8 +20,21 @@ import { useCreateToast } from './Toast'
 
 type NavProps = {}
 
+const StyledName = styled.span``
+
+const StyledProfileMenuButton = styled(MenuButton)`
+  @media (max-width: 985px) {
+    min-width: auto;
+
+    ${StyledName} {
+      display: none;
+    }
+  }
+`
+
 export const Nav: FC<NavProps> = () => {
   const history = useHistory()
+  const location = useLocation()
   const { colorMode, toggleColorMode } = useColorMode()
   const { user, isLoading } = useAuthState()
   const { logout } = useAuthDispatch()
@@ -42,7 +56,7 @@ export const Nav: FC<NavProps> = () => {
   }, [googleError, githubError])
 
   return (
-    <Box position="absolute" right="8" top="8" zIndex={3000}>
+    <Box position="absolute" right="8" top="6" zIndex={3000}>
       <IconButton
         aria-label="Toggle color mode"
         icon={colorMode === 'dark' ? 'sun' : 'moon'}
@@ -52,27 +66,29 @@ export const Nav: FC<NavProps> = () => {
       />
       {/*
       // @ts-ignore */}
-      <Button as={Link} mr="2" size="sm" to="/gallery">
+      {/* <Button as={Link} mr="2" size="sm" to="/gallery">
         Gallery
-      </Button>
-      <Menu>
-        {/*
+      </Button> */}
+      {location.pathname === '/' && (
+        <Menu>
+          {/*
         // @ts-ignore */}
-        <MenuButton as={Button} mr="2" rightIcon="chevron-down" size="sm">
-          New...
-        </MenuButton>
-        <MenuList placement="bottom-end">
-          <MenuItem>Blank</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-          <MenuItem>Mark as Draft</MenuItem>
-          <MenuItem>Delete</MenuItem>
-        </MenuList>
-      </Menu>
+          <MenuButton as={Button} mr="2" rightIcon="chevron-down" size="sm">
+            New...
+          </MenuButton>
+          <MenuList placement="bottom-end">
+            <MenuItem>Blank</MenuItem>
+            <MenuItem>Create a Copy</MenuItem>
+            <MenuItem>Mark as Draft</MenuItem>
+            <MenuItem>Delete</MenuItem>
+          </MenuList>
+        </Menu>
+      )}
       {user ? (
         <Menu>
           {/*
             // @ts-ignore as coercion makes props messed up */}
-          <MenuButton
+          <StyledProfileMenuButton
             as={Button}
             // @ts-ignore
             isLoading={googleLoading || githubLoading}
@@ -81,17 +97,31 @@ export const Nav: FC<NavProps> = () => {
             size="sm"
           >
             {user.photoURL && (
-              <Image
-                alt={user.displayName}
+              <Avatar
                 mr="2"
+                name={user.displayName}
                 rounded="full"
-                size="22px"
+                size="xs"
                 src={user.photoURL}
               />
             )}
-            {user.displayName}
-          </MenuButton>
+            <StyledName>{user.displayName}</StyledName>
+          </StyledProfileMenuButton>
           <MenuList minWidth="125px" placement="bottom-end">
+            <MenuItem
+              onClick={() => {
+                history.push('/')
+              }}
+            >
+              Home
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                history.push('/gallery')
+              }}
+            >
+              Gallery
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 history.push('/my-snippets')

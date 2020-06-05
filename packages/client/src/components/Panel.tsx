@@ -5,7 +5,10 @@ import React, { FC, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 import { CODE_THEMES_DICT } from '../code-themes'
-import { SUPPORTED_CODING_LANGAUGES_DICT } from '../const'
+import {
+  BUILDER_MOBILE_BREAKPOINT,
+  SUPPORTED_CODING_LANGAUGES_DICT,
+} from '../const'
 import { usePreviewDispatch, useSnippetDispatch } from '../context'
 import {
   Box,
@@ -45,6 +48,8 @@ export type PanelItemProps = {
 const BottomActionRow = styled(Box)<{ isDraggingOverDroppable: boolean }>`
   transition: opacity 100ms linear;
   opacity: ${(props) => (props.isDraggingOverDroppable ? '0' : '1')};
+  display: flex;
+  justify-content: flex-end;
 `
 
 export const PanelItem: FC<PanelItemProps> = ({
@@ -169,6 +174,13 @@ export const PanelItem: FC<PanelItemProps> = ({
   )
 }
 
+const StyledPanelContainer = styled(Box)`
+  @media (max-width: ${BUILDER_MOBILE_BREAKPOINT}) {
+    padding-right: 0;
+    margin-top: 2rem;
+  }
+`
+
 export const Panel: FC<PanelProps> = ({
   steps,
   currentStep,
@@ -186,7 +198,7 @@ export const Panel: FC<PanelProps> = ({
     >
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
-          <Box
+          <StyledPanelContainer
             paddingRight="4"
             {...containerStyleProps}
             {...provided.droppableProps}
@@ -240,7 +252,7 @@ export const Panel: FC<PanelProps> = ({
                 </MenuList>
               </Menu>
             </BottomActionRow>
-          </Box>
+          </StyledPanelContainer>
         )}
       </Droppable>
     </DragDropContext>

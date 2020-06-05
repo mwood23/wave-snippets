@@ -13,6 +13,7 @@ export const isProd = process.env.REACT_APP_ENV === 'production'
 
 // Starts at 0 and used on a debounced callback so think +2 actions to what you put in
 export const DEFAULT_AUTOSAVE_THRESHOLD = 1
+export const BUILDER_MOBILE_BREAKPOINT = '1000px'
 
 export const DEFAULT_CYCLE_SPEED = 1500
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'

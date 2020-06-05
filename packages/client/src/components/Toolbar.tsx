@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled/macro'
 import React, { FC } from 'react'
 
 import {
@@ -43,6 +43,35 @@ type ToolbarProps = {
   downloadLoading?: boolean
 }
 
+const StyledLeftToolbar = styled(Flex)``
+const StyledRightToolbar = styled(Flex)``
+const StyledToolbarSquares = styled(Flex)``
+
+const StyledToolbar = styled(Flex)`
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    ${StyledLeftToolbar}, ${StyledRightToolbar} {
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: 710px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    ${StyledLeftToolbar} {
+      flex-direction: column;
+      width: 100%;
+
+      & > * {
+        margin-bottom: 0.75rem;
+      }
+    }
+  }
+`
+
 export const ToolbarItem = styled(Box)`
   margin-right: ${rem('10px')};
 
@@ -73,8 +102,8 @@ export const Toolbar: FC<ToolbarProps> = ({
   const snippetDispatch = useSnippetDispatch()
 
   return (
-    <Flex justifyContent="space-between" marginBottom="8">
-      <Flex justifyContent="center">
+    <StyledToolbar justifyContent="space-between" marginBottom="8">
+      <StyledLeftToolbar justifyContent="center">
         <ToolbarItem>
           <Autocomplete
             leftInputIcon="palette"
@@ -104,154 +133,158 @@ export const Toolbar: FC<ToolbarProps> = ({
             valueKey={'value'}
           />
         </ToolbarItem>
-        <ToolbarItem>
-          <Popover>
-            <PopoverTrigger>
-              {/*
+        <StyledToolbarSquares>
+          <ToolbarItem>
+            <Popover>
+              <PopoverTrigger>
+                {/*
               // @ts-ignore */}
-              <IconButton
-                backgroundColor={`${backgroundColorToHexAlpha(
-                  backgroundColor,
-                )} !important`}
-              />
-            </PopoverTrigger>
-            <PopoverContent width="230px" zIndex={1000}>
-              <ColorPicker
-                color={backgroundColor}
-                onChange={(color) =>
-                  snippetDispatch({
-                    type: 'updateSnippetState',
-                    backgroundColor: color.rgb,
-                  })
-                }
-              />
-            </PopoverContent>
-          </Popover>
-        </ToolbarItem>
-
-        <ToolbarItem>
-          <Popover>
-            <PopoverTrigger>
-              <IconButton aria-label="Settings dropdown" icon="settings" />
-            </PopoverTrigger>
-            <PopoverContent padding="4" width="230px" zIndex={1000}>
-              <FormControl mb="4">
-                <FormLabel htmlFor="email">Animation Preset</FormLabel>
-                <Select
-                  isDisabled={immediate}
-                  onChange={(e) =>
+                <IconButton
+                  backgroundColor={`${backgroundColorToHexAlpha(
+                    backgroundColor,
+                  )} !important`}
+                />
+              </PopoverTrigger>
+              <PopoverContent width="230px" zIndex={1000}>
+                <ColorPicker
+                  color={backgroundColor}
+                  onChange={(color) =>
                     snippetDispatch({
                       type: 'updateSnippetState',
-                      springPreset: e.target.value,
+                      backgroundColor: color.rgb,
                     })
                   }
-                  placeholder="Select option"
-                  size="sm"
-                  value={springPreset}
-                >
-                  {ANIMATION_PRESETS.map((preset) => (
-                    <option key={preset.value} value={preset.value}>
-                      {preset.name}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl mb="4">
-                <FormLabel htmlFor="email">Window Controls</FormLabel>
-                <Select
-                  isDisabled={immediate}
-                  mb="2"
-                  onChange={(e) =>
-                    snippetDispatch({
-                      type: 'updateSnippetState',
-                      windowControlsType: e.target.value as WindowControlsType,
-                    })
-                  }
-                  placeholder="Select option"
-                  size="sm"
-                  value={windowControlsType ?? ''}
-                >
-                  {WINDOW_CONTROL_TYPES.map((preset) => (
-                    <option key={preset.value} value={preset.value}>
-                      {preset.name}
-                    </option>
-                  ))}
-                </Select>
-                <Flex align="center">
-                  <FormLabel htmlFor="window-controls-position">
-                    Position
-                  </FormLabel>
+                />
+              </PopoverContent>
+            </Popover>
+          </ToolbarItem>
+          <ToolbarItem>
+            <Popover>
+              <PopoverTrigger>
+                <IconButton aria-label="Settings dropdown" icon="settings" />
+              </PopoverTrigger>
+              <PopoverContent padding="4" width="230px" zIndex={1000}>
+                <FormControl mb="4">
+                  <FormLabel htmlFor="email">Animation Preset</FormLabel>
+                  <Select
+                    isDisabled={immediate}
+                    onChange={(e) =>
+                      snippetDispatch({
+                        type: 'updateSnippetState',
+                        springPreset: e.target.value,
+                      })
+                    }
+                    placeholder="Select option"
+                    size="sm"
+                    value={springPreset}
+                  >
+                    {ANIMATION_PRESETS.map((preset) => (
+                      <option key={preset.value} value={preset.value}>
+                        {preset.name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl mb="4">
+                  <FormLabel htmlFor="email">Window Controls</FormLabel>
+                  <Select
+                    isDisabled={immediate}
+                    mb="2"
+                    onChange={(e) =>
+                      snippetDispatch({
+                        type: 'updateSnippetState',
+                        windowControlsType: e.target
+                          .value as WindowControlsType,
+                      })
+                    }
+                    placeholder="Select option"
+                    size="sm"
+                    value={windowControlsType ?? ''}
+                  >
+                    {WINDOW_CONTROL_TYPES.map((preset) => (
+                      <option key={preset.value} value={preset.value}>
+                        {preset.name}
+                      </option>
+                    ))}
+                  </Select>
+                  <Flex align="center">
+                    <FormLabel htmlFor="window-controls-position">
+                      Position
+                    </FormLabel>
+                    <Switch
+                      id="window-controls-position"
+                      onChange={() =>
+                        snippetDispatch({
+                          type: 'updateSnippetState',
+                          windowControlsPosition:
+                            windowControlsPosition === 'right'
+                              ? 'left'
+                              : 'right',
+                        })
+                      }
+                      value={windowControlsPosition === 'right'}
+                    />
+                  </Flex>
+                </FormControl>
+                <FormControl mb="4">
+                  <FormLabel htmlFor="email">Cycle Speed (ms)</FormLabel>
+                  <Input
+                    onChange={(e: any) =>
+                      snippetDispatch({
+                        type: 'updateSnippetState',
+                        cycleSpeed: e.target.value,
+                      })
+                    }
+                    size="sm"
+                    type="numeric"
+                    value={cycleSpeed}
+                  />
+                </FormControl>
+                <Flex align="center" mb="4">
+                  <FormLabel htmlFor="line-numbers">Line Numbers</FormLabel>
                   <Switch
-                    id="window-controls-position"
+                    id="line-numbers"
+                    isChecked={showLineNumbers}
                     onChange={() =>
                       snippetDispatch({
                         type: 'updateSnippetState',
-                        windowControlsPosition:
-                          windowControlsPosition === 'right' ? 'left' : 'right',
+                        showLineNumbers: !showLineNumbers,
                       })
                     }
-                    value={windowControlsPosition === 'right'}
                   />
                 </Flex>
-              </FormControl>
-              <FormControl mb="4">
-                <FormLabel htmlFor="email">Cycle Speed (ms)</FormLabel>
-                <Input
-                  onChange={(e: any) =>
-                    snippetDispatch({
-                      type: 'updateSnippetState',
-                      cycleSpeed: e.target.value,
-                    })
-                  }
-                  size="sm"
-                  type="numeric"
-                  value={cycleSpeed}
-                />
-              </FormControl>
-              <Flex align="center" mb="4">
-                <FormLabel htmlFor="line-numbers">Line Numbers</FormLabel>
-                <Switch
-                  id="line-numbers"
-                  isChecked={showLineNumbers}
-                  onChange={() =>
-                    snippetDispatch({
-                      type: 'updateSnippetState',
-                      showLineNumbers: !showLineNumbers,
-                    })
-                  }
-                />
-              </Flex>
-              <Flex align="center" mb="4">
-                <FormLabel htmlFor="slide-show">No Animation</FormLabel>
-                <Switch
-                  id="slide-show"
-                  isChecked={immediate}
-                  onChange={() =>
-                    snippetDispatch({
-                      type: 'updateSnippetState',
-                      immediate: !immediate,
-                    })
-                  }
-                />
-              </Flex>
-              <Flex align="center">
-                <FormLabel htmlFor="cycle">Cycle</FormLabel>
-                <Switch
-                  id="cycle"
-                  isChecked={cycle}
-                  onChange={() =>
-                    snippetDispatch({
-                      type: 'updateSnippetState',
-                      cycle: !cycle,
-                    })
-                  }
-                />
-              </Flex>
-            </PopoverContent>
-          </Popover>
-        </ToolbarItem>
-      </Flex>
-      <Flex alignItems="center">
+                <Flex align="center" mb="4">
+                  <FormLabel htmlFor="slide-show">No Animation</FormLabel>
+                  <Switch
+                    id="slide-show"
+                    isChecked={immediate}
+                    onChange={() =>
+                      snippetDispatch({
+                        type: 'updateSnippetState',
+                        immediate: !immediate,
+                      })
+                    }
+                  />
+                </Flex>
+                <Flex align="center">
+                  <FormLabel htmlFor="cycle">Cycle</FormLabel>
+                  <Switch
+                    id="cycle"
+                    isChecked={cycle}
+                    onChange={() =>
+                      snippetDispatch({
+                        type: 'updateSnippetState',
+                        cycle: !cycle,
+                      })
+                    }
+                  />
+                </Flex>
+              </PopoverContent>
+            </Popover>
+          </ToolbarItem>
+        </StyledToolbarSquares>
+      </StyledLeftToolbar>
+      <StyledRightToolbar alignItems="center">
         <Flex align="center" mr="2">
           <FormLabel htmlFor="visibility">
             Public{' '}
@@ -296,7 +329,7 @@ export const Toolbar: FC<ToolbarProps> = ({
             Download
           </Button>
         </ToolbarItem>
-      </Flex>
-    </Flex>
+      </StyledRightToolbar>
+    </StyledToolbar>
   )
 }

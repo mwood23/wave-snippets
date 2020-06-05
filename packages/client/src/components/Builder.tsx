@@ -1,7 +1,9 @@
+import styled from '@emotion/styled/macro'
 import { SnippetDocument } from '@waves/shared'
 import React, { ComponentType, FC, useState } from 'react'
 
 import { CODE_THEMES_DICT } from '../code-themes'
+import { BUILDER_MOBILE_BREAKPOINT } from '../const'
 import {
   PreviewProvider,
   SnippetProvider,
@@ -22,6 +24,22 @@ import { Toolbar } from './Toolbar'
 type BuilderProps = {
   snippet?: SnippetDocument
 }
+
+const StyledBuilder = styled(Box)`
+  @media (max-width: 760px) {
+    border: none;
+    padding: 0;
+  }
+`
+const StyledBuilderContent = styled(Flex)`
+  @media (max-width: ${BUILDER_MOBILE_BREAKPOINT}) {
+    flex-direction: column-reverse;
+    height: auto;
+  }
+`
+const PreviewWrapper = styled.div`
+  overflow-x: auto;
+`
 
 export const BuilderComponent: FC = () => {
   const toast = useCreateToast()
@@ -89,7 +107,7 @@ export const BuilderComponent: FC = () => {
   const themeObject = CODE_THEMES_DICT[theme]
 
   return (
-    <Box
+    <StyledBuilder
       borderColor="gray.600"
       borderRadius="3px"
       borderWidth="2px"
@@ -111,7 +129,7 @@ export const BuilderComponent: FC = () => {
           renderGIFDispatch({ type: 'startRecording' })
         }}
       />
-      <Flex height="450px" justifyContent="center">
+      <StyledBuilderContent height="450px" justifyContent="center">
         <Panel
           containerStyleProps={{
             flex: 1,
@@ -122,40 +140,42 @@ export const BuilderComponent: FC = () => {
           steps={steps}
           theme={theme}
         />
-        <PreviewContainer
-          {...bind}
-          backgroundColor={backgroundColor}
-          key={previewKey}
-          onTitleChanged={(e: any) =>
-            snippetDispatch({
-              type: 'updateSnippetState',
-              defaultWindowTitle: e.target.value,
-            })
-          }
-          title={defaultWindowTitle}
-          windowBackground={themeObject.theme.colors.background}
-          windowControlsPosition={
-            windowControlsPosition ?? themeObject.windowControlsPosition
-          }
-          windowControlsType={
-            windowControlsType ?? themeObject.windowControlsType
-          }
-        >
-          <Preview
-            cycle={cycle}
-            cycleSpeed={cycleSpeed}
-            immediate={immediate}
-            onAnimationCycleEnd={() => {
-              renderGIFDispatch({ type: 'stopRecording' })
-            }}
-            showLineNumbers={showLineNumbers}
-            springPreset={springPreset}
-            steps={steps}
-            theme={theme}
-          />
-        </PreviewContainer>
-      </Flex>
-    </Box>
+        <PreviewWrapper>
+          <PreviewContainer
+            {...bind}
+            backgroundColor={backgroundColor}
+            key={previewKey}
+            onTitleChanged={(e: any) =>
+              snippetDispatch({
+                type: 'updateSnippetState',
+                defaultWindowTitle: e.target.value,
+              })
+            }
+            title={defaultWindowTitle}
+            windowBackground={themeObject.theme.colors.background}
+            windowControlsPosition={
+              windowControlsPosition ?? themeObject.windowControlsPosition
+            }
+            windowControlsType={
+              windowControlsType ?? themeObject.windowControlsType
+            }
+          >
+            <Preview
+              cycle={cycle}
+              cycleSpeed={cycleSpeed}
+              immediate={immediate}
+              onAnimationCycleEnd={() => {
+                renderGIFDispatch({ type: 'stopRecording' })
+              }}
+              showLineNumbers={showLineNumbers}
+              springPreset={springPreset}
+              steps={steps}
+              theme={theme}
+            />
+          </PreviewContainer>
+        </PreviewWrapper>
+      </StyledBuilderContent>
+    </StyledBuilder>
   )
 }
 

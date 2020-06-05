@@ -63,12 +63,12 @@ export const Hero: FC<HeroProps> = () => {
         </animated.svg>
       </Link>
       <Box marginBottom="8">
-        <Text fontSize="xl" fontWeight="500" textAlign="center">
+        <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
           Create gorgeous GIFs of your code to share with the world.
         </Text>
-        <Text fontSize="xl" fontWeight="500" textAlign="center">
+        {/* <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
           Start adding snippets to start.
-        </Text>
+        </Text> */}
       </Box>
     </Flex>
   )

@@ -1,9 +1,23 @@
+import styled from '@emotion/styled'
 import { SnippetDocument, snippets } from '@waves/shared'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, useHistory } from 'react-router-dom'
 import { get } from 'typesaurus'
 
-import { Builder, Hero, Page, Spinner, useCreateToast } from '../components'
+import {
+  Builder,
+  Hero,
+  Message,
+  Page,
+  Spinner,
+  useCreateToast,
+} from '../components'
+
+const StyledMobileWarningMessage = styled(Message)`
+  @media (min-width: 700px) {
+    display: none;
+  }
+`
 
 export const HomePage: FC<RouteComponentProps<
   { snippetID: string },
@@ -68,6 +82,11 @@ export const HomePage: FC<RouteComponentProps<
   return (
     <Page>
       <Hero />
+      <StyledMobileWarningMessage
+        content="Rendering GIFs in the browser from DOM elements takes a lot of
+          resources. Use desktop for the best experience!"
+        title="Mobile support experimental"
+      />
       {loading ? (
         <Spinner superCentered />
       ) : !data ? (

@@ -9,7 +9,7 @@ export const Page: FC = ({ children }) => (
     maxWidth="1200px"
     padding="0 2rem"
     pb="8"
-    pt="12"
+    pt="16"
     width="100%"
   >
     {children}

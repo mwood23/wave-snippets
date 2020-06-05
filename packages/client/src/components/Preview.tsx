@@ -118,6 +118,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     return (
       <Box
         height={'314px'}
+        margin="0 auto"
         overflow={'hidden'}
         position="relative"
         ref={ref}
