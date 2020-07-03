@@ -4,39 +4,18 @@ import React, { FC } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { Doc, Query, where } from 'typesaurus'
 
-import { CODE_THEMES_DICT } from '../code-themes'
-import { PreviewProvider } from '../context'
 import { Box, Flex, Link, Spinner, Text } from './core'
-import { Preview } from './Preview'
-import { PreviewContainer } from './PreviewContainer'
 import { SnippetTags } from './SnippetTags'
+import { StandaloneSnippet } from './StandaloneSnippet'
 
 type SnippetsListItemProps = {
   snippet: Doc<SnippetDocument>
 }
 
-export const SnippetsListItem: FC<SnippetsListItemProps> = ({
-  snippet: {
-    data: {
-      backgroundColor,
-      cycle,
-      cycleSpeed,
-      immediate,
-      showLineNumbers,
-      springPreset,
-      steps,
-      windowControlsPosition,
-      windowControlsType,
-      theme,
-      defaultWindowTitle,
-      tags,
-      name,
-      updatedOn,
-      createdOn,
-    },
-  },
-}) => {
-  const themeObject = CODE_THEMES_DICT[theme]
+export const SnippetsListItem: FC<SnippetsListItemProps> = ({ snippet }) => {
+  const {
+    data: { tags, updatedOn, createdOn, name },
+  } = snippet
 
   return (
     <Box
@@ -46,33 +25,7 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({
       width={['100%', '100%', '100%', '50%']}
     >
       <Box borderRadius="4px" borderWidth="1px" height="100%" overflow="hidden">
-        <PreviewProvider>
-          <PreviewContainer
-            readOnly
-            responsive
-            backgroundColor={backgroundColor}
-            title={defaultWindowTitle}
-            windowBackground={themeObject.theme.colors.background}
-            windowControlsPosition={
-              windowControlsPosition ?? themeObject.windowControlsPosition
-            }
-            windowControlsType={
-              windowControlsType ?? themeObject.windowControlsType
-            }
-          >
-            <Preview
-              responsive
-              cycle={cycle}
-              cycleSpeed={cycleSpeed}
-              immediate={immediate}
-              playOnInit={true}
-              showLineNumbers={showLineNumbers}
-              springPreset={springPreset}
-              steps={steps}
-              theme={theme}
-            />
-          </PreviewContainer>
-        </PreviewProvider>
+        <StandaloneSnippet snippet={snippet} />
         <Box overflow="hidden">
           <Box p="6">
             <Box alignItems="baseline" d="flex" justifyContent="space-between">

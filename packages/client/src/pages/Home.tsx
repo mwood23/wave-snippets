@@ -85,8 +85,7 @@ export const HomePage: FC<RouteComponentProps<
     <Page>
       <Hero />
       <StyledMobileWarningMessage
-        content="Rendering GIFs in the browser from DOM elements takes a lot of
-          resources. Use desktop for the best experience!"
+        content="Use desktop for the best experience!"
         title="Mobile support experimental"
       />
       {loading ? (

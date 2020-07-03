@@ -1,4 +1,4 @@
-Weird functions directory due to: https://github.com/firebase/firebase-tools/issues/653
+Weird functions directory due to: https://github.com/firebase/firebase-tools/issues/653. Need to publish the shared module to fix this right.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

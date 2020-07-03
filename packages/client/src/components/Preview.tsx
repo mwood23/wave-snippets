@@ -1,4 +1,5 @@
 import { CodeSurfer } from '@code-surfer/standalone'
+import styled from '@emotion/styled'
 import { InputStep } from '@waves/shared'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
@@ -37,6 +38,17 @@ export type PreviewProps = {
   responsive?: boolean
 }
 
+const PreviewContainer = styled(Box)`
+  /* .cs-content {
+    display: flex;
+    align-items: center;
+  } */
+
+  /* .cs-scaled-content {
+    transform-origin: center !important;
+  } */
+`
+
 export const Preview = forwardRef<any, PreviewProps>(
   (
     {
@@ -55,7 +67,7 @@ export const Preview = forwardRef<any, PreviewProps>(
   ) => {
     const totalSteps = steps.length - 1
     const dispatch = usePreviewDispatch()
-    const { currentStep, isPlaying } = usePreviewState()
+    const { currentStep, isPlaying, pauseAnimation } = usePreviewState()
     const [codeSurferKey, setCodeSurferKey] = useState(1)
     const [loading, setLoading] = useState(false)
 
@@ -113,10 +125,11 @@ export const Preview = forwardRef<any, PreviewProps>(
         }
       },
       immediate,
+      pause: pauseAnimation,
     })
 
     return (
-      <Box
+      <PreviewContainer
         height={'314px'}
         margin="0 auto"
         overflow={'hidden'}
@@ -141,7 +154,7 @@ export const Preview = forwardRef<any, PreviewProps>(
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>
-      </Box>
+      </PreviewContainer>
     )
   },
 )

@@ -64,7 +64,7 @@ export const Hero: FC<HeroProps> = () => {
       </Link>
       <Box marginBottom="8">
         <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
-          Create gorgeous GIFs of your code to share with the world.
+          Create gorgeous snippets of your code to share with the world.
         </Text>
         {/* <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
           Start adding snippets to start.

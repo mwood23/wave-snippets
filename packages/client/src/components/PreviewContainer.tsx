@@ -48,6 +48,7 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
     <Box
       className={className}
       height={responsive ? 'auto' : '450px'}
+      id="snippetPreview"
       margin="0 auto"
       paddingX="8"
       paddingY="12"

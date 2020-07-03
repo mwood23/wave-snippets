@@ -197,7 +197,7 @@ export const useRenderGIF = (
 
         const scale = 600 / node.offsetWidth
 
-        const image = await domToImage.toPng(elementToGIF.current!, {
+        const image = await domToImage.toPng(node, {
           height: node.offsetHeight * scale,
           width: node.offsetWidth * scale,
           style: {
@@ -243,6 +243,10 @@ export const useRenderGIF = (
 
       gif.on('finished', function (blob: Blob) {
         dispatch({ type: 'renderComplete' })
+
+        // Reset Ref
+        imagesToRender.current = []
+
         onRenderComplete(blob)
       })
 

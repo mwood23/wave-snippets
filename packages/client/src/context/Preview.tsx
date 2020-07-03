@@ -11,6 +11,7 @@ import { UnreachableCaseError, noop, omit } from '../utils'
 type PreviewState = {
   currentStep: number
   isPlaying: boolean
+  pauseAnimation: boolean
 }
 
 type PreviewAction =
@@ -28,6 +29,7 @@ type PreviewAction =
 const initialPreviewState: PreviewState = {
   currentStep: 0,
   isPlaying: false,
+  pauseAnimation: false,
 }
 
 const PreviewStateContext = createContext<PreviewState>(initialPreviewState)

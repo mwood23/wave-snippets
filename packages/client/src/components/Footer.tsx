@@ -50,7 +50,11 @@ export const Footer: FC<FooterProps> = () => {
       <Box>
         <Text>
           created by{' '}
-          <WavesFooterLink isExternal color={color[colorMode]}>
+          <WavesFooterLink
+            isExternal
+            color={color[colorMode]}
+            href="https://www.marcuswood.io"
+          >
             @marcuswood23 <Icon mx="2px" name="external-link" />
           </WavesFooterLink>
         </Text>

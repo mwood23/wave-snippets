@@ -1,5 +1,6 @@
 import styled from '@emotion/styled/macro'
 import React, { FC } from 'react'
+import { useRouteMatch } from 'react-router-dom'
 
 import {
   CODE_THEMES,
@@ -23,7 +24,6 @@ import { Autocomplete } from './Autocomplete'
 import { ColorPicker } from './ColorPicker'
 import {
   Box,
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -37,6 +37,7 @@ import {
   Switch,
   Tooltip,
 } from './core'
+import { ExportMenu } from './ExportMenu'
 
 type ToolbarProps = {
   onRenderGIFClicked: any
@@ -100,6 +101,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { isPlaying } = usePreviewState()
   const previewDispatch = usePreviewDispatch()
   const snippetDispatch = useSnippetDispatch()
+  const match = useRouteMatch<{ snippetID?: string }>()
 
   return (
     <StyledToolbar justifyContent="space-between" marginBottom="8">
@@ -321,13 +323,11 @@ export const Toolbar: FC<ToolbarProps> = ({
           />
         </ToolbarItem>
         <ToolbarItem>
-          <Button
-            isLoading={downloadLoading}
-            leftIcon={'download'}
-            onClick={onRenderGIFClicked}
-          >
-            Download
-          </Button>
+          <ExportMenu
+            isDisabled={downloadLoading}
+            onRenderGIFClicked={onRenderGIFClicked}
+            snippetID={match.params?.snippetID}
+          />
         </ToolbarItem>
       </StyledRightToolbar>
     </StyledToolbar>
