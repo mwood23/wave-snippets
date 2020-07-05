@@ -1,0 +1,5 @@
+{
+  "env": {
+    "downloadurl": "http://localhost:3000/download"
+  }
+}

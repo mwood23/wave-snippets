@@ -8,4 +8,6 @@ export * from './onUserCreate'
 exports.createMedia = runWith({
   timeoutSeconds: 540,
   memory: '1GB',
-}).https.onRequest(createMedia)
+})
+  .region('us-east1')
+  .https.onRequest(createMedia)

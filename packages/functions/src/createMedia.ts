@@ -6,6 +6,7 @@ import puppeteer from 'puppeteer'
 import { Required } from 'utility-types'
 import { number, object, string } from 'yup'
 
+import { WAVE_DOWNLOAD_URL } from './const'
 import { createGIF } from './utils/createGIF'
 import timecut from './vendor/timecut'
 
@@ -84,7 +85,8 @@ const createMediaValidationSchema = object().shape({
   height: number().default(VIEWPORT_OPTIONS.height),
   width: number().default(VIEWPORT_OPTIONS.width),
   deviceScaleFactor: number().default(VIEWPORT_OPTIONS.deviceScaleFactor),
-  duration: number().default(DEFAULT_RESTING_DURATION),
+  duration: number(),
+  restingDuration: number().default(DEFAULT_RESTING_DURATION),
 })
 
 export const createMedia = async (req: Request, res: Response) => {
@@ -97,12 +99,13 @@ export const createMedia = async (req: Request, res: Response) => {
     })) as YupCreateMediaParams
 
   // TODO Create an entity in Firebase for the export so they can check the status.
+
   res.status(200).send({
     code: 'SUCCESS',
     msg: `Creating your snippet now.`,
   })
 
-  const URL = `http://localhost:3000/download/${createMediaParams.id}`
+  const URL = `${WAVE_DOWNLOAD_URL}/${createMediaParams.id}`
   const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
   })

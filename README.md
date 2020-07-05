@@ -1,4 +1,4 @@
-Weird functions directory due to: https://github.com/firebase/firebase-tools/issues/653. Need to publish the shared module to fix this right.
+Weird functions directory due to: https://github.com/firebase/firebase-tools/issues/653. Need to publish the shared module to fix this right or figure out how to make puppeteer bundleable https://github.com/puppeteer/puppeteer/issues/2245
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

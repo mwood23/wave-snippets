@@ -4,6 +4,11 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "source": "deploy-functions"
+    "source": "packages/functions"
+  },
+  "emulators": {
+    "firestore": {
+      "port": "8633"
+    }
   }
 }
