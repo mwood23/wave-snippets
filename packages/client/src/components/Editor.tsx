@@ -140,6 +140,7 @@ export const Editor: FC<EditorProps> = ({
         })
       }
     }, parsedFocus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parsedFocus, step, editorRef])
 
   return (

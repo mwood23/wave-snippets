@@ -54,6 +54,7 @@ export const Nav: FC<NavProps> = () => {
     if (googleError || githubError) {
       toast(googleError ?? githubError, { type: 'error' })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [googleError, githubError])
 
   return (

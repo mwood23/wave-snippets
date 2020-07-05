@@ -119,6 +119,7 @@ export const Autocomplete = <Option extends GenericAutocompleteOption>({
     if (!isNil(displayValue)) {
       setSearchText(displayValue)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayValue])
 
   useEffect(() => {

@@ -47,6 +47,7 @@ export const ExportMenu: FC<ExportMenuProps> = ({
         </Box>,
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasCopied])
 
   return (
