@@ -1,6 +1,6 @@
 import { useGet } from '@typesaurus/react'
 import { snippets } from '@waves/shared'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 
 import { Box, Spinner } from '../components'
@@ -19,7 +19,6 @@ export const EmbedPage: FC<EmbedPageProps> = ({
     return <Spinner superCentered />
   }
 
-  console.log(snippetID)
   return (
     <Box>
       <StandaloneSnippet snippet={snippet} />

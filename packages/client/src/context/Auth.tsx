@@ -79,7 +79,8 @@ export const AuthProvider: FC = ({ children }) => {
       unsubscribe()
       unsubscribeFromUserListener()
     }
-  }, [setAuthState])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <AuthStateContext.Provider value={authState}>

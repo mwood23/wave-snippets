@@ -27,7 +27,7 @@ module.exports = {
       },
     ],
     'react/prop-types': ['off'],
-    'react-hooks/exhaustive-deps': ['off'],
+    // 'react-hooks/exhaustive-deps': ['off'],
     'unicorn/explicit-length-check': ['error'],
     'unicorn/no-array-instanceof': ['error'],
     'unicorn/throw-new-error': ['error'],

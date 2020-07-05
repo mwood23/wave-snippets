@@ -5,6 +5,7 @@ import { PageRoute } from './components'
 import { PrivateRoute } from './components/PrivateRoute'
 import {
   AccountPage,
+  DownloadPage,
   EmbedPage,
   GalleryPage,
   HomePage,
@@ -21,6 +22,13 @@ export const App: FC = () => (
       exact
       component={EmbedPage}
       path="/embed/:snippetID"
+      showFooter={false}
+      showNav={false}
+    />
+    <PageRoute
+      exact
+      component={DownloadPage}
+      path="/download/:snippetID"
       showFooter={false}
       showNav={false}
     />

@@ -2,22 +2,21 @@
   "name": "@waves/functions",
   "version": "0.1.0",
   "scripts": {
+    "tsc": "tsc",
     "clean": "run-p clean:*",
     "clean:node_modules": "rimraf node_modules",
-    "clean:build": "rimraf dist",
-    "build": "webpack",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "clean:dist": "rimraf dist",
+    "build": "tsc && echo 'Copying files into deploy-functions...' && cp -r ./dist ../../deploy-functions",
+    "serve": "firebase emulators:start --only functions",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "echo 'N/A'",
     "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "eslint:fix": "yarn eslint --fix",
-    "tsc": "tsc -p tsconfig.json",
     "lint": "run-s tsc eslint",
     "lint:fix": "yarn tsc && yarn eslint:fix",
-    "dev": "echo 'N/A: You have to deploy and test against environment'"
+    "dev:run": "yarn build && yarn serve",
+    "dev": "onchange -i -k './src/**/*' -- yarn dev:run"
   },
   "engines": {
     "node": "10"
@@ -25,8 +24,15 @@
   "main": "dist/index.js",
   "dependencies": {
     "@waves/shared": "^0.1.0",
+    "event-emitter": "^0.3.5",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.1"
+    "firebase-functions": "^3.6.1",
+    "ffmpeg-static": "^4.2.5",
+    "fluent-ffmpeg": "^2.1.2",
+    "puppeteer": "2.1.1",
+    "sprintf-js": "1.1.1",
+    "waait": "^1.0.5",
+    "yup": "^0.29.0"
   },
   "private": true
 }

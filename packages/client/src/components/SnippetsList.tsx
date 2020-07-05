@@ -15,6 +15,7 @@ type SnippetsListItemProps = {
 export const SnippetsListItem: FC<SnippetsListItemProps> = ({ snippet }) => {
   const {
     data: { tags, updatedOn, createdOn, name },
+    ref: { id },
   } = snippet
 
   return (
@@ -50,7 +51,7 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({ snippet }) => {
               lineHeight="tight"
               mt="2"
             >
-              {name}
+              {name} {id}
             </Box>
           </Box>
         </Box>

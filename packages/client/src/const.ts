@@ -126,7 +126,6 @@ export const SUPPORTED_CODING_LANGAUGES = [
     codeMirrorMap: 'text/html',
   },
   { value: 'css', aliases: [], name: 'CSS', codeMirrorMap: 'css' },
-  // { value: 'clike', aliases: [], name: 'C-like', codeMirrorMap: 'clike' },
   {
     value: 'javascript',
     aliases: ['js'],

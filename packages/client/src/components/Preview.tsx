@@ -80,6 +80,7 @@ export const Preview = forwardRef<any, PreviewProps>(
       setLoading(true)
       debouncedCallback()
       // Show line numbers is global to a snippet right now and why it's passed in
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [steps, showLineNumbers])
 
     useEffect(() => {
@@ -89,6 +90,7 @@ export const Preview = forwardRef<any, PreviewProps>(
           currentStep: totalSteps > 1 ? currentStep + 1 : currentStep,
         })
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isPlaying])
 
     useEffect(() => {
@@ -98,6 +100,7 @@ export const Preview = forwardRef<any, PreviewProps>(
           isPlaying: true,
         })
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playOnInit])
 
     const props = useSpring({
@@ -130,6 +133,7 @@ export const Preview = forwardRef<any, PreviewProps>(
 
     return (
       <PreviewContainer
+        className="code-snippet-preview-container"
         height={'314px'}
         margin="0 auto"
         overflow={'hidden'}

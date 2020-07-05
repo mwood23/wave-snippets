@@ -38,6 +38,7 @@ export const useSearch = <T extends {}>({
     searchInstance.current = new Search(uidFieldName)
     indexes.forEach((index) => searchInstance.current!.addIndex(index))
     searchInstance.current!.addDocuments(collection)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const results =

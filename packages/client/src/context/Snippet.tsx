@@ -187,7 +187,12 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
 
         toast(
           <Box>
-            <Text>🚀Saved a new snippet!</Text>
+            <Text>
+              <span aria-label="rocket" role="img">
+                🚀
+              </span>
+              Saved a new snippet!
+            </Text>
           </Box>,
         )
         dispatch({ type: 'updateSnippetState', owner: user.userID })

@@ -220,6 +220,7 @@ export const useRenderGIF = (
 
       dispatch({ type: 'startGIFBuilding' })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRecording, frequency])
 
   useEffect(() => {
@@ -256,6 +257,7 @@ export const useRenderGIF = (
     if (isBuildingGIF) {
       buildGIF()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBuildingGIF])
 
   return [{ ref: elementToGIF }, dispatch, state]

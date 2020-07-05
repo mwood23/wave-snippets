@@ -71,7 +71,6 @@ export const HomePage: FC<RouteComponentProps<
         history.push('/')
         setLoading(false)
       })
-
       if (data) {
         setData(data.data)
         setLoading(false)
@@ -79,6 +78,7 @@ export const HomePage: FC<RouteComponentProps<
     }
 
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snippetID, shouldSkipFetch])
 
   return (
