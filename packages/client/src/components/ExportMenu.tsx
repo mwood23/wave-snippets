@@ -11,11 +11,12 @@ import {
   MenuList,
   Text,
   useClipboard,
+  useDisclosure,
 } from './core'
+import { ExportModal } from './ExportModal'
 import { useCreateToast } from './Toast'
 
 type ExportMenuProps = {
-  onRenderGIFClicked: () => void
   snippetID?: string
   isLoading?: boolean
   isDisabled?: boolean
@@ -29,13 +30,12 @@ const createEmbed = (snippetID: string) => `<iframe
 `
 
 export const ExportMenu: FC<ExportMenuProps> = ({
-  onRenderGIFClicked,
   snippetID,
   isLoading = false,
   isDisabled = false,
 }) => {
   const embedURL = snippetID ? createEmbed(snippetID) : 'No snippet exists'
-
+  const { isOpen, onClose, onOpen, onToggle } = useDisclosure()
   const { onCopy, hasCopied } = useClipboard(embedURL)
   const toast = useCreateToast()
 
@@ -51,25 +51,26 @@ export const ExportMenu: FC<ExportMenuProps> = ({
   }, [hasCopied])
 
   return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        // @ts-ignore
-        isDisabled={isDisabled}
-        isLoading={isLoading}
-        // @ts-ignore
-        rightIcon="chevron-down"
-      >
-        Actions
-      </MenuButton>
-      <MenuList zIndex={1000}>
-        <MenuItem isDisabled={!snippetID} onClick={onCopy}>
-          Embed
-        </MenuItem>
-        <MenuItem onClick={onRenderGIFClicked}>
-          Export GIF <Badge ml="4">Beta</Badge>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+    <>
+      <Menu>
+        <MenuButton
+          as={Button}
+          // @ts-ignore
+          isDisabled={isDisabled}
+          isLoading={isLoading}
+          // @ts-ignore
+          rightIcon="chevron-down"
+        >
+          Export...
+        </MenuButton>
+        <MenuList zIndex={1000}>
+          <MenuItem isDisabled={!snippetID} onClick={onCopy}>
+            Embed <Badge ml="4">Beta</Badge>
+          </MenuItem>
+          <MenuItem onClick={onOpen}>Export GIF/MP4</MenuItem>
+        </MenuList>
+      </Menu>
+      <ExportModal id="ewedw" isOpen={isOpen} onClose={onClose} />
+    </>
   )
 }

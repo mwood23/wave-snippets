@@ -127,13 +127,13 @@ export const Nav: FC<NavProps> = () => {
             >
               Home
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               onClick={() => {
                 history.push('/gallery')
               }}
             >
               Gallery
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               onClick={() => {
                 history.push('/my-snippets')

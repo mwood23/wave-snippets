@@ -1,6 +1,7 @@
 import os from 'os'
 import path from 'path'
 
+import { storage } from 'firebase-admin'
 import { Request, Response } from 'firebase-functions'
 import puppeteer from 'puppeteer'
 import { Required } from 'utility-types'
@@ -8,6 +9,7 @@ import { number, object, string } from 'yup'
 
 import { WAVE_DOWNLOAD_URL } from './const'
 import { createGIF } from './utils/createGIF'
+import { db } from './utils/store'
 import timecut from './vendor/timecut'
 
 const VIEWPORT_OPTIONS = {
@@ -24,6 +26,16 @@ export type CreateMediaParams = {
    * ID of the snippet to create media from.
    */
   id: string
+
+  /**
+   * Name to give the export. Anything given will be slugified. If not provided, random id will be given
+   */
+  name?: string
+
+  /**
+   * Comma separated list of people to send the export notification to
+   */
+  emails: string
 
   /**
    * Quality of the export. This is the frame per second mostly. Large snippets might run
@@ -71,6 +83,7 @@ export type CreateMediaParams = {
 // Types are blown so we're helping them out here
 type YupCreateMediaParams = Required<
   CreateMediaParams,
+  | 'emails'
   | 'deviceScaleFactor'
   | 'width'
   | 'height'
@@ -79,8 +92,9 @@ type YupCreateMediaParams = Required<
   | 'restingDuration'
 >
 
-const createMediaValidationSchema = object().shape({
+export const createMediaValidationSchema = object().shape({
   id: string().required('ID is required.').trim(),
+  emails: string().required(),
   quality: string().oneOf(['low', 'medium', 'high']).default(DEFAULT_QUALITY),
   height: number().default(VIEWPORT_OPTIONS.height),
   width: number().default(VIEWPORT_OPTIONS.width),
@@ -90,6 +104,9 @@ const createMediaValidationSchema = object().shape({
 })
 
 export const createMedia = async (req: Request, res: Response) => {
+  // @ts-ignore
+  console.log('User', req?.locals?.user)
+
   const createMediaParams = (await createMediaValidationSchema
     .validate(req.query, { abortEarly: false })
     .catch(({ errors }) => {
@@ -99,11 +116,6 @@ export const createMedia = async (req: Request, res: Response) => {
     })) as YupCreateMediaParams
 
   // TODO Create an entity in Firebase for the export so they can check the status.
-
-  res.status(200).send({
-    code: 'SUCCESS',
-    msg: `Creating your snippet now.`,
-  })
 
   const URL = `${WAVE_DOWNLOAD_URL}/${createMediaParams.id}`
   const browser = await puppeteer.launch({
@@ -173,8 +185,48 @@ export const createMedia = async (req: Request, res: Response) => {
 
   await browser.close()
 
-  // TODO: Upload to buckets
+  const bucket = storage().bucket()
+
+  // @ts-ignore Locals isn't typed :(
+  const userIDOrAnonymous = () => req.locals?.user?.uid ?? 'anonymous'
+  const SEVEN_DAYS = Date.now() + 7 * 24 * 60 * 60 * 1000
+
+  const uploadAsset = (assetPath: string) =>
+    bucket
+      .upload(assetPath, {
+        destination: `exports/${userIDOrAnonymous()}/${createMediaParams.id}`,
+      })
+      .then(([data]) =>
+        data.getSignedUrl({
+          expires: SEVEN_DAYS,
+          action: 'read',
+        }),
+      )
+
+  // Adding a random ID to the end since people could be exporting these multiple times
+  // especially for public snippets
+
+  try {
+    const [videoURL, gifURL] = await Promise.all([
+      uploadAsset(outputVideoFilePath),
+      uploadAsset(outputGIFFilePath),
+    ])
+
+    await db.collection('mail').add({
+      to: createMediaParams.emails.split(','),
+      message: {
+        subject: 'Your Wave Snippet Export is Ready!',
+        text: '',
+        html: `Hello,<br />Your snippies are ready!! Video: ${videoURL[0]}<br />Gif:${gifURL[0]}<br />Links expire in seven days!`,
+      },
+    })
+
+    console.log('Emailed queued for delivery!')
+  } catch (error) {
+    console.log('Upload and send email err', error)
+  }
 
   // TODO: Any cleanup needed for the functions like clearing out the temp dir?
+  res.end()
   return
 }

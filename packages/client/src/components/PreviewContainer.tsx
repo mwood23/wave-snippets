@@ -11,6 +11,8 @@ type PreviewContainerProps = {
   children: ReactNode
   className?: string
   responsive?: boolean
+  onMouseEnter?: (event: React.MouseEvent<any, MouseEvent>) => void
+  onMouseLeave?: (event: React.MouseEvent<any, MouseEvent>) => void
 } & WindowTitleBarProps
 
 const Background = styled(Box)`
@@ -42,6 +44,8 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       windowControlsType,
       windowControlsPosition,
       className,
+      onMouseEnter,
+      onMouseLeave,
     },
     ref,
   ) => (
@@ -49,6 +53,8 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
       className={className}
       height={responsive ? 'auto' : '450px'}
       margin="0 auto"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       paddingX="8"
       paddingY="12"
       position="relative"

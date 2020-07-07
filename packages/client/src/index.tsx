@@ -17,10 +17,13 @@ import { AuthProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
 
-init({
-  dsn:
-    'https://27e96aefbcba4947a1ed1fc69a00fc87@o180781.ingest.sentry.io/5266266',
-})
+if (process.env.NODE_ENV === 'production') {
+  init({
+    dsn:
+      'https://27e96aefbcba4947a1ed1fc69a00fc87@o180781.ingest.sentry.io/5266266',
+    environment: process.env.NODE_ENV,
+  })
+}
 
 const myCache = createCache()
 myCache.compat = true

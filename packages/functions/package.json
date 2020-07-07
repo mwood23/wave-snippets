@@ -23,10 +23,15 @@
   },
   "main": "dist/index.js",
   "dependencies": {
+    "axios": "^0.19.2",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.6.1",
     "ffmpeg-static": "^4.2.5",
     "puppeteer": "2.1.1",
+    "shortid": "^2.2.15",
     "sprintf-js": "1.1.1",
     "waait": "^1.0.5",
     "yup": "^0.29.0"

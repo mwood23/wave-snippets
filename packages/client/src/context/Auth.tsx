@@ -57,6 +57,9 @@ export const AuthProvider: FC = ({ children }) => {
             (doc) => {
               const userInfo = doc.data()
 
+              // @ts-ignore
+              console.log(firebase.auth().currentUser.getIdToken())
+
               // We don't handle the error case because when a user is created a cloud function is fired and
               // sometimes it doesn't complete by the time this is called. However, since it's a subscription
               // it'll eventually come through for us.

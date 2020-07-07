@@ -39,10 +39,7 @@ import {
 } from './core'
 import { ExportMenu } from './ExportMenu'
 
-type ToolbarProps = {
-  onRenderGIFClicked: any
-  downloadLoading?: boolean
-}
+type ToolbarProps = {}
 
 const StyledLeftToolbar = styled(Flex)``
 const StyledRightToolbar = styled(Flex)``
@@ -81,10 +78,7 @@ export const ToolbarItem = styled(Box)`
   }
 `
 
-export const Toolbar: FC<ToolbarProps> = ({
-  onRenderGIFClicked,
-  downloadLoading,
-}) => {
+export const Toolbar: FC<ToolbarProps> = () => {
   const {
     defaultLanguage,
     theme,
@@ -313,7 +307,6 @@ export const Toolbar: FC<ToolbarProps> = ({
           <IconButton
             // @ts-ignore
             icon={isPlaying ? 'pause' : 'play'}
-            isDisabled={downloadLoading}
             onClick={() =>
               previewDispatch({
                 type: 'updatePreviewState',
@@ -323,11 +316,7 @@ export const Toolbar: FC<ToolbarProps> = ({
           />
         </ToolbarItem>
         <ToolbarItem>
-          <ExportMenu
-            isDisabled={downloadLoading}
-            onRenderGIFClicked={onRenderGIFClicked}
-            snippetID={match.params?.snippetID}
-          />
+          <ExportMenu snippetID={match.params?.snippetID} />
         </ToolbarItem>
       </StyledRightToolbar>
     </StyledToolbar>

@@ -36,6 +36,8 @@
     "@testing-library/user-event": "^7.1.2",
     "@types/array.prototype.flat": "^1.2.1",
     "@types/codemirror": "^0.0.95",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.6",
     "@types/dom-to-image": "^2.6.0",
     "@types/ffmpeg-static": "^3.0.0",
     "@types/fluent-ffmpeg": "^2.1.14",

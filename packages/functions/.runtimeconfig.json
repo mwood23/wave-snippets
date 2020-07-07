@@ -1,5 +1,6 @@
 {
   "env": {
-    "downloadurl": "http://localhost:3000/download"
+    "downloadurl": "http://localhost:3000/download",
+    "cloudfunctionsurl": "http://localhost:5001/waves-production/us-east1"
   }
 }

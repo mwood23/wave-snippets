@@ -7,7 +7,6 @@ import {
   AccountPage,
   DownloadPage,
   EmbedPage,
-  GalleryPage,
   HomePage,
   MySnippetsPage,
   NotFoundPage,
@@ -16,7 +15,7 @@ import {
 export const App: FC = () => (
   <Switch>
     <PrivateRoute exact component={AccountPage} path="/account" />
-    <PrivateRoute exact component={GalleryPage} path="/gallery" />
+    {/* <PrivateRoute exact component={GalleryPage} path="/gallery" /> */}
     <PrivateRoute exact component={MySnippetsPage} path="/my-snippets" />
     <PageRoute
       exact

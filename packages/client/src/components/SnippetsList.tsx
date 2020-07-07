@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { Doc, Query, where } from 'typesaurus'
 
-import { Box, Flex, Link, Spinner, Text } from './core'
+import { Box, Flex, IconButton, Link, Spinner, Text } from './core'
 import { SnippetTags } from './SnippetTags'
 import { StandaloneSnippet } from './StandaloneSnippet'
 
@@ -26,11 +26,26 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({ snippet }) => {
       width={['100%', '100%', '100%', '50%']}
     >
       <Box borderRadius="4px" borderWidth="1px" height="100%" overflow="hidden">
-        <StandaloneSnippet snippet={snippet} />
+        <RouterLink to={`/${id}`}>
+          <StandaloneSnippet cycle playOn="hover" snippet={snippet} />
+        </RouterLink>
         <Box overflow="hidden">
           <Box p="6">
-            <Box alignItems="baseline" d="flex" justifyContent="space-between">
-              <SnippetTags showCloseButton={false} tags={tags} />
+            <Box
+              alignItems="center"
+              d="flex"
+              justifyContent="space-between"
+              mb="4"
+            >
+              <Box display="flex">
+                <IconButton
+                  as={RouterLink}
+                  icon="edit"
+                  size="sm"
+                  // @ts-ignore
+                  to={`/${id}`}
+                />
+              </Box>
               <Box
                 color="gray.500"
                 fontSize="xs"
@@ -49,9 +64,12 @@ export const SnippetsListItem: FC<SnippetsListItemProps> = ({ snippet }) => {
               as="h4"
               fontWeight="semibold"
               lineHeight="tight"
-              mt="2"
+              mb="4"
             >
-              {name} {id}
+              {name}
+            </Box>
+            <Box>
+              <SnippetTags showCloseButton={false} tags={tags} />
             </Box>
           </Box>
         </Box>
@@ -72,7 +90,7 @@ export const SnippetsList: FC<SnippetsListProps> = ({
 }) => {
   const [snips, loadMore] = useInfiniteQuery(snippets, query, {
     field: 'updatedOn',
-    method: 'asc',
+    method: 'desc',
     limit: 6,
   })
   useInfiniteScroll(0.3, loadMore)
