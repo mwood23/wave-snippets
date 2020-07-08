@@ -11,7 +11,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "echo 'N/A'",
-    "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern=\"src/vendor/**\"",
     "eslint:fix": "yarn eslint --fix",
     "lint": "run-s tsc eslint",
     "lint:fix": "yarn tsc && yarn eslint:fix",

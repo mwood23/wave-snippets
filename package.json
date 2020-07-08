@@ -96,7 +96,7 @@
     "utility-types": "^3.10.0"
   },
   "importSort": {
-    ".ts,.tsx": {
+    ".ts,.tsx,.js,.jsx": {
       "style": "module"
     }
   },
