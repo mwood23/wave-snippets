@@ -60,7 +60,7 @@
     "clean:build": "rimraf build",
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "lint:css": "stylelint './src/**/*.{ts,tsx}'",
     "eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
