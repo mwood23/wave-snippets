@@ -4,7 +4,7 @@ import {
   LinkProps as RouterLinkProps,
 } from 'react-router-dom'
 
-import { Box, Flex, Icon, Link, LinkProps, Text, useColorMode } from './core'
+import { Box, Flex, Link, LinkProps, Text } from './core'
 
 type FooterProps = {}
 

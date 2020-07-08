@@ -371,15 +371,15 @@ p li, ul li, ol li {
     LINKS & BUTTONS
 ------------------------------------- */
 a {
-  color: #348eda;
+  color: #348eda !important;
   text-decoration: underline;
 }
 
 .btn-primary {
   text-decoration: none;
-  color: #FFF;
-  background-color: #348eda;
-  border: solid #348eda;
+  color: #FFF !important;
+  background-color: #348eda !important;
+  border: solid #348eda !important;
   border-width: 10px 20px;
   line-height: 1em;
   /* 2em * 14px = 28px, use px to get airier line-height also in Thunderbird, and Yahoo!, Outlook.com, AOL webmail clients */
