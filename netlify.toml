@@ -1,6 +1,6 @@
 [build]
   command = "yarn lint:fix && yarn test && yarn build"
-  publish = "packages/client/buildbuild-output/"
+  publish = "packages/client/build/"
 
 [[redirects]]
   from = "/api/*"
