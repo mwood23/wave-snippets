@@ -2,11 +2,25 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps } from './core'
 
-export const Page: FC<BoxProps> = ({ children, ...rest }) => (
+export type PageProps = BoxProps & {
+  /**
+   * Squeezes the container a bit for word heavy pages to make it easier to read.
+   *
+   * @default
+   * false
+   */
+  wordyPage?: boolean
+}
+
+export const Page: FC<PageProps> = ({
+  children,
+  wordyPage = false,
+  ...rest
+}) => (
   <Box
     flex="1"
     marginX="auto"
-    maxWidth="1200px"
+    maxWidth={wordyPage ? '700px' : '1200px'}
     // If you change this make sure to update the builder negative margin!
     paddingX={['1rem', '1rem', '2rem']}
     pb="8"

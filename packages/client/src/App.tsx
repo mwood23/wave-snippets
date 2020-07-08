@@ -4,6 +4,7 @@ import { Switch } from 'react-router-dom'
 import { PageRoute } from './components'
 import { PrivateRoute } from './components/PrivateRoute'
 import {
+  AboutPage,
   AccountPage,
   DownloadPage,
   EmbedPage,
@@ -15,6 +16,7 @@ import {
 export const App: FC = () => (
   <Switch>
     <PrivateRoute exact component={AccountPage} path="/account" />
+    <PageRoute exact component={AboutPage} path="/about" />
     {/* <PrivateRoute exact component={GalleryPage} path="/gallery" /> */}
     <PrivateRoute exact component={MySnippetsPage} path="/my-snippets" />
     <PageRoute

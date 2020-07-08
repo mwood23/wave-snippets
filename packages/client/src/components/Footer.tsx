@@ -27,38 +27,33 @@ const InternalLink: FC<LinkProps & RouterLinkProps> = ({
   </WavesFooterLink>
 )
 
-export const Footer: FC<FooterProps> = () => {
-  const { colorMode } = useColorMode()
-  const color = { light: 'cyan.400', dark: 'cyan.400' }
-
-  return (
-    <Flex
-      alignItems="center"
-      flexDir="column"
-      justifyContent="center"
-      pb="8"
-      pt="4"
-      px="4"
-    >
-      <Flex alignItems="center" justifyContent="center" mb="2">
-        <InternalLink to="/">About</InternalLink>
-        <InternalLink to="/">Feedback</InternalLink>
-        <InternalLink to="/">Terms</InternalLink>
-        <InternalLink to="/">Privacy</InternalLink>
-        <InternalLink to="/">Author</InternalLink>
-      </Flex>
-      <Box>
-        <Text>
-          created by{' '}
-          <WavesFooterLink
-            isExternal
-            color={color[colorMode]}
-            href="https://www.marcuswood.io"
-          >
-            @marcuswood23 <Icon mx="2px" name="external-link" />
-          </WavesFooterLink>
-        </Text>
-      </Box>
+export const Footer: FC<FooterProps> = () => (
+  <Flex
+    alignItems="center"
+    flexDir="column"
+    justifyContent="center"
+    pb="8"
+    pt="4"
+    px="4"
+  >
+    <Flex alignItems="center" justifyContent="center" mb="2">
+      <InternalLink to="/about">About</InternalLink>
+      <WavesFooterLink
+        isExternal
+        href="mailto:hi@marcuswood.io?subject=Wave Snippets Feedback"
+      >
+        Feedback
+      </WavesFooterLink>
+      <InternalLink to="/">Terms</InternalLink>
+      <InternalLink to="/">Privacy</InternalLink>
     </Flex>
-  )
-}
+    <Box>
+      <Text>
+        created by{' '}
+        <WavesFooterLink isExternal href="https://www.marcuswood.io">
+          @marcuswood23
+        </WavesFooterLink>
+      </Text>
+    </Box>
+  </Flex>
+)

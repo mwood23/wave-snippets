@@ -217,7 +217,6 @@ const goToTime = function (browserFrames, time) {
 };
 
 const goToTimeAndAnimate = function (browserFrames, time) {
-  console.log('goToTimeAndAnimate', time)
   // Goes to a certain time. Can't go backwards
   return Promise.all(browserFrames.map(function (frame) {
     return frame.evaluate(function (ms) {

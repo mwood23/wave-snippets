@@ -17,6 +17,7 @@ import { AuthProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
 
+// TODO: When we add an error boundary we'll need to start recording errors there.
 if (process.env.NODE_ENV === 'production') {
   init({
     dsn:

@@ -37,9 +37,7 @@ export const queueCreateExport = async (req: Request, res: Response) => {
     {
       headers,
     },
-  ).catch((err) => {
-    console.log('Something went wrong :(', err.toJSON().message)
-  })
+  )
 
   res.status(200).send({
     code: 'SUCCESS',

@@ -5,6 +5,7 @@ import { region, runWith } from 'firebase-functions'
 
 import { createMedia } from './createMedia'
 import { queueCreateExport } from './queueCreateExport'
+import { catchErrors } from './utils/errors'
 import { addUserIfExists } from './utils/validateFirebaseIdToken'
 
 // Sad day...
@@ -14,7 +15,7 @@ const createMediaApp = express()
 createMediaApp.use(cors({ origin: true }))
 createMediaApp.use(cookieParser())
 createMediaApp.use(addUserIfExists)
-createMediaApp.get('/create-media', createMedia)
+createMediaApp.get('/create-media', catchErrors(createMedia))
 
 // eslint-disable-next-line import/no-commonjs
 exports.export = runWith({
@@ -30,7 +31,7 @@ const queueApp = express()
 
 queueApp.use(cors({ origin: true }))
 queueApp.use(cookieParser())
-queueApp.get('/media-export', queueCreateExport)
+queueApp.get('/media-export', catchErrors(queueCreateExport))
 
 // eslint-disable-next-line import/no-commonjs
 exports.queue = region('us-east1').https.onRequest(queueApp)

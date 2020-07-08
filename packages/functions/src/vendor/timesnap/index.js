@@ -196,7 +196,6 @@ module.exports = function (config) {
           let time = 0
 
           while (!stopped) {
-            console.log('callled', time)
             await timeHandler.goToTimeAndAnimateForCapture(browserFrames, time)
             await wait(VIRTUAL_TIME_TICK)
             const data = await page.$('.code-snippet-preview-container')

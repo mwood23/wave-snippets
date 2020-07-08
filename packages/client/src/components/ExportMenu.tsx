@@ -19,7 +19,7 @@ type ExportMenuProps = {
 
 export const ExportMenu: FC<ExportMenuProps> = () => {
   // const embedURL = snippetID ? createEmbed(snippetID) : 'No snippet exists'
-  const { isOpen, onClose, onOpen } = useDisclosure(true)
+  const { isOpen, onClose, onOpen } = useDisclosure()
   // const { onCopy, hasCopied } = useClipboard(embedURL)
   // const toast = useCreateToast()
 

@@ -62,8 +62,7 @@ export const HomePage: FC<RouteComponentProps<
 
     const getData = async () => {
       setLoading(true)
-      const data = await get(snippets, snippetID).catch((e) => {
-        console.log(e)
+      const data = await get(snippets, snippetID).catch(() => {
         toast(
           'Permission denied. Do you have access for the requested snippet?',
         )

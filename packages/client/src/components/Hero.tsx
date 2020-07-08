@@ -4,14 +4,16 @@ import { animated, useSpring } from 'react-spring'
 
 import { useSnippetState } from '../context'
 import { backgroundColorToHex } from '../utils'
-import { Box, Flex, Text } from './core'
+import { Box, Flex, FlexProps, Text } from './core'
 
-type HeroProps = {}
+type HeroProps = FlexProps & {
+  showAboutSection?: false
+}
 
 const AnimFeTurbulence = animated('feTurbulence')
 const AnimFeDisplacementMap = animated('feDisplacementMap')
 
-export const Hero: FC<HeroProps> = () => {
+export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
   // const [open, toggle] = useState(false)
   const { backgroundColor } = useSnippetState()
 
@@ -27,7 +29,7 @@ export const Hero: FC<HeroProps> = () => {
   })
 
   return (
-    <Flex alignItems="center" direction="column">
+    <Flex alignItems="center" direction="column" {...rest}>
       <Link to="/">
         <animated.svg
           // onClick={() => toggle(!open)}
@@ -62,14 +64,20 @@ export const Hero: FC<HeroProps> = () => {
           </g>
         </animated.svg>
       </Link>
-      <Box marginBottom="8">
-        <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
-          Create gorgeous snippets of your code to share with the world.
-        </Text>
-        {/* <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
+      {showAboutSection && (
+        <Box marginBottom="8">
+          <Text
+            fontSize={['md', 'lg', 'xl']}
+            fontWeight="500"
+            textAlign="center"
+          >
+            Create gorgeous snippets of your code to share with the world.
+          </Text>
+          {/* <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
           Start adding snippets to start.
         </Text> */}
-      </Box>
+        </Box>
+      )}
     </Flex>
   )
 }

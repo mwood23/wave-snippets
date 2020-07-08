@@ -6,6 +6,8 @@ import { Required } from 'utility-types'
 import { boolean, object, string } from 'yup'
 
 import { useSnippetState } from '../context'
+import { useConvertKit } from '../hooks/useConvertKit'
+import { head } from '../utils'
 import {
   Button,
   Checkbox,
@@ -65,7 +67,8 @@ const napkinCalculationOfEstimatedTime = ({
 }
 
 export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
-  const { saveOrCreateSnippet, isSaving, ...rest } = useSnippetState()
+  const { saveOrCreateSnippet, ...rest } = useSnippetState()
+  const [subscribeToNewsletter] = useConvertKit()
 
   const toast = useCreateToast()
 
@@ -78,7 +81,9 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
           weeklyEmails: true,
         }}
         isInitialValid={false}
-        onSubmit={async ({ email }) => {
+        onSubmit={async ({ email }, { setSubmitting }) => {
+          setSubmitting(true)
+
           try {
             const snippetID = await saveOrCreateSnippet({
               force: true,
@@ -108,6 +113,8 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
               </Box>,
             )
 
+            await subscribeToNewsletter(head(email.split(','))!)
+
             // @ts-ignore Wants an event prop, but doesn't appear to need it
             onClose()
           } catch (error) {
@@ -120,6 +127,7 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
             )
           }
 
+          setSubmitting(false)
           return
         }}
         validationSchema={object().shape({
@@ -137,77 +145,67 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
           values,
           isValid,
           handleSubmit,
-        }) => {
-          console.log(touched, errors)
-          return (
-            <Form onSubmit={handleSubmit}>
-              <ModalContent>
-                <ModalHeader>Export Snippet</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <FormControl
-                    isInvalid={touched.email && !!errors.email}
-                    mb={3}
-                  >
-                    <FormLabel htmlFor="email">
-                      What email should we send the export email to?
-                    </FormLabel>
-                    <Input
-                      aria-describedby="email-helper-text"
-                      id="email"
-                      name="email"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="email"
-                      value={values.email}
-                    />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+          isSubmitting,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <ModalContent>
+              <ModalHeader>Export Snippet</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <FormControl isInvalid={touched.email && !!errors.email} mb={3}>
+                  <FormLabel htmlFor="email">
+                    What email should we send the export email to?
+                  </FormLabel>
+                  <Input
+                    aria-describedby="email-helper-text"
+                    id="email"
+                    name="email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="email"
+                    value={values.email}
+                  />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
 
-                    <FormHelperText id="email-helper-text">
-                      We need your email because it takes 5-10 minutes to
-                      process and create a high quality snippet. It&apos;s used
-                      only to email you the snippet and send you weekly emails
-                      if you opt in.
-                      {/* TODO: Link to blog */}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl
-                    isInvalid={touched.weeklyEmails && !!errors.weeklyEmails}
-                    mb={3}
+                  <FormHelperText id="email-helper-text">
+                    We need your email because it takes 5-10 minutes to process
+                    and create a high quality snippet. It&apos;s used only to
+                    email you the snippet and send you weekly emails if you opt
+                    in.
+                    {/* TODO: Link to blog */}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl
+                  isInvalid={touched.weeklyEmails && !!errors.weeklyEmails}
+                  mb={3}
+                >
+                  <Checkbox
+                    isChecked={values.weeklyEmails}
+                    name="weeklyEmails"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    variantColor="green"
                   >
-                    <Checkbox
-                      isChecked={values.weeklyEmails}
-                      name="weeklyEmails"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      variantColor="green"
-                    >
-                      Send me weekly emails of the waviest snippets
-                    </Checkbox>
-                  </FormControl>
-                </ModalBody>
+                    Send me weekly emails of the waviest snippets
+                  </Checkbox>
+                </FormControl>
+              </ModalBody>
 
-                <ModalFooter>
-                  <Button
-                    mr={3}
-                    onClick={onClose}
-                    type="button"
-                    variant="ghost"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    isDisabled={!isValid || isSaving}
-                    isLoading={isSaving}
-                    type="submit"
-                  >
-                    Export
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Form>
-          )
-        }}
+              <ModalFooter>
+                <Button mr={3} onClick={onClose} type="button" variant="ghost">
+                  Close
+                </Button>
+                <Button
+                  isDisabled={!isValid || isSubmitting}
+                  isLoading={isSubmitting}
+                  type="submit"
+                >
+                  Export
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Form>
+        )}
       </Formik>
     </Modal>
   )

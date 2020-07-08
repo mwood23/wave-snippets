@@ -89,3 +89,16 @@ export const getColorByTagGroup = (domain: TagGroup) => {
       throw new UnreachableCaseError(domain)
   }
 }
+
+/**
+ * Helper to parse the referrer URL if there is one.
+ * This is pretty dumb at the moment because there could be valuable if the referrer
+ * is an internal page or param? We could potentially append certain params at channels
+ * to get better insights on where people are coming in from.
+ */
+export function getReferrer() {
+  const a = document.createElement('a')
+  a.href = document.referrer
+
+  return { url: a.hostname ?? '', params: a.search ?? '' }
+}
