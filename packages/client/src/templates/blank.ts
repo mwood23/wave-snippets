@@ -30,6 +30,6 @@ export const BLANK_TEMPLATE: BaseSnippet = {
   springPreset: 'default',
   status: 'draft',
   defaultWindowTitle: 'hello.ts',
-  visibility: 'private',
+  visibility: 'unlisted',
   defaultLanguage: 'typescript',
 }

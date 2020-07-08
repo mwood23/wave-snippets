@@ -24,7 +24,7 @@ export const DEFAULT_SHOW_NUMBERS = false
 export const DEFAULT_ANIMATION_PRESET = 'default'
 export const DEFAULT_WINDOW_TITLE = 'hello.tsx'
 export const DEFAULT_SNIPPET_STATUS: SnippetStatus = 'draft'
-export const DEFAULT_SNIPPET_VISIBILITY: SnippetVisibility = 'private'
+export const DEFAULT_SNIPPET_VISIBILITY: SnippetVisibility = 'unlisted'
 export const DEFAULT_WINDOWS_CONTROLS_TYPE: WindowControlsType | null = null
 export const DEFAULT_WINDOWS_CONTROLS_POSITION: WindowControlsPosition | null = null
 export const DEFAULT_APP_COLOR: BackgroundColor = {
@@ -35,6 +35,8 @@ export const DEFAULT_APP_COLOR: BackgroundColor = {
 }
 export const DEFAULT_STARTING_STEP = 0
 export const MAX_NUMBER_OF_TAGS = 4
+
+export const ANONYMOUS_USER_KEY = 'anonymous'
 
 export type AnimationPreset = {
   name: string

@@ -58,7 +58,7 @@ export const Nav: FC<NavProps> = () => {
   }, [googleError, githubError])
 
   return (
-    <Box position="absolute" right="8" top="6" zIndex={3000}>
+    <Box position="absolute" right="8" top="6" zIndex={1250}>
       <IconButton
         aria-label="Toggle color mode"
         icon={colorMode === 'dark' ? 'sun' : 'moon'}

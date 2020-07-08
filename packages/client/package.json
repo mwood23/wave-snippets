@@ -44,6 +44,7 @@
     "react-share": "^4.1.0",
     "react-simple-code-editor": "^0.11.0",
     "react-spring": "^9.0.0-rc.3",
+    "react-timeago": "^4.4.0",
     "react-toastify": "^6.0.5",
     "shortid": "^2.2.15",
     "theme-ui": "^0.3.1",

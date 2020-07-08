@@ -2,7 +2,7 @@ import { collection } from 'typesaurus'
 
 import { UserID } from '../types'
 
-export type SnippetVisibility = 'private' | 'public'
+export type SnippetVisibility = 'unlisted' | 'public' | 'private'
 export type SnippetStatus = 'draft' | 'published' | 'disabled'
 export type WindowControlsType = 'blackAndWhite' | 'boxy' | 'rounded'
 export type WindowControlsPosition = 'left' | 'right'

@@ -14,6 +14,7 @@ import {
   WINDOW_CONTROL_TYPES,
 } from '../const'
 import {
+  useAuthState,
   usePreviewDispatch,
   usePreviewState,
   useSnippetDispatch,
@@ -92,6 +93,7 @@ export const Toolbar: FC<ToolbarProps> = () => {
     windowControlsType,
     visibility,
   } = useSnippetState()
+  const { isAuthed } = useAuthState()
   const { isPlaying } = usePreviewState()
   const previewDispatch = usePreviewDispatch()
   const snippetDispatch = useSnippetDispatch()
@@ -281,28 +283,30 @@ export const Toolbar: FC<ToolbarProps> = () => {
         </StyledToolbarSquares>
       </StyledLeftToolbar>
       <StyledRightToolbar alignItems="center">
-        <Flex align="center" mr="2">
-          <FormLabel htmlFor="visibility">
-            Public{' '}
-            <Tooltip
-              aria-label="Make public info"
-              label="Making a snippet public lets everyone see and search for it!"
-              placement="top"
-            >
-              <Icon name="info-outline" />
-            </Tooltip>
-          </FormLabel>
-          <Switch
-            id="visibility"
-            isChecked={visibility === 'public'}
-            onChange={() =>
-              snippetDispatch({
-                type: 'updateSnippetState',
-                visibility: 'public',
-              })
-            }
-          />
-        </Flex>
+        {isAuthed && (
+          <Flex align="center" mr="2">
+            <FormLabel htmlFor="visibility">
+              Public{' '}
+              <Tooltip
+                aria-label="Make public info"
+                label="Making a snippet public lets everyone see and search for it!"
+                placement="top"
+              >
+                <Icon name="info-outline" />
+              </Tooltip>
+            </FormLabel>
+            <Switch
+              id="visibility"
+              isChecked={visibility === 'public'}
+              onChange={() =>
+                snippetDispatch({
+                  type: 'updateSnippetState',
+                  visibility: 'public',
+                })
+              }
+            />
+          </Flex>
+        )}
         <ToolbarItem>
           <IconButton
             // @ts-ignore

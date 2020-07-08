@@ -8,7 +8,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { useImmerReducer } from 'use-immer'
 
 import { Box, Text, useCreateToast } from '../components'
-import { DEFAULT_AUTOSAVE_THRESHOLD } from '../const'
+import { ANONYMOUS_USER_KEY, DEFAULT_AUTOSAVE_THRESHOLD } from '../const'
 import { DEFAULT_TEMPLATE } from '../templates/default'
 import { BaseSnippet } from '../types'
 import {
@@ -68,8 +68,24 @@ const createEmptyStep = ({
 
 const initialSnippetState: BaseSnippet = DEFAULT_TEMPLATE
 
-const SnippetStateContext = createContext<BaseSnippet & { isSaving: boolean }>({
+type SaveOrCreateSnippet = (config?: {
+  /**
+   * Pass to force a save or update
+   */
+  force?: boolean
+}) => Promise<void | string>
+
+const SnippetStateContext = createContext<
+  BaseSnippet & {
+    isSaving: boolean
+    saveOrCreateSnippet: SaveOrCreateSnippet
+  }
+>({
   ...initialSnippetState,
+  // eslint-disable-next-line arrow-body-style
+  saveOrCreateSnippet: async () => {
+    return
+  },
   isSaving: false,
 })
 const SnippetDispatchContext = createContext<Dispatch<SnippetAction>>(noop)
@@ -153,17 +169,18 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
 
   // console.log(JSON.stringify(state, null, 2))
 
-  /**
-   * This is called on initial render and everytime a user takes an action in the app.
-   * We add a threshold here for autosaving to keep us from saving on initial render and
-   * saving from users taking one or two actions. Any GIF worth saving will have tons of actions.
-   */
-  const [debouncedCallback] = useDebouncedCallback(async () => {
+  const saveOrCreateSnippet: SaveOrCreateSnippet = async (
+    // @ts-ignore Types aren't picking up the default cause of the type above
+    { force = false } = {
+      force: false,
+    },
+  ) => {
     // Break early if in the process of creating a new entity
     if (isSaving) return
     setCurrentThreshold((current) => current + 1)
 
-    if (user) {
+    if (user || force) {
+      const owner = user?.userID ?? ANONYMOUS_USER_KEY
       if (params.snippetID && !isMatchParamTemplate(params.snippetID)) {
         // @Performance: This fires an extra write on redirection, not too worried about it for now.
         console.log('autosave update', state)
@@ -171,42 +188,59 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
         await update(snippets, params.snippetID, {
           ...state,
           updatedOn: value('serverDate'),
-          owner: user.userID,
+          owner,
         })
         setIsSaving(false)
-      } else if (currentThreshold > DEFAULT_AUTOSAVE_THRESHOLD) {
+
+        return params.snippetID
+      } else if (force || currentThreshold > DEFAULT_AUTOSAVE_THRESHOLD) {
         console.log('autosave create', state)
         setIsSaving(true)
         const data = await add(snippets, {
           ...state,
           createdOn: value('serverDate'),
-          owner: user.userID,
+          updatedOn: value('serverDate'),
+          owner,
         })
 
-        history.push(`/${data.id}`, { skipFetch: true })
+        if (!force) {
+          history.push(`/${data.id}`, { skipFetch: true })
 
-        toast(
-          <Box>
-            <Text>
-              <span aria-label="rocket" role="img">
-                🚀
-              </span>
-              Saved a new snippet!
-            </Text>
-          </Box>,
-        )
-        dispatch({ type: 'updateSnippetState', owner: user.userID })
+          toast(
+            <Box>
+              <Text>
+                <span aria-label="rocket" role="img">
+                  🚀
+                </span>
+                Saved a new snippet!
+              </Text>
+            </Box>,
+          )
+        }
+
+        dispatch({ type: 'updateSnippetState', owner })
         setIsSaving(false)
+
+        return data.id
       }
     }
-  }, 3000)
+  }
+
+  /**
+   * This is called on initial render and everytime a user takes an action in the app.
+   * We add a threshold here for autosaving to keep us from saving on initial render and
+   * saving from users taking one or two actions. Any GIF worth saving will have tons of actions.
+   */
+  const [debouncedCallback] = useDebouncedCallback(saveOrCreateSnippet, 3000)
 
   useEffect(() => {
     debouncedCallback()
   }, [debouncedCallback, state])
 
   return (
-    <SnippetStateContext.Provider value={{ ...state, isSaving }}>
+    <SnippetStateContext.Provider
+      value={{ ...state, isSaving, saveOrCreateSnippet }}
+    >
       <SnippetDispatchContext.Provider value={dispatch}>
         {children}
       </SnippetDispatchContext.Provider>

@@ -25,7 +25,12 @@ exports.export = runWith({
   // @ts-ignore
   .https.onRequest(createMediaApp)
 
+// Separate because the functions need to be ran with different memory
+const queueApp = express()
+
+queueApp.use(cors({ origin: true }))
+queueApp.use(cookieParser())
+queueApp.get('/media-export', queueCreateExport)
+
 // eslint-disable-next-line import/no-commonjs
-exports.queueCreateExport = region('us-east1').https.onRequest(
-  queueCreateExport,
-)
+exports.queue = region('us-east1').https.onRequest(queueApp)

@@ -47,7 +47,7 @@ export const NPM_PACKAGE_TEMPLATE: BaseSnippet = {
   springPreset: 'default',
   windowControlsPosition: 'left',
   status: 'draft',
-  visibility: 'private',
+  visibility: 'unlisted',
   windowControlsType: null,
   defaultLanguage: 'jsx',
   theme: 'nightOwl',

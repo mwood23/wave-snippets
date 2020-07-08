@@ -10,6 +10,9 @@ service cloud.firestore {
     function isPublic() {
       return resource.data.visibility == 'public';
     }
+    function isUnlisted() {
+      return resource.data.visibility == 'unlisted';
+    }
     function isLiker() {
       return resource.data.userID == request.auth.uid;
     }
@@ -19,8 +22,8 @@ service cloud.firestore {
     }
 
     match /snippets/{snippet} {
-      allow read: if isPublic() || (isSignedIn() && isSnippetOwner());
-      allow create: if isSignedIn();
+      allow read: if isPublic() || isUnlisted() || (isSignedIn() && isSnippetOwner());
+      allow create: if true;
       allow update, delete: if isSignedIn() && isSnippetOwner();
     }
 
