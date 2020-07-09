@@ -44,14 +44,14 @@ export const Footer: FC<FooterProps> = () => (
       >
         Feedback
       </WavesFooterLink>
-      <InternalLink to="/">Terms</InternalLink>
-      <InternalLink to="/">Privacy</InternalLink>
+      <InternalLink to="/terms-and-conditions">Terms</InternalLink>
+      <InternalLink to="/privacy-policy">Privacy</InternalLink>
     </Flex>
     <Box>
       <Text>
         created by{' '}
         <WavesFooterLink isExternal href="https://www.marcuswood.io">
-          @marcuswood23
+          Marcus Wood
         </WavesFooterLink>
       </Text>
     </Box>

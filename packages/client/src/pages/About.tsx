@@ -132,7 +132,7 @@ export const AboutPage: FC = () => (
             Tungs
           </Link>
         </b>
-        {/* TODO Backlink to my blog here */}: The author of Timecut and
+        {/* TODO Backlink to my blog here */}: The author of Timecut and :
         Timesnap. Who would have guessed how difficult building gifs and videos
         in the browser would be. I was just about ready to give up on this
         project until I stumbled across{' '}
@@ -147,7 +147,7 @@ export const AboutPage: FC = () => (
             Paul Henschel
           </Link>
         </b>
-        The author of React Spring. Discovering his library a couple years ago
+        : The author of React Spring. Discovering his library a couple years ago
         was a gamechanger for seeing what animations on the web could be. This
         project uses React Spring under the hood to animate between the steps.
       </Text>
@@ -157,10 +157,10 @@ export const AboutPage: FC = () => (
             Chakra UI
           </Link>
         </b>
-        This was my first app using Chakra UI as the design system framework and
-        it was a huge relief. Their TS support is good, components work great,
-        and it never got in my way like most of design system frameworks do.
-        Highly recommend.
+        : This was my first app using Chakra UI as the design system framework
+        and it was a huge relief. Their TS support is good, components work
+        great, and it never got in my way like most of design system frameworks
+        do. Highly recommend.
       </Text>
     </Box>
   </Page>

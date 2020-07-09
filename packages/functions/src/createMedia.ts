@@ -4,6 +4,7 @@ import path from 'path'
 import { storage } from 'firebase-admin'
 import { Request, Response } from 'firebase-functions'
 import puppeteer from 'puppeteer'
+import { generate as generateID } from 'shortid'
 import { Required } from 'utility-types'
 import { number, object, string } from 'yup'
 
@@ -159,9 +160,11 @@ export const createMedia = async (req: Request, res: Response) => {
 
   const tempDirectory = os.tmpdir()
   const outputFileName = (extension: 'mp4' | 'gif') =>
-    `test--${new Date().getTime()}.${extension}`
-  const outputVideoFilePath = path.join(tempDirectory, outputFileName('mp4'))
-  const outputGIFFilePath = path.join(tempDirectory, outputFileName('gif'))
+    `wave-snippet-${new Date().getTime()}-${generateID()}.${extension}`
+  const videoName = outputFileName('mp4')
+  const gifName = outputFileName('gif')
+  const outputVideoFilePath = path.join(tempDirectory, videoName)
+  const outputGIFFilePath = path.join(tempDirectory, gifName)
 
   // This write a file to the tmp directory when complete
   await timecut({
@@ -540,8 +543,8 @@ a {
 								</tr>
 								<tr>
                   <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-                    <a href="${videoURL[0]}" class="btn-primary" style="margin-right: 5px;" itemprop="url">Download MP4</a>
-                    <a href="${gifURL[0]}" class="btn-primary" itemprop="url">Download GIF</a>
+                    <a href="${videoURL[0]}" download="${videoName}" class="btn-primary" style="margin-right: 5px;" itemprop="url">Download MP4</a>
+                    <a href="${gifURL[0]}" download="${gifName}" class="btn-primary" itemprop="url">Download GIF</a>
                   </td>
                 </tr>
 								<tr>
