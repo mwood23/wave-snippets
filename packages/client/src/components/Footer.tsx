@@ -1,10 +1,30 @@
-import React, { FC } from 'react'
+import { Form, Formik } from 'formik'
+import React, { FC, useRef } from 'react'
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from 'react-router-dom'
+import { object, string } from 'yup'
 
-import { Box, Flex, Link, LinkProps, Text } from './core'
+import { useConvertKit } from '../hooks/useConvertKit'
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Link,
+  LinkProps,
+  Popover,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useColorMode,
+  useDisclosure,
+} from './core'
 
 type FooterProps = {}
 
@@ -27,6 +47,95 @@ const InternalLink: FC<LinkProps & RouterLinkProps> = ({
   </WavesFooterLink>
 )
 
+const NewsletterSignup = () => {
+  const [signUp] = useConvertKit()
+  const emailInput = useRef(null)
+  const { colorMode } = useColorMode()
+  const color = { light: 'cyan.600', dark: 'cyan.400' }
+  const { onOpen, isOpen, onClose } = useDisclosure()
+
+  return (
+    <Popover
+      usePortal
+      closeOnBlur={false}
+      initialFocusRef={emailInput}
+      isOpen={isOpen}
+      onClose={onClose}
+      onOpen={onOpen}
+      placement="top"
+    >
+      <PopoverTrigger>
+        <Button
+          backgroundColor="transparent"
+          color={color[colorMode]}
+          fontWeight="normal"
+          lineHeight={1}
+          mr="4"
+          padding="0"
+          variant="link"
+        >
+          Newsletter
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent p={5} zIndex={5000}>
+        <PopoverCloseButton />
+        <Formik
+          initialValues={{
+            email: '',
+          }}
+          onSubmit={async ({ email }, { setSubmitting }) => {
+            setSubmitting(true)
+            await signUp(email)
+            setSubmitting(false)
+
+            onClose()
+          }}
+          validationSchema={object().shape({
+            email: string()
+              .required('Email is required.')
+              .email('Must be a valid email.'),
+          })}
+        >
+          {({
+            handleSubmit,
+            handleBlur,
+            handleChange,
+            values,
+            touched,
+            errors,
+            isValid,
+            isSubmitting,
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <FormControl isInvalid={touched.email && !!errors.email} mb={3}>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Input
+                  aria-describedby="email-helper-text"
+                  id="email"
+                  name="email"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  ref={emailInput}
+                  type="email"
+                  value={values.email}
+                />
+                <FormErrorMessage>{errors.email}</FormErrorMessage>
+              </FormControl>
+              <Button
+                isDisabled={!isValid || isSubmitting}
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Export
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export const Footer: FC<FooterProps> = () => (
   <Flex
     alignItems="center"
@@ -44,6 +153,7 @@ export const Footer: FC<FooterProps> = () => (
       >
         Feedback
       </WavesFooterLink>
+      <NewsletterSignup />
       <InternalLink to="/terms-and-conditions">Terms</InternalLink>
       <InternalLink to="/privacy-policy">Privacy</InternalLink>
     </Flex>
