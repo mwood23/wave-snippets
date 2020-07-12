@@ -14,7 +14,6 @@ const AnimFeTurbulence = animated('feTurbulence')
 const AnimFeDisplacementMap = animated('feDisplacementMap')
 
 export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
-  // const [open, toggle] = useState(false)
   const { backgroundColor } = useSnippetState()
 
   const { freq, scale, transform, opacity } = useSpring({
@@ -32,7 +31,6 @@ export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
     <Flex alignItems="center" direction="column" {...rest}>
       <Link to="/">
         <animated.svg
-          // onClick={() => toggle(!open)}
           style={{ transform, opacity, margin: '1rem auto', cursor: 'pointer' }}
           viewBox="0 0 1068 446"
           width="220px"
@@ -41,7 +39,7 @@ export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
             <filter id="water">
               <AnimFeTurbulence
                 baseFrequency={freq}
-                numOctaves={1.5}
+                numOctaves={1}
                 result="TURB"
                 seed="8"
                 type="fractalNoise"
@@ -74,9 +72,6 @@ export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
             Create gorgeous animated snippets of your code to share with the
             world.
           </Text>
-          {/* <Text fontSize={['md', 'lg', 'xl']} fontWeight="500" textAlign="center">
-          Start adding snippets to start.
-        </Text> */}
         </Box>
       )}
     </Flex>

@@ -3,12 +3,12 @@ import { spawn } from 'child_process'
 import ffmpeg_static from 'ffmpeg-static'
 
 export const createGIF = ({
-  inputFile,
+  frameDir,
   outputFile,
   fps = 20,
 }: {
-  inputFile: string
   outputFile: string
+  frameDir: string
   /**
    * Frames per second.
    *
@@ -19,8 +19,10 @@ export const createGIF = ({
 }) => {
   const ffmpegArgs = [
     '-y',
+    '-pattern_type',
+    'glob',
     '-i',
-    inputFile,
+    `${frameDir}/*.png`,
     '-filter_complex',
     `[0:v] fps=${fps},split [a][b];[a] palettegen [p];[b][p] paletteuse`,
     outputFile,

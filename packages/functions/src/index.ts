@@ -5,8 +5,10 @@ import { region, runWith } from 'firebase-functions'
 
 import { createMedia } from './createMedia'
 import { queueCreateExport } from './queueCreateExport'
-import { catchErrors } from './utils/errors'
+import { catchErrors, initSentry } from './utils/errors'
 import { addUserIfExists } from './utils/validateFirebaseIdToken'
+
+initSentry()
 
 // Sad day...
 // https://stackoverflow.com/questions/49104012/firebase-functions-chain-middleware

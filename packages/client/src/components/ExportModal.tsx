@@ -81,7 +81,7 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
           weeklyEmails: true,
         }}
         isInitialValid={false}
-        onSubmit={async ({ email }, { setSubmitting }) => {
+        onSubmit={async ({ email, weeklyEmails }, { setSubmitting }) => {
           setSubmitting(true)
 
           try {
@@ -113,7 +113,9 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
               </Box>,
             )
 
-            await subscribeToNewsletter(head(email.split(','))!)
+            if (weeklyEmails) {
+              await subscribeToNewsletter(head(email.split(','))!)
+            }
 
             // @ts-ignore Wants an event prop, but doesn't appear to need it
             onClose()

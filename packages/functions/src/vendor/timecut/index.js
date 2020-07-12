@@ -67,7 +67,7 @@ module.exports = function (config) {
     roundToEvenWidth: true,
     roundToEvenHeight: true,
     url: 'index.html',
-    pixFmt: 'yuv420p'
+    pixFmt: 'yuv420p',
   }, config || {});
 
   if(!config.tempDir) {
@@ -78,7 +78,7 @@ module.exports = function (config) {
   var ffmpegArgs;
   var inputOptions = config.inputOptions || [];
   var outputOptions = config.outputOptions || [];
-  var frameDirectory = `${config.tempDir}/timecut-temp-${new Date().getTime()}`;
+  var frameDirectory = config.frameDir || `${config.tempDir}/timecut-temp`;
   var fps;
   var frameMode = config.frameCache || !config.pipeMode;
   var pipeMode = config.pipeMode;

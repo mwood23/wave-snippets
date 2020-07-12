@@ -29,6 +29,7 @@
     "reinstall": "yarn clean:node_modules && yarn install && yarn killallNode",
     "firebase:exportConfig": "yarn firebase functions:config:get > .runtimeconfig.json",
     "firebase:deploy": "run-s 'lerna:run-deps --scope @waves/functions build' 'firebase deploy'",
+    "firebase:deploy:functions": "run-s 'lerna:run-deps --scope @waves/functions build' 'firebase deploy --only functions'",
     "firebase:indexes": "yarn firebase firestore:indexes",
     "dev:client": "yarn lerna:run-deps --scope @waves/functions --scope @waves/client --parallel dev"
   },
