@@ -1,9 +1,10 @@
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { region, runWith } from 'firebase-functions'
+import { auth, region, runWith } from 'firebase-functions'
 
 import { createMedia } from './createMedia'
+import { createProfile } from './onUserCreate'
 import { queueCreateExport } from './queueCreateExport'
 import { catchErrors, initSentry } from './utils/errors'
 import { addUserIfExists } from './utils/validateFirebaseIdToken'
@@ -37,3 +38,5 @@ queueApp.get('/media-export', catchErrors(queueCreateExport))
 
 // eslint-disable-next-line import/no-commonjs
 exports.queue = region('us-east1').https.onRequest(queueApp)
+
+export const createUser = auth.user().onCreate(catchErrors(createProfile))

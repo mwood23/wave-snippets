@@ -32,8 +32,10 @@ const initialPreviewState: PreviewState = {
   pauseAnimation: false,
 }
 
-const PreviewStateContext = createContext<PreviewState>(initialPreviewState)
-const PreviewDispatchContext = createContext<Dispatch<PreviewAction>>(noop)
+const PreviewStateContext = createContext<PreviewState | undefined>(undefined)
+const PreviewDispatchContext = createContext<
+  Dispatch<PreviewAction> | undefined
+>(undefined)
 
 const previewReducer = (state: PreviewState, action: PreviewAction) => {
   switch (action.type) {
@@ -62,7 +64,7 @@ export const PreviewProvider: FC<{ initialState?: Partial<PreviewState> }> = ({
 
   return (
     <PreviewStateContext.Provider value={state}>
-      <PreviewDispatchContext.Provider value={dispatch}>
+      <PreviewDispatchContext.Provider value={dispatch ?? noop}>
         {children}
       </PreviewDispatchContext.Provider>
     </PreviewStateContext.Provider>

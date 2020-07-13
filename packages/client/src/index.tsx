@@ -9,11 +9,10 @@ import { init } from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider as ThemeUIThemeProvider } from 'theme-ui'
 
 import { App } from './App'
 import { ScrollToTop, ToastContainer } from './components'
-import { AuthProvider } from './context'
+import { AuthProvider, GlobalProvider } from './context'
 import { unregister } from './serviceWorker'
 import { customTheme } from './theme'
 
@@ -34,27 +33,27 @@ ReactDOM.render(
     <Router>
       <ScrollToTop />
       <CacheProvider value={myCache}>
-        <ThemeUIThemeProvider theme={{}}>
-          <ThemeProvider theme={customTheme}>
-            <ColorModeProvider value={'dark'}>
-              <CSSReset />
-              <ToastContainer />
-              {/* Code surfer relies on Theme-UI which hijacks some global elements. We need to take the control
+        <ThemeProvider theme={customTheme}>
+          <ColorModeProvider value={'dark'}>
+            <CSSReset />
+            <ToastContainer />
+            {/* Code surfer relies on Theme-UI which hijacks some global elements. We need to take the control
           back so that Chakra can be our single source of truth. */}
-              <Global
-                styles={{
-                  body: {
-                    backgroundColor: 'transparent !important',
-                  },
-                }}
-              />
-              {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
+            <Global
+              styles={{
+                body: {
+                  backgroundColor: 'transparent !important',
+                },
+              }}
+            />
+            {/* Putting at root for now because not sure what this turns into. Can move down later if we only use it in the builder. */}
+            <GlobalProvider>
               <AuthProvider>
                 <App />
               </AuthProvider>
-            </ColorModeProvider>
-          </ThemeProvider>
-        </ThemeUIThemeProvider>
+            </GlobalProvider>
+          </ColorModeProvider>
+        </ThemeProvider>
       </CacheProvider>
     </Router>
   </React.StrictMode>,

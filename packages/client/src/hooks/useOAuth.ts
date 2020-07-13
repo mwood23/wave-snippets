@@ -1,7 +1,9 @@
+import { captureException } from '@sentry/browser'
 import { useState } from 'react'
 
 import { firebase } from '../config/firebase'
 import { UnreachableCaseError } from '../utils'
+import { useConvertKit } from './useConvertKit'
 
 type EnabledProviders = 'google' | 'github'
 
@@ -29,6 +31,7 @@ export const useOAuth = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
   const [data, setData] = useState<firebase.auth.UserCredential>()
+  const [subscribeToNewsletter] = useConvertKit()
 
   const authProvider = getAuthProvider(provider)
 
@@ -38,14 +41,20 @@ export const useOAuth = ({
     const result = await firebase
       .auth()
       .signInWithPopup(authProvider)
-      .catch(function ({ message }) {
+      .catch(function (err) {
         setLoading(false)
-        setError(message)
+        setError(err.message)
+
+        captureException(err)
       })
 
     if (result) {
       setLoading(false)
       setData(result)
+
+      if (result.additionalUserInfo?.isNewUser && result.user?.email) {
+        subscribeToNewsletter(result.user?.email)
+      }
     }
   }
 

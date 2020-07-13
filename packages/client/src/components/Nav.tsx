@@ -1,10 +1,11 @@
 import styled from '@emotion/styled/macro'
 import React, { FC, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 
 import { useAuthDispatch, useAuthState } from '../context'
 import { useOAuth } from '../hooks/useOAuth'
 import { TEMPLATES, TEMPLATES_DICT } from '../templates'
+import { isMatchParamATemplate } from '../utils'
 import {
   Avatar,
   Box,
@@ -36,6 +37,7 @@ const StyledProfileMenuButton = styled(MenuButton)`
 export const Nav: FC<NavProps> = () => {
   const history = useHistory()
   const location = useLocation()
+  const { params } = useRouteMatch<{ snippetID?: string }>()
   const { colorMode, toggleColorMode } = useColorMode()
   const { user, isLoading } = useAuthState()
   const { logout } = useAuthDispatch()
@@ -71,7 +73,8 @@ export const Nav: FC<NavProps> = () => {
       {/* <Button as={Link} mr="2" size="sm" to="/gallery">
         Gallery
       </Button> */}
-      {location.pathname === '/' && (
+      {(location.pathname === '/' ||
+        isMatchParamATemplate(params?.snippetID)) && (
         <Menu>
           {/*
         // @ts-ignore */}

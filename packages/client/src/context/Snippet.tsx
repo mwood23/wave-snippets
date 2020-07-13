@@ -14,13 +14,15 @@ import { BaseSnippet } from '../types'
 import {
   UnreachableCaseError,
   generateID,
-  isMatchParamTemplate,
+  isMatchParamATemplate,
   isNil,
+  keys,
   last,
   noop,
   omit,
 } from '../utils'
 import { useAuthState } from './Auth'
+import { useGlobalDispatch } from './Global'
 
 type SnippetAction =
   | ({
@@ -76,19 +78,15 @@ type SaveOrCreateSnippet = (config?: {
 }) => Promise<void | string>
 
 const SnippetStateContext = createContext<
-  BaseSnippet & {
-    isSaving: boolean
-    saveOrCreateSnippet: SaveOrCreateSnippet
-  }
->({
-  ...initialSnippetState,
-  // eslint-disable-next-line arrow-body-style
-  saveOrCreateSnippet: async () => {
-    return
-  },
-  isSaving: false,
-})
-const SnippetDispatchContext = createContext<Dispatch<SnippetAction>>(noop)
+  | (BaseSnippet & {
+      isSaving: boolean
+      saveOrCreateSnippet: SaveOrCreateSnippet
+    })
+  | undefined
+>(undefined)
+const SnippetDispatchContext = createContext<
+  Dispatch<SnippetAction> | undefined
+>(undefined)
 
 const snippetReducer = produce((state: BaseSnippet, action: SnippetAction) => {
   switch (action.type) {
@@ -152,6 +150,14 @@ const snippetReducer = produce((state: BaseSnippet, action: SnippetAction) => {
   }
 })
 
+const EXTRA_PROPS_FOR_CONVENIENCE_NOT_FOR_SAVING = {
+  // eslint-disable-next-line arrow-body-style
+  saveOrCreateSnippet: async () => {
+    return
+  },
+  isSaving: false,
+}
+
 export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
   children,
   snippet,
@@ -159,13 +165,17 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
   const toast = useCreateToast()
   const [state, dispatch] = useImmerReducer(
     snippetReducer,
-    snippet ?? initialSnippetState,
+    snippet ?? {
+      ...initialSnippetState,
+      ...EXTRA_PROPS_FOR_CONVENIENCE_NOT_FOR_SAVING,
+    },
   )
   const [isSaving, setIsSaving] = useState(false)
   const [currentThreshold, setCurrentThreshold] = useState(0)
   const { user } = useAuthState()
   const params = useParams<{ snippetID: string }>()
   const history = useHistory()
+  const dispatchGlobal = useGlobalDispatch()
 
   // console.log(JSON.stringify(state, null, 2))
 
@@ -181,12 +191,15 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
 
     if (user || force) {
       const owner = user?.userID ?? ANONYMOUS_USER_KEY
-      if (params.snippetID && !isMatchParamTemplate(params.snippetID)) {
+      const stateToSave = omit(
+        keys(EXTRA_PROPS_FOR_CONVENIENCE_NOT_FOR_SAVING),
+        state,
+      )
+      if (params.snippetID && !isMatchParamATemplate(params.snippetID)) {
         // @Performance: This fires an extra write on redirection, not too worried about it for now.
-        console.log('autosave update', state)
         setIsSaving(true)
         await update(snippets, params.snippetID, {
-          ...state,
+          ...stateToSave,
           updatedOn: value('serverDate'),
           owner,
         })
@@ -194,17 +207,17 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
 
         return params.snippetID
       } else if (force || currentThreshold > DEFAULT_AUTOSAVE_THRESHOLD) {
-        console.log('autosave create', state)
         setIsSaving(true)
         const data = await add(snippets, {
-          ...state,
+          ...stateToSave,
           createdOn: value('serverDate'),
           updatedOn: value('serverDate'),
           owner,
         })
 
         if (!force) {
-          history.push(`/${data.id}`, { skipFetch: true })
+          dispatchGlobal({ type: 'updateGlobalState', skipSnippetFetch: true })
+          history.push(`/${data.id}`)
 
           toast(
             <Box>
@@ -241,7 +254,7 @@ export const SnippetProvider: FC<{ snippet?: BaseSnippet }> = ({
     <SnippetStateContext.Provider
       value={{ ...state, isSaving, saveOrCreateSnippet }}
     >
-      <SnippetDispatchContext.Provider value={dispatch}>
+      <SnippetDispatchContext.Provider value={dispatch ?? noop}>
         {children}
       </SnippetDispatchContext.Provider>
     </SnippetStateContext.Provider>

@@ -1,11 +1,12 @@
 import { firestore } from 'firebase-admin'
 import { auth } from 'firebase-functions'
 
+import { reportError } from './utils/errors'
 import { db } from './utils/store'
 
 const increment = firestore.FieldValue.increment(1)
 
-const createProfile = async (userRecord: auth.UserRecord) => {
+export const createProfile = async (userRecord: auth.UserRecord) => {
   const usersRef = db.collection('users').doc(userRecord.uid)
   const totalsRef = db.collection('aggregations').doc('totals')
 
@@ -31,13 +32,12 @@ const createProfile = async (userRecord: auth.UserRecord) => {
     isDisabled: userRecord.disabled,
     features: {},
     tier: 'free',
-    sendMarketingEmails: true,
   })
   batch.set(totalsRef, { users: increment }, { merge: true })
 
   return batch.commit().catch((e) => {
     console.log('User created failed!', e)
+
+    reportError(e)
   })
 }
-
-export const createUser = auth.user().onCreate(createProfile)

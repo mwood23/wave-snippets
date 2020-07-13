@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/browser'
 import { Form, Formik } from 'formik'
 import React, { FC } from 'react'
 import TimeAgo from 'react-timeago'
@@ -120,7 +121,7 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
             // @ts-ignore Wants an event prop, but doesn't appear to need it
             onClose()
           } catch (error) {
-            console.log(error)
+            captureException(error)
 
             toast(
               <Box>

@@ -48,7 +48,7 @@ const InternalLink: FC<LinkProps & RouterLinkProps> = ({
 )
 
 const NewsletterSignup = () => {
-  const [signUp] = useConvertKit()
+  const [subscribeToNewsletter] = useConvertKit()
   const emailInput = useRef(null)
   const { colorMode } = useColorMode()
   const color = { light: 'cyan.600', dark: 'cyan.400' }
@@ -85,7 +85,7 @@ const NewsletterSignup = () => {
           }}
           onSubmit={async ({ email }, { setSubmitting }) => {
             setSubmitting(true)
-            await signUp(email)
+            await subscribeToNewsletter(email)
             setSubmitting(false)
 
             onClose()

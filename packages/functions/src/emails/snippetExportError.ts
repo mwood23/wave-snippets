@@ -6,7 +6,7 @@ export const snippetExportErrorEmail = ({
   subject: '🌊 Wave Snippets Export Error',
   text: `Hey there,
 
-Oh no, there was an error processing your wave snippet. Not to fear,
+Oh no, there was an error processing your Wave Snippet. Not to fear,
 we've been notified of the issue and are looking into a fix.
 
 It's not gone forever! Here is a link to try the export again in a couple hours.
@@ -320,7 +320,7 @@ a {
 								</tr>
 								<tr>
 									<td class="content-block">
-                  Oh no, there was an error processing your wave snippet. Not to fear,
+                  Oh no, there was an error processing your Wave Snippet. Not to fear,
                   we've been notified of the issue and are looking into a fix. It's not gone forever! Here is a link to try the export again in a couple hours.
 									</td>
 								</tr>

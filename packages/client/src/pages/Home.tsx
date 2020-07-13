@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
 import { SnippetDocument, snippets } from '@waves/shared'
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { usePrevious } from 'react-delta'
-import { RouteComponentProps, useHistory } from 'react-router-dom'
+import React, { FC, useEffect, useState } from 'react'
+import { RouteComponentProps, useHistory, useLocation } from 'react-router-dom'
 import { get } from 'typesaurus'
 
 import {
@@ -13,8 +12,9 @@ import {
   Spinner,
   useCreateToast,
 } from '../components'
+import { useGlobalState } from '../context'
 import { TEMPLATES_DICT } from '../templates'
-import { isMatchParamTemplate } from '../utils'
+import { generateID, isMatchParamATemplate } from '../utils'
 
 const StyledMobileWarningMessage = styled(Message)`
   @media (min-width: 700px) {
@@ -25,40 +25,32 @@ const StyledMobileWarningMessage = styled(Message)`
 export const HomePage: FC<RouteComponentProps<
   { snippetID: string },
   any,
-  { skipFetch?: boolean }
+  { skipSnippetFetch?: boolean }
 >> = ({
   match: {
     params: { snippetID },
   },
 }) => {
-  const [data, setData] = useState<SnippetDocument>()
+  const [data, setData] = useState<SnippetDocument | undefined>(
+    // @ts-ignore Undefined is ok
+    snippetID ? TEMPLATES_DICT[snippetID] : undefined,
+  )
   const [loading, setLoading] = useState(false)
   const history = useHistory()
-  const initialSnippetID = useRef<string | undefined>(snippetID)
-  const previousSnippetID = usePrevious(snippetID)
+  const location = useLocation()
+  // Don't want to jank the page on the autocreate redirect. This gives a better
+  // user experience although it's gross.
+  const [builderKey, setBuilderKey] = useState(generateID())
   const toast = useCreateToast()
+  const { skipSnippetFetch } = useGlobalState()
 
-  const isTemplateURL = isMatchParamTemplate(snippetID)
+  const isTemplateURL = isMatchParamATemplate(snippetID)
 
-  // Skip fetch when redirecting from an autosave. Aka from / to /:snippetID or if using a template
-  const shouldSkipFetch =
-    !initialSnippetID.current || !snippetID || isTemplateURL
-
-  // Reset the builder when from /:snippetID to / (clicking the logo to take you home)
-  const shouldResetBuilder =
-    (!!initialSnippetID.current && !snippetID) || isTemplateURL
+  const shouldSkipSnippetFetch =
+    location.pathname === '/' || isTemplateURL || !snippetID || skipSnippetFetch
 
   useEffect(() => {
-    if (shouldResetBuilder) {
-      // Reset ref too!
-      initialSnippetID.current = undefined
-      setData(undefined)
-    }
-  }, [setData, shouldResetBuilder, snippetID])
-
-  useEffect(() => {
-    // We want to skip this fetch when we redirect from an auto-create
-    if (shouldSkipFetch) return
+    if (shouldSkipSnippetFetch) return
 
     const getData = async () => {
       setLoading(true)
@@ -78,7 +70,15 @@ export const HomePage: FC<RouteComponentProps<
 
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [snippetID, shouldSkipFetch])
+  }, [snippetID])
+
+  useEffect(() => {
+    if (location.pathname === '/' || isTemplateURL) {
+      // @ts-ignore
+      setData(snippetID ? TEMPLATES_DICT[snippetID] : undefined)
+      setBuilderKey(generateID())
+    }
+  }, [location.pathname, isTemplateURL, snippetID])
 
   return (
     <Page>
@@ -89,14 +89,8 @@ export const HomePage: FC<RouteComponentProps<
       />
       {loading ? (
         <Spinner superCentered />
-      ) : // @ts-ignore
-      isTemplateURL || isMatchParamTemplate(previousSnippetID) ? (
-        // @ts-ignore Doing check for safety above
-        <Builder snippet={TEMPLATES_DICT[snippetID]} />
-      ) : !data ? (
-        <Builder />
       ) : (
-        <Builder snippet={data} />
+        <Builder key={builderKey} snippet={data} />
       )}
     </Page>
   )

@@ -2,9 +2,8 @@
  * Pulled from here: https://github.com/httptoolkit/accounts/blob/master/src/errors.ts
  */
 import { captureException, captureMessage, flush, init } from '@sentry/node'
-import { Request, Response } from 'firebase-functions'
 
-type Handler = (req: Request, resp: Response<any>) => void
+type Handler = (...args: any[]) => void
 
 let sentryInitialized = false
 export function initSentry() {
