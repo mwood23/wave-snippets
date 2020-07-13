@@ -96,7 +96,8 @@ module.exports = function (config) {
   }
   var timesnapConfig = Object.assign({}, config, {
     output: '',
-    outputPattern: outputPattern
+    outputPattern: outputPattern,
+    quiet: true
   });
 
   if (config.fps) {

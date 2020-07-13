@@ -1,10 +1,12 @@
 export const snippetExportErrorEmail = ({
   snippetURL,
+  userName,
 }: {
   snippetURL: string
+  userName?: string
 }) => ({
   subject: '🌊 Wave Snippets Export Error',
-  text: `Hey there,
+  text: `Hey ${userName ?? 'there'},
 
 Oh no, there was an error processing your Wave Snippet. Not to fear,
 we've been notified of the issue and are looking into a fix.
@@ -315,7 +317,7 @@ a {
 							<table width="100%" cellpadding="0" cellspacing="0">
 								<tr>
 									<td class="content-block">
-										Hey there,
+										Hey ${userName ?? 'there'},
 									</td>
 								</tr>
 								<tr>

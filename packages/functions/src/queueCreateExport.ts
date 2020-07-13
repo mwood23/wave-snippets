@@ -15,7 +15,7 @@ const queryString = (params: { [x: string]: any }) =>
  * a message queue if this doesn't get the job done.
  */
 export const queueCreateExport = async (req: Request, res: Response) => {
-  console.log(req.query, req.params, req.url, req.headers.authorization)
+  console.log('here', req.headers.authorization)
 
   await createMediaValidationSchema
     .validate(req.query, { abortEarly: false })
@@ -28,7 +28,7 @@ export const queueCreateExport = async (req: Request, res: Response) => {
   const headers: AxiosRequestConfig['headers'] = {}
 
   if (req?.headers?.authorization) {
-    headers.authorization = req.headers.authorization
+    headers.Authorization = req.headers.authorization
   }
 
   // We're not waiting because we just want to trigger the cloud function

@@ -2,6 +2,7 @@ import os from 'os'
 import path from 'path'
 
 import { storage } from 'firebase-admin'
+import { admin } from 'firebase-admin/lib/auth'
 import { Request, Response } from 'firebase-functions'
 import fs from 'fs-extra'
 import puppeteer from 'puppeteer'
@@ -12,9 +13,10 @@ import { number, object, string } from 'yup'
 import { CLIENT_URL, WAVE_DOWNLOAD_URL } from './const'
 import { snippetExportEmail } from './emails/snippetExport'
 import { snippetExportErrorEmail } from './emails/snippetExportError'
+import { parseName } from './utils'
 import { createGIF } from './utils/createGIF'
 import { reportError } from './utils/errors'
-import { db } from './utils/store'
+import { auth, db } from './utils/store'
 import timecut from './vendor/timecut'
 
 const VIEWPORT_OPTIONS = {
@@ -109,8 +111,11 @@ export const createMediaValidationSchema = object().shape({
 })
 
 export const createMedia = async (req: Request, res: Response) => {
-  // @ts-ignore
-  console.log('User', req?.locals?.user)
+  const user = res.locals.user as admin.auth.DecodedIdToken
+
+  const userName = user ? parseName(user?.name)[0] : undefined
+  console.log('User', user, userName)
+
   let browser = null
   const createMediaInvocationID = generateID()
   const tempDirectory = path.join(os.tmpdir(), createMediaInvocationID)
@@ -201,7 +206,7 @@ export const createMedia = async (req: Request, res: Response) => {
     const bucket = storage().bucket()
 
     // @ts-ignore Locals isn't typed :(
-    const userIDOrAnonymous = () => req.locals?.user?.uid ?? 'anonymous'
+    const userIDOrAnonymous = () => user?.uid ?? 'anonymous'
     const SEVEN_DAYS = Date.now() + 7 * 24 * 60 * 60 * 1000
 
     const uploadAsset = (assetPath: string, destinationName: string) =>
@@ -231,6 +236,7 @@ export const createMedia = async (req: Request, res: Response) => {
         gifFileName: gifName,
         videoFileName: videoName,
         videoURL: videoURL[0],
+        userName,
       }),
     })
     console.log('Email queued for delivery!')
@@ -244,6 +250,7 @@ export const createMedia = async (req: Request, res: Response) => {
       to: createMediaParams.emails.split(','),
       message: snippetExportErrorEmail({
         snippetURL: `${CLIENT_URL}/${createMediaParams.id}`,
+        userName,
       }),
     })
 

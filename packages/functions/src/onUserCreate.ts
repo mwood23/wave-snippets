@@ -1,6 +1,7 @@
 import { firestore } from 'firebase-admin'
 import { auth } from 'firebase-functions'
 
+import { parseName } from './utils'
 import { reportError } from './utils/errors'
 import { db } from './utils/store'
 
@@ -10,13 +11,7 @@ export const createProfile = async (userRecord: auth.UserRecord) => {
   const usersRef = db.collection('users').doc(userRecord.uid)
   const totalsRef = db.collection('aggregations').doc('totals')
 
-  let firstName = ''
-  let lastName = ''
-  if (userRecord.displayName) {
-    const splitName = userRecord.displayName.split(/(\s+)/)
-    firstName = splitName[0] ?? ''
-    lastName = splitName[2] ?? ''
-  }
+  const [firstName, lastName] = parseName(userRecord.displayName)
 
   const batch = db.batch()
   batch.set(usersRef, {

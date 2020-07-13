@@ -6,7 +6,7 @@ import { Box } from 'theme-ui'
 import { Required } from 'utility-types'
 import { boolean, object, string } from 'yup'
 
-import { useSnippetState } from '../context'
+import { useAuthState, useSnippetState } from '../context'
 import { useConvertKit } from '../hooks/useConvertKit'
 import { head } from '../utils'
 import {
@@ -70,6 +70,7 @@ const napkinCalculationOfEstimatedTime = ({
 export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
   const { saveOrCreateSnippet, ...rest } = useSnippetState()
   const [subscribeToNewsletter] = useConvertKit()
+  const { user, token } = useAuthState()
 
   const toast = useCreateToast()
 
@@ -78,10 +79,10 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
       <ModalOverlay />
       <Formik
         initialValues={{
-          email: '',
-          weeklyEmails: true,
+          email: user?.email ?? '',
+          weeklyEmails: !user?.email,
         }}
-        isInitialValid={false}
+        isInitialValid={!!user?.email}
         onSubmit={async ({ email, weeklyEmails }, { setSubmitting }) => {
           setSubmitting(true)
 
@@ -93,6 +94,13 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
             if (snippetID) {
               await fetch(
                 `/api/queue/media-export?id=${snippetID}&emails=${email}`,
+                token
+                  ? {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  : {},
               )
             }
 
@@ -170,28 +178,32 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
                   />
                   <FormErrorMessage>{errors.email}</FormErrorMessage>
 
-                  <FormHelperText id="email-helper-text">
-                    We need your email because it takes 5-10 minutes to process
-                    and create a high quality snippet. It&apos;s used only to
-                    email you the snippet and send you weekly emails if you opt
-                    in.
-                    {/* TODO: Link to blog */}
-                  </FormHelperText>
+                  {!user && (
+                    <FormHelperText id="email-helper-text">
+                      We need your email because it takes 5-10 minutes to
+                      process and create a high quality snippet. It&apos;s used
+                      only to email you the snippet and send you weekly emails
+                      if you opt in.
+                      {/* TODO: Link to blog */}
+                    </FormHelperText>
+                  )}
                 </FormControl>
-                <FormControl
-                  isInvalid={touched.weeklyEmails && !!errors.weeklyEmails}
-                  mb={3}
-                >
-                  <Checkbox
-                    isChecked={values.weeklyEmails}
-                    name="weeklyEmails"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    variantColor="green"
+                {!user && (
+                  <FormControl
+                    isInvalid={touched.weeklyEmails && !!errors.weeklyEmails}
+                    mb={3}
                   >
-                    Send me weekly emails of the waviest snippets
-                  </Checkbox>
-                </FormControl>
+                    <Checkbox
+                      isChecked={values.weeklyEmails}
+                      name="weeklyEmails"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      variantColor="green"
+                    >
+                      Send me weekly emails of the waviest snippets
+                    </Checkbox>
+                  </FormControl>
+                )}
               </ModalBody>
 
               <ModalFooter>

@@ -8,12 +8,14 @@ type UnauthedState = {
   isAuthed: false
   isLoading: boolean
   user: null
+  token: undefined
 }
 
 type AuthedState = {
   isAuthed: true
   isLoading: boolean
   user: UserDocument
+  token: string
 }
 
 export type AuthState = UnauthedState | AuthedState
@@ -26,6 +28,7 @@ export const initialAuthState: AuthState = {
   isAuthed: false,
   isLoading: true,
   user: null,
+  token: undefined,
 }
 
 const AuthStateContext = createContext<AuthState>(initialAuthState)
@@ -47,6 +50,7 @@ export const AuthProvider: FC = ({ children }) => {
           isAuthed: false,
           isLoading: false,
           user: null,
+          token: undefined,
         })
       } else {
         const db = firebase.firestore()
@@ -54,8 +58,9 @@ export const AuthProvider: FC = ({ children }) => {
           .collection('users')
           .doc(userAuth.uid)
           .onSnapshot(
-            (doc) => {
+            async (doc) => {
               const userInfo = doc.data()
+              const token = await firebase.auth()?.currentUser?.getIdToken()
 
               // We don't handle the error case because when a user is created a cloud function is fired and
               // sometimes it doesn't complete by the time this is called. However, since it's a subscription
@@ -65,6 +70,8 @@ export const AuthProvider: FC = ({ children }) => {
                   isAuthed: true,
                   isLoading: false,
                   user: userInfo as UserDocument,
+                  // @ts-ignore Token will be there since in callback
+                  token,
                 })
               }
             },

@@ -1,5 +1,6 @@
 import { Request, Response } from 'firebase-functions'
 
+import { reportError } from './errors'
 import { auth } from './store'
 
 /**
@@ -42,7 +43,12 @@ export const isAuthenticatedRoute = async (
       'Authorization: Bearer <Firebase ID Token>',
       'or by passing a "__session" cookie.',
     )
+    reportError(
+      'No Firebase ID token was passed as a Bearer token in the Authorization header.',
+    )
+
     res.status(403).send('Unauthorized')
+
     return
   }
 
@@ -67,12 +73,14 @@ export const isAuthenticatedRoute = async (
   try {
     const decodedIdToken = await auth.verifyIdToken(idToken)
     console.log('ID Token correctly decoded', decodedIdToken)
-    // @ts-ignore Mutating the var to put user on the middlewar
-    req.locals.user = decodedIdToken
+
+    res.locals.user = decodedIdToken
     next()
     return
   } catch (error) {
     console.error('Error while verifying Firebase ID token:', error)
+    reportError(error)
+
     res.status(403).send('Unauthorized')
     return
   }
@@ -118,12 +126,12 @@ export const addUserIfExists = async (
   try {
     const decodedIdToken = await auth.verifyIdToken(idToken)
     console.log('ID Token correctly decoded', decodedIdToken)
-    // @ts-ignore Mutating the var to put user on the middlewar
-    req.locals.user = decodedIdToken
+    res.locals.user = decodedIdToken
     next()
     return
   } catch (error) {
     console.error('Error while verifying Firebase ID token:', error)
+    reportError(error)
 
     // We still throw here because this smells weird if they're coming at us with a bombed out token.
     res.status(403).send('Unauthorized')

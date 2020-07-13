@@ -31,6 +31,7 @@
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.6.1",
     "ffmpeg-static": "^4.2.5",
+    "lodash": "4.17.19",
     "puppeteer": "2.1.1",
     "shortid": "^2.2.15",
     "sprintf-js": "1.1.1",

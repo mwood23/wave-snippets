@@ -3,14 +3,16 @@ export const snippetExportEmail = ({
   gifURL,
   videoFileName,
   gifFileName,
+  userName,
 }: {
   videoURL: string
   gifURL: string
   videoFileName: string
   gifFileName: string
+  userName?: string
 }) => ({
   subject: '🌊 Radical! Your Wave Snippet is Ready!',
-  text: `Hey there,
+  text: `Hey ${userName ?? 'there'},
 
 Your Wave Snippet is ready! Links expire in <b>seven days</b>.
 
@@ -323,7 +325,7 @@ a {
 							<table width="100%" cellpadding="0" cellspacing="0">
 								<tr>
 									<td class="content-block">
-										Hey there,
+										Hey ${userName ?? 'there'},
 									</td>
 								</tr>
 								<tr>
