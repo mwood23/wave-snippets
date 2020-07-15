@@ -26,6 +26,7 @@ export const StandaloneSnippetComponent: FC<StandaloneSnippetProps> = ({
       windowControlsType,
       theme,
       defaultWindowTitle,
+      showBackground,
     },
   },
   playOn = 'init',
@@ -37,8 +38,9 @@ export const StandaloneSnippetComponent: FC<StandaloneSnippetProps> = ({
   return (
     <PreviewContainer
       readOnly
-      responsive
       backgroundColor={backgroundColor}
+      showBackground={showBackground}
+      style={{ height: '450px' }}
       title={defaultWindowTitle}
       windowBackground={themeObject.theme.colors.background}
       windowControlsPosition={
@@ -53,9 +55,9 @@ export const StandaloneSnippetComponent: FC<StandaloneSnippetProps> = ({
               dispatch({ type: 'updatePreviewState', isPlaying: false }),
           }
         : {})}
+      responsive
     >
       <Preview
-        responsive
         cycle={cycle}
         cycleSpeed={cycleSpeed}
         immediate={immediate}

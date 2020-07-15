@@ -44,6 +44,7 @@ export const NPM_PACKAGE_TEMPLATE: BaseSnippet = {
   ],
   name: 'Getting Started',
   showLineNumbers: false,
+  showBackground: false,
   springPreset: 'default',
   windowControlsPosition: 'left',
   status: 'draft',

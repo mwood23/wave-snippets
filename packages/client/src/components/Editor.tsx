@@ -35,6 +35,7 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { usePrevious } from 'react-delta'
 
+import { DEFAULT_STEP_MESSAGE } from '../const'
 import {
   ParsedFocus,
   addFocusToSelection,
@@ -49,24 +50,31 @@ import {
   last,
   mapObjIndexed,
   mergeDeepWith,
+  pick,
   removeLineFromFocus,
   serializeFocus,
+  times,
   uniq,
 } from '../utils'
-import { Box, BoxProps, IconButton, Tooltip } from './core'
+import { Box, BoxProps, IconButton, Tooltip, useColorMode } from './core'
 
 type EditorProps = {
   containerStyleProps?: BoxProps
-  theme: string
+  theme?: string
   step: InputStep
   onChange: (
     editor: CodeMirror.Editor,
     data: CodeMirror.EditorChange,
-    value: string,
+    value: {
+      code: string
+      focus: string
+    },
   ) => void
   onFocusChanged: (serializedFocus: string, stepID: string) => void
   language: string | { name: string; [x: string]: any }
 }
+
+const getLineNumbers = (str: string) => str.split(/\r\n|\r|\n/).length
 
 const EditorContainer = styled(Box)`
   .CodeMirror {
@@ -93,6 +101,7 @@ export const Editor: FC<EditorProps> = ({
   theme,
   language,
 }) => {
+  const { colorMode } = useColorMode()
   const editorRef = useRef<CodeMirror.Editor>()
   const [parsedFocus, setParsedFocus] = useState(
     step.focus ? deserializeFocus(step.focus) : {},
@@ -105,11 +114,24 @@ export const Editor: FC<EditorProps> = ({
     }
 
     onFocusChanged(serializeFocus(parsedFocus), step.id)
-    console.log(serializeFocus(parsedFocus))
 
+    /**
+     * Clear all marks and line highlights and rebuild the focus states
+     */
     editorRef.current?.getAllMarks().forEach((m) => {
       m.clear()
     })
+
+    const numberOfLines = editorRef.current?.lineCount()
+    if (numberOfLines !== undefined) {
+      times((line) => {
+        editorRef.current?.removeLineClass(
+          Number(line),
+          'background',
+          'waves-highlight-line',
+        )
+      }, numberOfLines)
+    }
 
     mapObjIndexed((value, lineNumber, _object) => {
       const line = Number(lineNumber)
@@ -211,6 +233,17 @@ export const Editor: FC<EditorProps> = ({
                 m.clear()
               })
 
+              const numberOfLines = editorRef.current?.lineCount()
+              if (numberOfLines !== undefined) {
+                times((line) => {
+                  editorRef.current?.removeLineClass(
+                    Number(line),
+                    'background',
+                    'waves-highlight-line',
+                  )
+                }, numberOfLines)
+              }
+
               setParsedFocus({})
             }}
             size="xs"
@@ -222,7 +255,22 @@ export const Editor: FC<EditorProps> = ({
           editorRef.current = editor
         }}
         onBeforeChange={(editor, data, value) => {
-          onChange(editor, data, value)
+          const numberOfLines = getLineNumbers(value)
+          let newParsedFocus = { ...parsedFocus }
+
+          // Normalize the focus just in case the user is deleting lines. If we don't do this
+          // the waves previewer might explode because we have focus for something that doesn't exist
+          if (numberOfLines !== undefined) {
+            newParsedFocus = pick(
+              times((i) => `${i}`, numberOfLines - 1), // Minus one because things are 0 indexed
+              parsedFocus,
+            )
+          }
+
+          onChange(editor, data, {
+            code: value,
+            focus: serializeFocus(newParsedFocus),
+          })
         }}
         onGutterClick={(editor, lineNumber) => {
           // Has to be a function because CodeMirror holds onto a ref of this function
@@ -254,7 +302,7 @@ export const Editor: FC<EditorProps> = ({
           },
           lineWrapping: true,
           smartIndent: true,
-          theme,
+          theme: theme ?? colorMode === 'dark' ? 'dracula' : 'eclipse',
           tabSize: 2,
           maxHighlightLength: Infinity,
         }}

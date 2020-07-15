@@ -34,6 +34,7 @@ export const DownloadPage: FC<DownloadPageProps> = ({
       windowControlsType,
       theme,
       defaultWindowTitle,
+      showBackground,
     },
   } = snippet
 
@@ -44,6 +45,7 @@ export const DownloadPage: FC<DownloadPageProps> = ({
         readOnly
         responsive
         backgroundColor={backgroundColor}
+        showBackground={showBackground}
         title={defaultWindowTitle}
         windowBackground={themeObject.theme.colors.background}
         windowControlsPosition={

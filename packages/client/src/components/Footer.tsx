@@ -29,7 +29,7 @@ import {
 type FooterProps = {}
 
 const WavesFooterLink: FC<LinkProps> = ({ children, ...props }) => (
-  <Link mr="4" {...props}>
+  <Link mb="2" mr={['0', '4']} {...props}>
     {children}
   </Link>
 )
@@ -69,8 +69,10 @@ const NewsletterSignup = () => {
           backgroundColor="transparent"
           color={color[colorMode]}
           fontWeight="normal"
+          height="24px"
           lineHeight={1}
-          mr="4"
+          mb="2"
+          mr={['0', '4']}
           padding="0"
           variant="link"
         >
@@ -145,7 +147,12 @@ export const Footer: FC<FooterProps> = () => (
     pt="4"
     px="4"
   >
-    <Flex alignItems="center" justifyContent="center" mb="2">
+    <Flex
+      alignItems="center"
+      flexDir={['column', 'row']}
+      justifyContent="center"
+      mb="2"
+    >
       <InternalLink to="/about">About</InternalLink>
       <WavesFooterLink
         isExternal

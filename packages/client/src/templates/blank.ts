@@ -24,6 +24,7 @@ export const BLANK_TEMPLATE: BaseSnippet = {
   cycleSpeed: 1500,
   immediate: false,
   showLineNumbers: false,
+  showBackground: true,
   windowControlsPosition: null,
   windowControlsType: null,
   startingStep: 0,

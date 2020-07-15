@@ -5,6 +5,8 @@ import { WINDOW_CONTROLS_TYPE_DICT } from '../code-themes'
 import { noop } from '../utils'
 import { Box, Flex, Input } from './core'
 
+export const TITLE_BAR_HEIGHT = '24px'
+
 export type WindowTitleBarProps = {
   windowControlsType: WindowControlsType
   windowControlsPosition: WindowControlsPosition
@@ -26,7 +28,11 @@ export const WindowTitleBar: FC<WindowTitleBarProps> = ({
   const WindowControls = WINDOW_CONTROLS_TYPE_DICT[windowControlsType]
 
   return (
-    <Flex alignItems="center" justifyContent="space-between">
+    <Flex
+      alignItems="center"
+      height={TITLE_BAR_HEIGHT}
+      justifyContent="space-between"
+    >
       <Box minWidth="60px">
         {windowControlsPosition === 'left' && <WindowControls />}
       </Box>

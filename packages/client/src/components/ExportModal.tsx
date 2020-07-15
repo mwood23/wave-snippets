@@ -6,6 +6,7 @@ import { Box } from 'theme-ui'
 import { Required } from 'utility-types'
 import { boolean, object, string } from 'yup'
 
+import { analytics } from '../config/firebase'
 import { useAuthState, useSnippetState } from '../context'
 import { useConvertKit } from '../hooks/useConvertKit'
 import { head } from '../utils'
@@ -125,6 +126,12 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
             if (weeklyEmails) {
               await subscribeToNewsletter(head(email.split(','))!)
             }
+
+            analytics.logEvent('snippet_exported', {
+              language: rest.defaultLanguage,
+              numberOfSteps: rest.steps.length,
+              snippetTags: rest.tags,
+            })
 
             // @ts-ignore Wants an event prop, but doesn't appear to need it
             onClose()

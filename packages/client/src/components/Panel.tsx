@@ -4,7 +4,7 @@ import { head } from 'ramda'
 import React, { FC, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { CODE_THEMES_DICT } from '../code-themes'
+// import { CODE_THEMES_DICT } from '../code-themes'
 import {
   BUILDER_MOBILE_BREAKPOINT,
   SUPPORTED_CODING_LANGAUGES_DICT,
@@ -54,16 +54,18 @@ const BottomActionRow = styled(Box)<{ isDraggingOverDroppable: boolean }>`
 
 export const PanelItem: FC<PanelItemProps> = ({
   step,
-  theme,
+  // theme,
   index,
   numberOfSteps,
   onExpandClick,
   activeStep,
+  currentStep,
 }) => {
   const snippetDispatch = useSnippetDispatch()
   const previewDispatch = usePreviewDispatch()
   const stepNumber = index + 1
   const isActive = activeStep === step.id
+  const isShowingInPreview = currentStep === index
 
   return (
     <Draggable draggableId={step.id} index={index} key={step.id}>
@@ -82,6 +84,14 @@ export const PanelItem: FC<PanelItemProps> = ({
               <Text fontSize="xl" mr="2">
                 Step {stepNumber}
               </Text>
+              <Box
+                backgroundColor="green.400"
+                borderRadius="50%"
+                height="10px"
+                opacity={isShowingInPreview ? 1 : 0}
+                transition="opacity 0.3s"
+                width="10px"
+              />
             </Flex>
 
             <Box>
@@ -153,7 +163,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                 snippetDispatch({
                   type: 'updateStep',
                   stepID: step.id,
-                  code: value,
+                  ...value,
                 })
               }}
               onFocusChanged={(newFocus, stepID) => {
@@ -164,7 +174,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                 })
               }}
               step={step}
-              theme={CODE_THEMES_DICT[theme].codeMirrorMap}
+              // theme={CODE_THEMES_DICT[theme].codeMirrorMap}
             />
           </Collapse>
         </Box>

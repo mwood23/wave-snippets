@@ -13,7 +13,6 @@ export type UserDocument = {
   lastName: string
   phoneNumber: string | null
   photoURL: string | null
-  sendingMarketingEmails: true
   tier: Tiers
   userID: string
 }

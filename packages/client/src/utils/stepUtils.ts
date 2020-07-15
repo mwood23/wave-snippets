@@ -234,9 +234,13 @@ export const addFocusToSelection = ({
   const createFocusedLinesObject = () => {
     const linesObject: any = {}
 
-    // Start at one since we use character styles for line 1
+    // Add one since we use character styles for line 1
     // Subtract 1 because we do the same for the last line
-    for (let index = 1; index < numberOfLinesSelectionSpans - 1; index++) {
+    for (
+      let index = startingLineNumber + 1;
+      index <= endingLineNumber - 1;
+      index++
+    ) {
       linesObject[index] = true
     }
 

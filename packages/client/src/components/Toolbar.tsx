@@ -87,7 +87,7 @@ export const Toolbar: FC<ToolbarProps> = () => {
     springPreset,
     showLineNumbers,
     immediate,
-    cycle,
+    showBackground,
     cycleSpeed,
     windowControlsPosition,
     windowControlsType,
@@ -172,7 +172,6 @@ export const Toolbar: FC<ToolbarProps> = () => {
                         springPreset: e.target.value,
                       })
                     }
-                    placeholder="Select option"
                     size="sm"
                     value={springPreset}
                   >
@@ -265,14 +264,16 @@ export const Toolbar: FC<ToolbarProps> = () => {
                   />
                 </Flex>
                 <Flex align="center">
-                  <FormLabel htmlFor="cycle">Cycle</FormLabel>
+                  <FormLabel htmlFor="showBackground">
+                    Show Background
+                  </FormLabel>
                   <Switch
-                    id="cycle"
-                    isChecked={cycle}
+                    id="showBackground"
+                    isChecked={showBackground}
                     onChange={() =>
                       snippetDispatch({
                         type: 'updateSnippetState',
-                        cycle: !cycle,
+                        showBackground: !showBackground,
                       })
                     }
                   />

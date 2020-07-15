@@ -228,8 +228,8 @@ export const PrivacyPolicyPage: FC = () => (
       </Text>
       <Text mb="3">
         We host the website and operate the platform using third parties,
-        including AWS®, Mailgun® and Netlify®. Your data will be hosted in their
-        data centers throughout the United States and/or Europe.
+        including AWS®, GCP®, Mailgun® and Netlify®. Your data will be hosted in
+        their data centers throughout the United States and/or Europe.
       </Text>
       <Text mb="3">
         We may use Stripe®, to process subscription payments, and therefore
@@ -237,15 +237,15 @@ export const PrivacyPolicyPage: FC = () => (
       </Text>
       <Text mb="3">
         We may use third-party services either embedded into our website (such
-        as Disqus®, Drift, Optimizely, Segment™ and Google® Analytics) or
-        outside of it (such as GitHub® and Twitter®) to communicate with you or
-        to enhance the function of the website and the services.
+        as Disqus®, Drift, Optimizely, Firebase, Segment™ and Google® Analytics)
+        or outside of it (such as GitHub® and Twitter®) to communicate with you
+        or to enhance the function of the website and the services.
       </Text>
       <Text mb="3">
         We may use third-party service providers and platforms (such as Pendo,
-        Customer.io, Hubspot, Salesforce, Uservoice, Zapier, and Zendesk) for
-        customer engagement, customer chat, product feedback and customer
-        support ticketing.
+        Customer.io, Hubspot, Salesforce, Uservoice, Zapier, ConvertKit, and
+        Zendesk) for customer engagement, customer chat, product feedback and
+        customer support ticketing.
       </Text>
       <Text mb="3">
         While we provide these third parties with no more information than what

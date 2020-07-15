@@ -39,6 +39,7 @@ export type SnippetDocument = {
   cycleSpeed: number
   springPreset: string
   showLineNumbers: boolean
+  showBackground: boolean
   windowControlsType: WindowControlsType | null
   windowControlsPosition: WindowControlsPosition | null
   defaultWindowTitle: string

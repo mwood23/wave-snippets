@@ -17,6 +17,7 @@ import {
 import { usePreviewDispatch, usePreviewState } from '../context'
 import { noop } from '../utils'
 import { Box, Spinner } from './core'
+import { TITLE_BAR_HEIGHT } from './WindowTitleBar'
 
 const AnimatedCodeSurfer = animated(CodeSurfer)
 
@@ -61,20 +62,31 @@ export const Preview = forwardRef<any, PreviewProps>(
       immediate,
       cycle,
       onAnimationCycleEnd = noop,
-      responsive = false,
+      responsive = true,
     },
     ref,
   ) => {
-    const totalSteps = steps.length - 1
     const dispatch = usePreviewDispatch()
     const { currentStep, isPlaying, pauseAnimation } = usePreviewState()
-    const [codeSurferKey, setCodeSurferKey] = useState(1)
+    const [codeSurferState, setCodeSurferState] = useState<{
+      key: number
+      steps: InputStep[]
+    }>({
+      key: 1,
+      steps,
+    })
     const [loading, setLoading] = useState(false)
 
-    const [debouncedCallback] = useDebouncedCallback(() => {
+    const remountPreview = () => {
       setLoading(false)
-      setCodeSurferKey((key) => key + 1)
-    }, 1500)
+      setCodeSurferState((previousState) => ({
+        key: previousState.key + 1,
+        steps,
+      }))
+    }
+    const totalSteps = codeSurferState.steps.length - 1
+    const chosenTheme = CODE_THEMES_DICT[theme]
+    const [debouncedCallback] = useDebouncedCallback(remountPreview, 1500)
 
     useEffect(() => {
       setLoading(true)
@@ -83,11 +95,21 @@ export const Preview = forwardRef<any, PreviewProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [steps, showLineNumbers])
 
+    // How many more can we go?!
+    const determineStepToGoTo = () =>
+      totalSteps > 1
+        ? currentStep === totalSteps
+          ? cycle || (!playOnInit && isPlaying)
+            ? 0
+            : currentStep
+          : currentStep + 1
+        : currentStep
+
     useEffect(() => {
       if (isPlaying) {
         dispatch({
           type: 'updatePreviewState',
-          currentStep: totalSteps > 1 ? currentStep + 1 : currentStep,
+          currentStep: determineStepToGoTo(),
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,15 +133,7 @@ export const Preview = forwardRef<any, PreviewProps>(
         if (isPlaying) {
           dispatch({
             type: 'updatePreviewState',
-            currentStep:
-              // How many more can we go?!
-              totalSteps > 1
-                ? currentStep === totalSteps
-                  ? cycle
-                    ? 0
-                    : currentStep
-                  : currentStep + 1
-                : currentStep,
+            currentStep: determineStepToGoTo(),
           })
         }
 
@@ -134,27 +148,34 @@ export const Preview = forwardRef<any, PreviewProps>(
     return (
       <PreviewContainer
         className="code-snippet-preview-container"
-        height={'314px'}
+        height={`calc(100% - ${TITLE_BAR_HEIGHT})`}
         margin="0 auto"
         overflow={'hidden'}
         position="relative"
         ref={ref}
         width={responsive ? '100%' : '550px'}
       >
-        {codeSurferKey !== 1 && loading && (
-          <Spinner position="absolute" right="6" top="0" zIndex={5000} />
+        {codeSurferState.key !== 1 && loading && (
+          <Spinner
+            color={chosenTheme.themeType === 'light' ? 'gray.600' : 'white'}
+            position="absolute"
+            right="6"
+            top="0"
+            zIndex={5000}
+          />
         )}
 
         {/* Reinitialize theme-ui around code surfer so that all the built in themes work
       // @ts-ignore */}
         <ThemeProvider>
           <AnimatedCodeSurfer
-            key={codeSurferKey}
+            // Pretty horrible hack here. Something internal to this holds on to old state
+            // so if something gets messed up with focus then not even deleting will fix it.
+            // Here we a compute the key on number of steps so that delete guarantees a remount
+            // to not hold onto back step data.
+            key={codeSurferState.key}
             progress={props.progress}
-            steps={steps.map((s) => ({
-              ...s,
-              showNumbers: showLineNumbers,
-            }))}
+            steps={codeSurferState.steps}
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>

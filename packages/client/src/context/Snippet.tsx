@@ -8,7 +8,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import { useImmerReducer } from 'use-immer'
 
 import { Box, Text, useCreateToast } from '../components'
-import { ANONYMOUS_USER_KEY, DEFAULT_AUTOSAVE_THRESHOLD } from '../const'
+import {
+  ANONYMOUS_USER_KEY,
+  DEFAULT_AUTOSAVE_THRESHOLD,
+  DEFAULT_STEP_MESSAGE,
+} from '../const'
 import { DEFAULT_TEMPLATE } from '../templates/default'
 import { BaseSnippet } from '../types'
 import {
@@ -62,7 +66,7 @@ const createEmptyStep = ({
 }): InputStep => ({
   title: '',
   subtitle: '',
-  code: '// Type code here',
+  code: DEFAULT_STEP_MESSAGE,
   focus: '',
   lang: snippetLanguage,
   id: generateID(),

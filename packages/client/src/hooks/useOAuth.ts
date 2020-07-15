@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/browser'
 import { useState } from 'react'
 
-import { firebase } from '../config/firebase'
+import { analytics, firebase } from '../config/firebase'
 import { UnreachableCaseError } from '../utils'
 import { useConvertKit } from './useConvertKit'
 
@@ -54,6 +54,10 @@ export const useOAuth = ({
 
       if (result.additionalUserInfo?.isNewUser && result.user?.email) {
         subscribeToNewsletter(result.user?.email)
+
+        analytics.logEvent('sign_up', {
+          method: result.user?.providerId,
+        })
       }
     }
   }

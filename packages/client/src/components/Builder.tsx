@@ -64,6 +64,7 @@ export const BuilderComponent: FC = () => {
     showLineNumbers,
     windowControlsType,
     windowControlsPosition,
+    showBackground,
   } = useSnippetState()
   const snippetDispatch = useSnippetDispatch()
   const { currentStep } = usePreviewState()
@@ -92,38 +93,41 @@ export const BuilderComponent: FC = () => {
           steps={steps}
           theme={theme}
         />
-        <PreviewWrapper>
-          <PreviewContainer
-            backgroundColor={backgroundColor}
-            onTitleChanged={(e: any) =>
-              snippetDispatch({
-                type: 'updateSnippetState',
-                defaultWindowTitle: e.target.value,
-              })
-            }
-            title={defaultWindowTitle}
-            windowBackground={themeObject.theme.colors.background}
-            windowControlsPosition={
-              windowControlsPosition ?? themeObject.windowControlsPosition
-            }
-            windowControlsType={
-              windowControlsType ?? themeObject.windowControlsType
-            }
-          >
-            <Preview
-              cycle={cycle}
-              cycleSpeed={cycleSpeed}
-              immediate={immediate}
-              showLineNumbers={showLineNumbers}
-              springPreset={springPreset}
-              steps={steps}
-              theme={theme}
-            />
-          </PreviewContainer>
+        <Box>
+          <PreviewWrapper>
+            <PreviewContainer
+              backgroundColor={backgroundColor}
+              onTitleChanged={(e: any) =>
+                snippetDispatch({
+                  type: 'updateSnippetState',
+                  defaultWindowTitle: e.target.value,
+                })
+              }
+              showBackground={showBackground}
+              title={defaultWindowTitle}
+              windowBackground={themeObject.theme.colors.background}
+              windowControlsPosition={
+                windowControlsPosition ?? themeObject.windowControlsPosition
+              }
+              windowControlsType={
+                windowControlsType ?? themeObject.windowControlsType
+              }
+            >
+              <Preview
+                cycle={cycle}
+                cycleSpeed={cycleSpeed}
+                immediate={immediate}
+                showLineNumbers={showLineNumbers}
+                springPreset={springPreset}
+                steps={steps}
+                theme={theme}
+              />
+            </PreviewContainer>
+          </PreviewWrapper>
           <MobileHelperText fontSize={'xs'} mt="2" textAlign="center">
             Scroll left and right!
           </MobileHelperText>
-        </PreviewWrapper>
+        </Box>
       </StyledBuilderContent>
     </StyledBuilder>
   )

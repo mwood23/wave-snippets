@@ -2,7 +2,7 @@ import { UserDocument } from '@waves/shared'
 import React, { FC, createContext, useEffect, useState } from 'react'
 
 import { useCreateToast } from '../components'
-import { firebase } from '../config/firebase'
+import { analytics, firebase } from '../config/firebase'
 
 type UnauthedState = {
   isAuthed: false
@@ -53,23 +53,26 @@ export const AuthProvider: FC = ({ children }) => {
           token: undefined,
         })
       } else {
+        analytics.setUserId(userAuth.uid)
         const db = firebase.firestore()
         unsubscribeFromUserListener = await db
           .collection('users')
           .doc(userAuth.uid)
           .onSnapshot(
             async (doc) => {
-              const userInfo = doc.data()
+              const userInfo = doc.data() as UserDocument
               const token = await firebase.auth()?.currentUser?.getIdToken()
 
               // We don't handle the error case because when a user is created a cloud function is fired and
               // sometimes it doesn't complete by the time this is called. However, since it's a subscription
               // it'll eventually come through for us.
               if (userInfo) {
+                analytics.setUserProperties({ tier: userInfo.tier })
+
                 setAuthState({
                   isAuthed: true,
                   isLoading: false,
-                  user: userInfo as UserDocument,
+                  user: userInfo,
                   // @ts-ignore Token will be there since in callback
                   token,
                 })

@@ -156,6 +156,9 @@ export const createMedia = async (req: Request, res: Response) => {
 
       await page.waitForSelector(
         '.code-snippet-preview-container.snippet-preview-complete',
+        {
+          timeout: 50000, // This is how long the snippie can be in duration. Make longer for premium?
+        },
       )
       const endTime = new Date().getTime()
       duration = +((endTime - startTime) / 1000).toFixed(2)
@@ -195,6 +198,9 @@ export const createMedia = async (req: Request, res: Response) => {
     })
 
     console.log('Timecut complete!')
+
+    // Close browser before creating GIF to give some memory back.
+    await browser.close()
 
     await createGIF({
       frameDir,
