@@ -69,7 +69,7 @@ export const TitleToolbar: FC<TitleToolbarProps> = () => {
         width="300px"
       />
 
-      <Flex alignItems="center">
+      <Flex alignItems="center" flexWrap="wrap">
         <SnippetTags
           onCloseButtonClicked={(t) => {
             snippetDispatch({

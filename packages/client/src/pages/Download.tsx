@@ -46,6 +46,7 @@ export const DownloadPage: FC<DownloadPageProps> = ({
         responsive
         backgroundColor={backgroundColor}
         showBackground={showBackground}
+        style={{ height: '100vh' }}
         title={defaultWindowTitle}
         windowBackground={themeObject.theme.colors.background}
         windowControlsPosition={

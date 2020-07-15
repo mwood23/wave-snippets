@@ -97,7 +97,7 @@ export const Preview = forwardRef<any, PreviewProps>(
 
     // How many more can we go?!
     const determineStepToGoTo = () =>
-      totalSteps > 1
+      totalSteps >= 1
         ? currentStep === totalSteps
           ? cycle || (!playOnInit && isPlaying)
             ? 0
@@ -175,7 +175,10 @@ export const Preview = forwardRef<any, PreviewProps>(
             // to not hold onto back step data.
             key={codeSurferState.key}
             progress={props.progress}
-            steps={codeSurferState.steps}
+            steps={codeSurferState.steps.map((s) => ({
+              ...s,
+              showNumbers: showLineNumbers,
+            }))}
             theme={CODE_THEMES_DICT[theme].theme}
           />
         </ThemeProvider>

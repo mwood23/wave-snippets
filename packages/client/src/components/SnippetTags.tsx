@@ -22,12 +22,13 @@ export const SnippetTags: FC<SnippetTagsProps> = ({
   onCloseButtonClicked = noop,
   ...rest
 }) => (
-  <Flex alignItems="center">
+  <Flex alignItems="center" flexWrap="wrap">
     {tags.map((t) => {
       const foundTag = TAGS_DICT[t]
       return (
         <SnippetTag
           key={foundTag.value}
+          mb={['1', '0']}
           mr="2"
           variantColor={getColorByTagGroup(foundTag.group)}
           {...rest}

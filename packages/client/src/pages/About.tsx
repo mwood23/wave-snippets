@@ -23,7 +23,7 @@ export const AboutPage: FC = () => (
         to help you illustrate complex concepts through motion. It allows you to
         create a series of code steps and describe the code as you go. Once
         you&apos;re finished, a high quality gif and video file is delivered
-        straight to your email for you to share with the world!
+        straight to your inbox for you to share with the world!
       </Text>
     </Box>
 
@@ -55,8 +55,9 @@ export const AboutPage: FC = () => (
         <ListItem>Snippet embeds</ListItem>
         <ListItem>A snippet gallery of the most liked snippets</ListItem>
         <ListItem>Typing effects for a snippet</ListItem>
+        <ListItem>Terminal mode effects</ListItem>
         <ListItem>Snippet storage</ListItem>
-        <ListItem>One click shares to Twitter</ListItem>
+        <ListItem>One click shares to Twitter and Github</ListItem>
         <ListItem>Export customization</ListItem>
       </List>
       <Text mb="3">
@@ -76,8 +77,8 @@ export const AboutPage: FC = () => (
         As it stands, I&apos;m not ready to open source it because I need to
         figure out how to hide some of the configs, clean up parts of the
         source, and write up docs. If there&apos;s enough interest from the
-        community helping me maintain it I will. The stack is Typescript, React,
-        Node, Chakra UI, React Spring, and Firebase.
+        community helping me maintain and support it I will. The stack is
+        Typescript, React, Node, Chakra UI, React Spring, and Firebase.
       </Text>
     </Box>
 
@@ -111,7 +112,7 @@ export const AboutPage: FC = () => (
       </Text>
       <Text mb="3">
         <b>
-          <Link isExternal href="https://github.com/pomber/code-surfer">
+          <Link isExternal href="https://twitter.com/pomber">
             Rodrigo Pombo
           </Link>
         </b>
@@ -132,7 +133,7 @@ export const AboutPage: FC = () => (
             Tungs
           </Link>
         </b>
-        {/* TODO Backlink to my blog here */}: The author of Timecut and :
+        {/* TODO Backlink to my blog here */}: The author of Timecut and
         Timesnap. Who would have guessed how difficult building gifs and videos
         in the browser would be. I was just about ready to give up on this
         project until I stumbled across{' '}

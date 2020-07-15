@@ -298,6 +298,9 @@ export const Editor: FC<EditorProps> = ({
           spellcheck: true,
           extraKeys: {
             'Shift-Tab': 'indentLess',
+            Tab(cm) {
+              cm.replaceSelection('  ', 'end')
+            },
           },
           lineWrapping: true,
           smartIndent: true,

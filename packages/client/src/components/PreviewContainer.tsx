@@ -26,12 +26,7 @@ const Background = styled(Box)`
   left: 0;
 `
 
-const Window = styled(Box)`
-  position: relative;
-  z-index: 10;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.55) 0px 20px 68px;
-`
+const Window = styled(Box)``
 
 // eslint-disable-next-line react/display-name
 export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
@@ -78,6 +73,14 @@ export const PreviewContainer = forwardRef<any, PreviewContainerProps>(
         paddingLeft="4"
         paddingRight="4"
         paddingTop="4"
+        position="relative"
+        zIndex={10}
+        {...(showBackground
+          ? {
+              borderRadius: '5px',
+              boxShadow: 'rgba(0, 0, 0, 0.55) 0px 20px 68px',
+            }
+          : {})}
       >
         <WindowTitleBar
           onTitleChanged={onTitleChanged}

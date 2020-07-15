@@ -237,29 +237,33 @@ export const Panel: FC<PanelProps> = ({
               isDraggingOverDroppable={snapshot.isDraggingOver}
               padding="0 0 2px 2px"
             >
-              <Menu>
-                {/*
+              {steps.length >= 10 ? (
+                <Text>Cannot add more than 10 steps.</Text>
+              ) : (
+                <Menu>
+                  {/*
                   // @ts-ignore As coercion type lost */}
-                <MenuButton as={Button} rightIcon="chevron-down" size="sm">
-                  Add Step
-                </MenuButton>
-                <MenuList placement="top-start" zIndex={1000}>
-                  <MenuItem
-                    onClick={() => snippetDispatch({ type: 'addStep' })}
-                  >
-                    Add Blank Step
-                  </MenuItem>
-                  {steps.length > 0 && (
+                  <MenuButton as={Button} rightIcon="chevron-down" size="sm">
+                    Add Step
+                  </MenuButton>
+                  <MenuList placement="top-start" zIndex={1000}>
                     <MenuItem
-                      onClick={() =>
-                        snippetDispatch({ type: 'duplicateLastStep' })
-                      }
+                      onClick={() => snippetDispatch({ type: 'addStep' })}
                     >
-                      Duplicate Previous Step
+                      Add Blank Step
                     </MenuItem>
-                  )}
-                </MenuList>
-              </Menu>
+                    {steps.length > 0 && (
+                      <MenuItem
+                        onClick={() =>
+                          snippetDispatch({ type: 'duplicateLastStep' })
+                        }
+                      >
+                        Duplicate Previous Step
+                      </MenuItem>
+                    )}
+                  </MenuList>
+                </Menu>
+              )}
             </BottomActionRow>
           </StyledPanelContainer>
         )}
