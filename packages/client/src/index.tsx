@@ -43,6 +43,7 @@ ReactDOM.render(
               styles={{
                 body: {
                   backgroundColor: 'transparent !important',
+                  color: 'inherit !important',
                 },
               }}
             />
