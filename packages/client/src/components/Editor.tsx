@@ -75,7 +75,7 @@ type EditorProps = {
 
 const getLineNumbers = (str: string) => str.split(/\r\n|\r|\n/).length
 
-const EditorContainer = styled(Box)`
+const EditorContainer = styled(Box)<{ colorMode: 'light' | 'dark' }>`
   .CodeMirror {
     height: 250px;
   }
@@ -87,8 +87,13 @@ const EditorContainer = styled(Box)`
   .waves-highlight-line,
   .waves-highlight-column {
     background-color: ${(props) =>
-      // @ts-ignore
-      props.theme.colors.whiteAlpha['400']};
+      props.colorMode === 'dark'
+        ? //
+          // @ts-ignore
+          props.theme.colors.whiteAlpha['400']
+        : //
+          // @ts-ignore
+          props.theme.colors.blackAlpha['400']};
   }
 `
 
@@ -165,7 +170,7 @@ export const Editor: FC<EditorProps> = ({
   }, [parsedFocus, step, editorRef])
 
   return (
-    <EditorContainer {...containerStyleProps}>
+    <EditorContainer colorMode={colorMode} {...containerStyleProps}>
       <Box mb="2">
         <Tooltip
           hasArrow
