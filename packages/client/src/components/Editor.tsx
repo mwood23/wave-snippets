@@ -35,7 +35,6 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { usePrevious } from 'react-delta'
 
-import { DEFAULT_STEP_MESSAGE } from '../const'
 import {
   ParsedFocus,
   addFocusToSelection,
