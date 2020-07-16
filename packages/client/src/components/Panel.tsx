@@ -99,6 +99,7 @@ export const PanelItem: FC<PanelItemProps> = ({
                 aria-label="Remove Step"
                 icon={'delete'}
                 isDisabled={numberOfSteps <= 1}
+                mr="2"
                 onClick={() => {
                   snippetDispatch({ type: 'removeStep', stepID: step.id })
                 }}
@@ -107,7 +108,7 @@ export const PanelItem: FC<PanelItemProps> = ({
               />
               <IconButton
                 aria-label="Toggle panel show"
-                icon={isActive ? 'minus' : 'add'}
+                icon={isActive ? 'chevron-down' : 'chevron-up'}
                 onClick={() => {
                   onExpandClick(step.id)
 
