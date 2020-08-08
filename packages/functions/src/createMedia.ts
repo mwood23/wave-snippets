@@ -114,7 +114,7 @@ export const createMedia = async (req: Request, res: Response) => {
   const user = res.locals.user as admin.auth.DecodedIdToken
 
   const userName = user ? parseName(user?.name)[0] : undefined
-  console.log('User', user, userName)
+  console.log('User', user)
 
   let browser = null
   const createMediaInvocationID = generateID()

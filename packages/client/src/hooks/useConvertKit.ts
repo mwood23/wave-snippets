@@ -9,6 +9,13 @@ export const useConvertKit = () => {
   const location = useLocation()
 
   const subscribeToConvertKit = async (email: string) => {
+    if (!process.env.REACT_APP_CONVERT_KIT_SUBSCRIBE_URL) {
+      console.warn(
+        'Wave Snippets Warning: No REACT_APP_CONVERT_KIT_SUBSCRIBE_URL found. Form will not be submitted. Add one to your environment configuration to use this feature.',
+      )
+      return
+    }
+
     try {
       const referrer = getReferrer()
       const bodyString = JSON.stringify({
@@ -22,7 +29,7 @@ export const useConvertKit = () => {
       })
 
       const response = await fetch(
-        'https://app.convertkit.com/forms/1514201/subscriptions',
+        process.env.REACT_APP_CONVERT_KIT_SUBSCRIBE_URL,
         {
           method: 'post',
           body: bodyString,

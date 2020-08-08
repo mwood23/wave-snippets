@@ -229,12 +229,12 @@ export const Toolbar: FC<ToolbarProps> = () => {
                     onChange={(e: any) =>
                       snippetDispatch({
                         type: 'updateSnippetState',
-                        cycleSpeed: e.target.value,
+                        cycleSpeed: Number(e.target.value),
                       })
                     }
                     size="sm"
                     type="numeric"
-                    value={cycleSpeed}
+                    value={cycleSpeed || ''}
                   />
                 </FormControl>
                 <Flex align="center" mb="4">

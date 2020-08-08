@@ -30,7 +30,7 @@ index c366e04..796ce42 100644
 +import "prismjs/components/prism-tsx";
 +import "prismjs/components/prism-java";
 diff --git a/node_modules/@code-surfer/standalone/dist/standalone.esm.js b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
-index 37c0d32..3390383 100644
+index 37c0d32..f3c0eb1 100644
 --- a/node_modules/@code-surfer/standalone/dist/standalone.esm.js
 +++ b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
 @@ -31,6 +31,24 @@ import 'prismjs/components/prism-stylus';
@@ -58,23 +58,18 @@ index 37c0d32..3390383 100644
  
  function _extends() {
    _extends = Object.assign || function (target) {
-@@ -552,12 +570,13 @@ function LineList(_ref) {
+@@ -552,7 +570,9 @@ function LineList(_ref) {
        var isStatic = !isMoving && !isChangingFocus;
        var areTokensAnimated = !isStatic && (Array.isArray(prevFocus) || Array.isArray(nextFocus));
        var areTokensStatic = !areTokensAnimated;
 -      var tokenElements = areTokensStatic && tokens[lineKey].map(function (token, tokeni) {
++      var tokenFixForEmptyState = tokens[lineKey] || []
 +
-+      var tokenElements = areTokensStatic && tokens[lineKey] ? tokens[lineKey].map(function (token, tokeni) {
++      var tokenElements = areTokensStatic && tokenFixForEmptyState.map(function (token, tokeni) {
          return React.createElement("span", {
            className: "token-" + types[lineKey][tokeni],
            key: tokeni
-         }, token);
--      });
-+      }) : [];
- 
-       var _ref2 = dimensions || {},
-           lineHeight = _ref2.lineHeight;
-@@ -657,7 +676,7 @@ function LineList(_ref) {
+@@ -657,7 +677,7 @@ function LineList(_ref) {
          display: "inline-block"
        },
        className: "cs-line cs-line-" + lineKey

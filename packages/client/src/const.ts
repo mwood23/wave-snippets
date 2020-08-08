@@ -16,7 +16,7 @@ export const DEFAULT_AUTOSAVE_THRESHOLD = 1
 export const BUILDER_MOBILE_BREAKPOINT = '1000px'
 export const BUILDER_MOBILE_TINY_BREAKPOINT = '760px'
 
-export const DEFAULT_CYCLE_SPEED = 1500
+export const DEFAULT_CYCLE_SPEED = 2000
 export const DEFAULT_PREVIEW_THEME = 'nightOwl'
 export const DEFAULT_CYCLE = false
 export const DEFAULT_IMMEDIATE = false

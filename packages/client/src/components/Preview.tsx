@@ -128,7 +128,7 @@ export const Preview = forwardRef<any, PreviewProps>(
     const props = useSpring({
       progress: currentStep,
       config: ANIMATION_PRESETS_DICT[springPreset].config,
-      delay: cycleSpeed,
+      delay: Number(cycleSpeed),
       onRest: () => {
         if (isPlaying) {
           dispatch({

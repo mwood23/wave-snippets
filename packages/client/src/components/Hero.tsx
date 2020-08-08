@@ -67,7 +67,7 @@ export const Hero: FC<HeroProps> = ({ showAboutSection = true, ...rest }) => {
             fontWeight="500"
             textAlign="center"
           >
-            Create gorgeous animated snippets of your code to share with the
+            Create and share gorgeous animated snippets of your code with the
             world.
           </Text>
         </Box>

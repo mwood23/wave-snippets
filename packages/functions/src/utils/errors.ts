@@ -3,14 +3,14 @@
  */
 import { captureException, captureMessage, flush, init } from '@sentry/node'
 
+import { SENTRY_DSN } from '../const'
+
 type Handler = (...args: any[]) => void
 
 let sentryInitialized = false
 export function initSentry() {
   init({
-    dsn:
-      'https://c51f36745b61415cb84e48d77cf3e26f@o180781.ingest.sentry.io/5317376',
-    environment: process.env.REACT_APP_ENV,
+    dsn: SENTRY_DSN,
   })
   sentryInitialized = true
 }

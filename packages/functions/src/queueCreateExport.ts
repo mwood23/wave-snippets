@@ -15,8 +15,6 @@ const queryString = (params: { [x: string]: any }) =>
  * a message queue if this doesn't get the job done.
  */
 export const queueCreateExport = async (req: Request, res: Response) => {
-  console.log('here', req.headers.authorization)
-
   await createMediaValidationSchema
     .validate(req.query, { abortEarly: false })
     .catch(({ errors }) => {
