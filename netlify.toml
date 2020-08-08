@@ -1,5 +1,5 @@
 [build]
-  command = "yarn lint:fix && yarn test && yarn build"
+  command = "yarn lint:fix && yarn test && yarn build && yarn firebase deploy --token ${FIREBASE_DEPLOY_TOKEN}"
   publish = "packages/client/build/"
 
 [[redirects]]
