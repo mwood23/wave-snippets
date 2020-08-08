@@ -9,10 +9,12 @@ type Handler = (...args: any[]) => void
 
 let sentryInitialized = false
 export function initSentry() {
-  init({
-    dsn: SENTRY_DSN,
-  })
-  sentryInitialized = true
+  if (SENTRY_DSN) {
+    init({
+      dsn: SENTRY_DSN,
+    })
+    sentryInitialized = true
+  }
 }
 
 export async function reportError(error: Error | string) {

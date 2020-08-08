@@ -71,19 +71,6 @@ export const AboutPage: FC = () => (
 
     <Box mb="12">
       <Heading as="h2" mb="3">
-        Will this be open sourced?
-      </Heading>
-      <Text mb="3">
-        As it stands, I&apos;m not ready to open source it because I need to
-        figure out how to hide some of the configs, clean up parts of the
-        source, and write up docs. If there&apos;s enough interest from the
-        community helping me maintain and support it I will. The stack is
-        Typescript, React, Node, Chakra UI, React Spring, and Firebase.
-      </Text>
-    </Box>
-
-    <Box mb="12">
-      <Heading as="h2" mb="3">
         How is this Different than Carbon?
       </Heading>
       <Text mb="3">

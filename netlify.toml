@@ -1,6 +1,9 @@
 [build]
-  command = "yarn lint:fix && yarn test && yarn build && yarn firebase deploy --token ${FIREBASE_DEPLOY_TOKEN}"
+  command = "yarn lint:fix && yarn test && yarn build"
   publish = "packages/client/build/"
+
+[context.production]
+  command = "yarn lint:fix && yarn test && yarn build && yarn firebase deploy --token ${FIREBASE_DEPLOY_TOKEN}"
 
 [[redirects]]
   from = "/api/*"

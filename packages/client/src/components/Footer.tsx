@@ -156,9 +156,15 @@ export const Footer: FC<FooterProps> = () => (
       <InternalLink to="/about">About</InternalLink>
       <WavesFooterLink
         isExternal
-        href="mailto:hi@marcuswood.io?subject=Wave Snippets Feedback"
+        href="https://github.com/mwood23/wave-snippets/issues/new"
       >
         Feedback
+      </WavesFooterLink>
+      <WavesFooterLink
+        isExternal
+        href="https://github.com/mwood23/wave-snippets"
+      >
+        Source
       </WavesFooterLink>
       <NewsletterSignup />
       <InternalLink to="/terms-and-conditions">Terms</InternalLink>

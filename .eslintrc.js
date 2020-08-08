@@ -73,6 +73,8 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    // Not really core modules, it's just the only way to get extraneous deps warnings ignored since they live
+    // in the root.
     'import/core-modules': [
       '@testing-library/react',
       'utility-types'

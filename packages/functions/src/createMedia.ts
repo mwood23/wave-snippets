@@ -16,7 +16,7 @@ import { snippetExportErrorEmail } from './emails/snippetExportError'
 import { parseName } from './utils'
 import { createGIF } from './utils/createGIF'
 import { reportError } from './utils/errors'
-import { auth, db } from './utils/store'
+import { db } from './utils/store'
 import timecut from './vendor/timecut'
 
 const VIEWPORT_OPTIONS = {
