@@ -1,0 +1,80 @@
+diff --git a/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts b/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
+index c366e04..796ce42 100644
+--- a/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
++++ b/node_modules/@code-surfer/standalone/dist/default-syntaxes.d.ts
+@@ -26,5 +26,24 @@ import "prismjs/components/prism-scss";
+ import "prismjs/components/prism-sql";
+ import "prismjs/components/prism-stylus";
+ import "prismjs/components/prism-typescript";
+-import "prismjs/components/prism-wasm";
+-import "prismjs/components/prism-yaml";
++import 'prismjs/components/prism-typescript';
++import 'prismjs/components/prism-wasm';
++import 'prismjs/components/prism-yaml';
++import "prismjs/components/prism-kotlin";
++import "prismjs/components/prism-matlab";
++import "prismjs/components/prism-groovy";
++import "prismjs/components/prism-haskell";
++import "prismjs/components/prism-clojure";
++import "prismjs/components/prism-rust";
++import "prismjs/components/prism-elixir";
++import "prismjs/components/prism-docker";
++import "prismjs/components/prism-swift";
++import "prismjs/components/prism-csharp";
++import "prismjs/components/prism-dart";
++import "prismjs/components/prism-elm";
++import "prismjs/components/prism-php";
++import "prismjs/components/prism-php-extras";
++import "prismjs/components/prism-r";
++import "prismjs/components/prism-ruby";
++import "prismjs/components/prism-tsx";
++import "prismjs/components/prism-java";
+diff --git a/node_modules/@code-surfer/standalone/dist/standalone.esm.js b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
+index 37c0d32..f3c0eb1 100644
+--- a/node_modules/@code-surfer/standalone/dist/standalone.esm.js
++++ b/node_modules/@code-surfer/standalone/dist/standalone.esm.js
+@@ -31,6 +31,24 @@ import 'prismjs/components/prism-stylus';
+ import 'prismjs/components/prism-typescript';
+ import 'prismjs/components/prism-wasm';
+ import 'prismjs/components/prism-yaml';
++import "prismjs/components/prism-kotlin";
++import "prismjs/components/prism-matlab";
++import "prismjs/components/prism-groovy";
++import "prismjs/components/prism-haskell";
++import "prismjs/components/prism-clojure";
++import "prismjs/components/prism-rust";
++import "prismjs/components/prism-elixir";
++import "prismjs/components/prism-docker";
++import "prismjs/components/prism-swift";
++import "prismjs/components/prism-csharp";
++import "prismjs/components/prism-dart";
++import "prismjs/components/prism-elm";
++import "prismjs/components/prism-php";
++import "prismjs/components/prism-php-extras";
++import "prismjs/components/prism-r";
++import "prismjs/components/prism-ruby";
++import "prismjs/components/prism-tsx";
++import "prismjs/components/prism-java";
+ 
+ function _extends() {
+   _extends = Object.assign || function (target) {
+@@ -552,7 +570,9 @@ function LineList(_ref) {
+       var isStatic = !isMoving && !isChangingFocus;
+       var areTokensAnimated = !isStatic && (Array.isArray(prevFocus) || Array.isArray(nextFocus));
+       var areTokensStatic = !areTokensAnimated;
+-      var tokenElements = areTokensStatic && tokens[lineKey].map(function (token, tokeni) {
++      var tokenFixForEmptyState = tokens[lineKey] || []
++
++      var tokenElements = areTokensStatic && tokenFixForEmptyState.map(function (token, tokeni) {
+         return React.createElement("span", {
+           className: "token-" + types[lineKey][tokeni],
+           key: tokeni
+@@ -657,7 +677,7 @@ function LineList(_ref) {
+         display: "inline-block"
+       },
+       className: "cs-line cs-line-" + lineKey
+-    }, lineNumberElement, tokenElements || tokens[lineKey].map(function (token, tokeni) {
++    }, lineNumberElement, tokenElements || !!lineKey && tokens[lineKey].map(function (token, tokeni) {
+       return React.createElement("span", {
+         className: "token-" + types[lineKey][tokeni],
+         style: getTokenStyle(t, tokeni),

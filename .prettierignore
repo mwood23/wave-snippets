@@ -1,0 +1,3 @@
+packages/client/public
+packages/functions/src/vendor/*
+.eslintrc.js

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth.uid != null;
+    }
+    function isSnippetOwner() {
+      return resource.data.owner == request.auth.uid;
+    }
+    function isPublic() {
+      return resource.data.visibility == 'public';
+    }
+    function isUnlisted() {
+      return resource.data.visibility == 'unlisted';
+    }
+    function isLiker() {
+      return resource.data.userID == request.auth.uid;
+    }
+
+    match /users/{user} {
+      allow read, write: if isSignedIn() && user == request.auth.uid;
+    }
+
+    match /snippets/{snippet} {
+      allow read: if isPublic() || isUnlisted() || (isSignedIn() && isSnippetOwner());
+      allow create: if true;
+      allow update, delete: if isSignedIn() && isSnippetOwner();
+    }
+
+    match /likes/{like} {
+      // Likes are public info
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isLiker();
+    }
+  }
+}

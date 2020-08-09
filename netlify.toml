@@ -1,0 +1,17 @@
+[build]
+  command = "yarn lint:fix && yarn test && yarn build"
+  publish = "packages/client/build/"
+
+[context.production]
+  command = "yarn lint:fix && yarn test && yarn build && yarn firebase deploy --token ${FIREBASE_DEPLOY_TOKEN}"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://us-east1-waves-production.cloudfunctions.net/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,7 @@
+{
+  "env": {
+    "clienturl": "http://localhost:3000",
+    "cloudfunctionsurl": "http://localhost:5001/waves-production/us-east1",
+    "sentrydsn": ""
+  }
+}
