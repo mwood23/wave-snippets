@@ -128,6 +128,7 @@ export const createMedia = async (req: Request, res: Response) => {
       throw new Error('createMedia validation error.')
     })) as YupCreateMediaParams
   const URL = `${WAVE_DOWNLOAD_URL}/${createMediaParams.id}`
+  const quality = createMediaParams.quality
 
   try {
     // TODO Create an entity in Firebase for the export so they can check the status
@@ -192,7 +193,7 @@ export const createMedia = async (req: Request, res: Response) => {
       output: videoName,
       duration,
       keepFrames: true,
-      fps: 20,
+      fps: quality === 'high' ? 60 : 20,
       browser,
       viewportOptions,
     })
@@ -202,12 +203,14 @@ export const createMedia = async (req: Request, res: Response) => {
     // Close browser before creating GIF to give some memory back.
     await browser.close()
 
-    await createGIF({
-      frameDir,
-      outputFile: outputGIFFilePath,
-    })
+    if (quality !== 'high') {
+      await createGIF({
+        frameDir,
+        outputFile: outputGIFFilePath,
+      })
 
-    console.log('Gif creation complete!')
+      console.log('Gif creation complete!')
+    }
 
     const bucket = storage().bucket()
 
@@ -232,13 +235,13 @@ export const createMedia = async (req: Request, res: Response) => {
 
     const [videoURL, gifURL] = await Promise.all([
       uploadAsset(outputVideoFilePath, videoName),
-      uploadAsset(outputGIFFilePath, gifName),
+      quality !== 'high' ? uploadAsset(outputGIFFilePath, gifName) : undefined,
     ])
 
     await db.collection('mail').add({
       to: createMediaParams.emails.split(','),
       message: snippetExportEmail({
-        gifURL: gifURL[0],
+        gifURL: gifURL?.[0],
         gifFileName: gifName,
         videoFileName: videoName,
         videoURL: videoURL[0],

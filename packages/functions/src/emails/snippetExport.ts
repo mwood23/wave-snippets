@@ -6,7 +6,7 @@ export const snippetExportEmail = ({
   userName,
 }: {
   videoURL: string
-  gifURL: string
+  gifURL?: string
   videoFileName: string
   gifFileName: string
   userName?: string
@@ -19,8 +19,13 @@ Your Wave Snippet is ready! Links expire in <b>seven days</b>.
 MP4:
 ${videoURL}
 
-Gif:
-${gifURL}
+${
+  gifURL
+    ? `Gif:
+${gifURL}`
+    : ''
+}
+
 
 Stay wavey,
 The Wave Snippets team
@@ -336,7 +341,11 @@ a {
 								<tr>
                   <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
                     <a href="${videoURL}" download="${videoFileName}" class="btn-primary" style="margin-right: 5px;" itemprop="url">Download MP4</a>
-                    <a href="${gifURL}" download="${gifFileName}" class="btn-primary" itemprop="url">Download GIF</a>
+                    ${
+                      gifURL
+                        ? `<a href="${gifURL}" download="${gifFileName}" class="btn-primary" itemprop="url">Download GIF</a>`
+                        : ''
+                    }
                   </td>
                 </tr>
 								<tr>

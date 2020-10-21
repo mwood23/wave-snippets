@@ -82,9 +82,13 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
         initialValues={{
           email: user?.email ?? '',
           weeklyEmails: !user?.email,
+          highQualityMode: false,
         }}
         isInitialValid={!!user?.email}
-        onSubmit={async ({ email, weeklyEmails }, { setSubmitting }) => {
+        onSubmit={async (
+          { email, weeklyEmails, highQualityMode },
+          { setSubmitting },
+        ) => {
           setSubmitting(true)
 
           try {
@@ -94,7 +98,9 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
 
             if (snippetID) {
               await fetch(
-                `/api/queue/media-export?id=${snippetID}&emails=${email}`,
+                `/api/queue/media-export?id=${snippetID}&emails=${email}&quality=${
+                  highQualityMode ? 'high' : 'medium'
+                }`,
                 token
                   ? {
                       headers: {
@@ -153,6 +159,7 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
             .required('Email is required.')
             .email('Must be a valid email.'),
           weeklyEmails: boolean().required('Field is required'),
+          highQualityMode: boolean(),
         })}
       >
         {({
@@ -194,6 +201,22 @@ export const ExportModal: FC<ExportModalProps> = ({ isOpen, onClose }) => {
                       {/* TODO: Link to blog */}
                     </FormHelperText>
                   )}
+                </FormControl>
+                <FormControl
+                  isInvalid={
+                    touched.highQualityMode && !!errors.highQualityMode
+                  }
+                  mb={3}
+                >
+                  <Checkbox
+                    isChecked={values.highQualityMode}
+                    name="highQualityMode"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    variantColor="green"
+                  >
+                    High quality mode (exports MP4 file only)
+                  </Checkbox>
                 </FormControl>
                 {!user && (
                   <FormControl
