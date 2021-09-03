@@ -25,7 +25,7 @@
     "gif.js": "^0.2.0",
     "gif.js.optimized": "^1.0.1",
     "highlight.js": "^10.0.3",
-    "immer": "^6.0.8",
+    "immer": "^9.0.6",
     "js-search": "^2.0.0",
     "polished": "^3.6.4",
     "prism-react-renderer": "^1.1.1",
