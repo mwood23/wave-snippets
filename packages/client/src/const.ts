@@ -210,6 +210,7 @@ export const SUPPORTED_CODING_LANGAUGES = [
   { value: 'ruby', aliases: ['rb'], name: 'Ruby', codeMirrorMap: 'ruby' },
   { value: 'rust', aliases: [], name: 'Rust', codeMirrorMap: 'rust' },
   { value: 'sass', aliases: [], name: 'Sass', codeMirrorMap: 'sass' },
+  { value: 'scala', aliases: [], name: 'Scala', codeMirrorMap: 'scala' },
   { value: 'sql', aliases: [], name: 'SQL', codeMirrorMap: 'sql' },
   { value: 'stylus', aliases: [], name: 'Stylus', codeMirrorMap: 'stylus' },
   { value: 'swift', aliases: [], name: 'Swift', codeMirrorMap: 'swift' },
